@@ -5,7 +5,7 @@ const productService = {}
 productService.getProducts = async function () {
   try {
     const res = await fetch({
-      url: '/product',
+      url: '/products',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ productService.getProducts = async function () {
 productService.deleteProduct = async function (id) {
   try {
     const res = await fetch({
-      url: `/product/${id}`,
+      url: `/products/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ productService.deleteProduct = async function (id) {
 productService.getProductById = async function (id) {
   try {
     const res = await fetch({
-      url: `/product/${id}`,
+      url: `/products/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ productService.getProductById = async function (id) {
 productService.createProduct = async function (data) {
   try {
     const res = await fetch({
-      url: `/product`,
+      url: `/products`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ productService.createProduct = async function (data) {
 productService.editProduct = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/product/${id}`,
+      url: `/products/${id}`,
       method: 'put',
       data: data,
     })

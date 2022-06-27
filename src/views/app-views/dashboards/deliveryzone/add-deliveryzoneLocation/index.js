@@ -87,11 +87,11 @@ const DeliveryZoneLocation = ({ history }) => {
           renderItem={(item, i) => (
             <List.Item key={i}>
               <List.Item.Meta
-                title={<Typography.Text>{item}</Typography.Text>}
+                title={<Typography.Text>{item.name}</Typography.Text>}
               />
               <Button
                 icon={<DeleteOutlined />}
-                onClick={() => onDeleteHandler(id, item)}
+                onClick={() => onDeleteHandler(id, item.id)}
               />
             </List.Item>
           )}

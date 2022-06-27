@@ -1,7 +1,7 @@
 import fetch from 'auth/FetchInterceptor'
 
 const customerService = {}
-const apiRoute = '/customer'
+const apiRoute = '/customers'
 
 customerService.getCustomers = async function () {
   try {

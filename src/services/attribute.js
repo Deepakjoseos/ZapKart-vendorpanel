@@ -5,7 +5,7 @@ const attributeService = {}
 attributeService.getAttributes = async function () {
   try {
     const res = await fetch({
-      url: '/attribute',
+      url: '/attributes',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ attributeService.getAttributes = async function () {
 attributeService.deleteAttribute = async function (id) {
   try {
     const res = await fetch({
-      url: `/attribute/${id}`,
+      url: `/attributes/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ attributeService.deleteAttribute = async function (id) {
 attributeService.getAttributeById = async function (id) {
   try {
     const res = await fetch({
-      url: `/attribute/${id}`,
+      url: `/attributes/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ attributeService.getAttributeById = async function (id) {
 attributeService.createAttribute = async function (data) {
   try {
     const res = await fetch({
-      url: `/attribute`,
+      url: `/attributes`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ attributeService.createAttribute = async function (data) {
 attributeService.editAttribute = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/attribute/${id}`,
+      url: `/attributes/${id}`,
       method: 'put',
       data: data,
     })

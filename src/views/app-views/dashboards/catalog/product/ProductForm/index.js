@@ -76,7 +76,7 @@ const ProductForm = (props) => {
             acquirementMethod: data.acquirementMethod,
             mrpPrice: data.mrpPrice,
             price: data.price,
-            deliveryZoneId: data.deliveryZoneId,
+            deliveryZoneId: data.deliveryZone.id,
             status: data.status,
             qty: data.qty,
             isUnlimited: data.isUnlimited,

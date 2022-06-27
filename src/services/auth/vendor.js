@@ -5,7 +5,7 @@ const authVendorService = {}
 authVendorService.getProfile = async function () {
   try {
     const res = await fetch({
-      url: '/vendor',
+      url: '/vendors',
       method: 'get',
     })
 
@@ -18,7 +18,7 @@ authVendorService.getProfile = async function () {
 authVendorService.createVendor = async function (data) {
   try {
     const res = await fetch({
-      url: '/vendor/register',
+      url: '/vendors/register',
       method: 'post',
       data,
     })
@@ -32,7 +32,7 @@ authVendorService.createVendor = async function (data) {
 authVendorService.editProfile = async function (data) {
   try {
     const res = await fetch({
-      url: '/vendor',
+      url: '/vendors',
       method: 'put',
       data,
     })

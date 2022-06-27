@@ -61,6 +61,12 @@ const ProductList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
+      <Menu.Item onClick={() => addAttributeValue(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">Add Attribute Value</span>
+        </Flex>
+      </Menu.Item>
       <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -80,6 +86,12 @@ const ProductList = () => {
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/catalog/attribute/edit-attribute/${row.id}`)
+  }
+
+  const addAttributeValue = (row) => {
+    history.push(
+      `/app/dashboards/catalog/attribute/add-attributevalue/${row.id}`
+    )
   }
 
   const deleteRow = async (row) => {

@@ -50,7 +50,7 @@ const AuthDetails = () => {
 
       try {
         const { data } = await fetch({
-          url: '/vendor',
+          url: '/vendors',
           method: 'get',
         })
         setCurrentUserFormData({

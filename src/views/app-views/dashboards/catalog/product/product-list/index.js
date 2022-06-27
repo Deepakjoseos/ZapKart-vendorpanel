@@ -127,9 +127,11 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'price'),
     },
     {
-      title: 'DeliveryZoneId',
-      dataIndex: 'deliveryZoneId',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
+      title: 'DeliveryZone',
+      dataIndex: 'deliveryZone',
+      render: (deliveryZone) => {
+        return <Flex>{deliveryZone.name}</Flex>
+      },
     },
     {
       title: 'Variant',
