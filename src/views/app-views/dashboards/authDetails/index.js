@@ -113,7 +113,7 @@ const AuthDetails = () => {
       await currentUser.updateEmail(email)
       notification.success({ message: 'Email Linked Success' })
     } catch (err) {
-      notification.error({ message: err.code })
+      notification.error({ message: err.message })
       return 'error'
     }
   }
@@ -132,8 +132,7 @@ const AuthDetails = () => {
           return true
         })
     } catch (err) {
-      notification.error({ message: err.code })
-      //   toast.error(getFBError(err.code))
+      notification.error({ message: err.message })
     }
   }
 
@@ -170,8 +169,7 @@ const AuthDetails = () => {
       .catch((err) => {
         setPhoneVerified(false)
         setShowPhoneOtpModal(false)
-        // toast.error(getFBError(err.code))
-        notification.error({ message: err.code })
+        notification.error({ message: err.message })
         console.log(err)
       })
   }
@@ -192,7 +190,7 @@ const AuthDetails = () => {
     } catch (err) {
       setPhoneVerified(false)
       setShowPhoneOtpModal(false)
-      notification.error({ message: err.code })
+      notification.error({ message: err.message })
     }
   }
 

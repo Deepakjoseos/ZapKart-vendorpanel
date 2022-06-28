@@ -105,6 +105,8 @@ const GeneralField = ({
   productTemplates,
   deliveryZones,
   productTemplateId,
+  productBuyType,
+  setProductBuyType,
   // subscriptionPrice,
   // bulkPrice,
 }) => {
@@ -135,176 +137,191 @@ const GeneralField = ({
   }, [productTemplateId, productTemplates])
 
   return (
-    <Card title="Basic Info">
-      <Form.Item
-        name="productTemplateId"
-        label="productTemplate"
-        rules={rules.productTemplateId}
-      >
-        <Select placeholder="productTemplate" onChange={(e) => getVariants(e)}>
-          {productTemplates.map((temp) => (
-            <Option value={temp.id}>{temp.name}</Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        name="productVariantId"
-        label="productVariant"
-        rules={rules.productVariantId}
-      >
-        <Select placeholder="productVariant">
-          {variants.map((variant) => (
-            <Option value={variant.id}>{variant.description}</Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="deliveryZoneId"
-        label="deliveryZone"
-        rules={rules.deliveryZoneId}
-      >
-        <Select placeholder="deliveryZoneId">
-          {deliveryZones.map((deliveryZone) => (
-            <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item name="status" label="Status" rules={rules.status}>
-        <Select placeholder="Status">
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item name="qty" label="QTY" rules={rules.qty}>
-        <InputNumber placeholder="QTY" type="number" min={0} max={100000} />
-      </Form.Item>
-      <Form.Item
-        name="isUnlimited"
-        label="is Unlimited"
-        rules={rules.isUnlimited}
-      >
-        <Select placeholder="is Unlimited">
-          <Option value={true}>Yes</Option>
-          <Option value={false}>No</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        name="acquirementMethod"
-        label="Product Buy Type"
-        rules={rules.acquirementMethod}
-      >
-        <Select placeholder="Acquirement Method">
-          <Option value="Purchase">Buy</Option>
-          <Option value="Lend">Lend</Option>
-          <Option value="Rent">Rent</Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
-        <InputNumber
-          placeholder="mrp Price"
-          type="number"
-          min={0}
-          max={100000}
-        />
-      </Form.Item>
-      <Form.Item name="price" label="Sale Price" rules={rules.price}>
-        <InputNumber
-          placeholder="Sale Price"
-          type="number"
-          min={0}
-          max={100000}
-        />
-      </Form.Item>
-
-      <label style={{ fontWeight: 500 }}>subscriptionPrice</label>
-      <Form.List name="subscriptionPrice">
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map((field) => (
-              <Space
-                key={field.key}
-                style={{ display: 'flex' }}
-                align="baseline"
-              >
-                <Form.Item
-                  {...field}
-                  rules={[{ required: true, message: 'required' }]}
-                  name={[field.name, 'price']}
-                  fieldKey={[field.fieldKey, 'price']}
-                >
-                  <Input placeholder="price" />
-                </Form.Item>
-                <Form.Item
-                  {...field}
-                  rules={[{ required: true, message: 'required' }]}
-                  name={[field.name, 'month']}
-                  fieldKey={[field.fieldKey, 'month']}
-                >
-                  <Input placeholder="Month" />
-                </Form.Item>
-                <MinusCircleOutlined onClick={() => remove(field.name)} />
-              </Space>
+    <>
+      <Card title="Basic Info">
+        <Form.Item
+          name="productTemplateId"
+          label="productTemplate"
+          rules={rules.productTemplateId}
+        >
+          <Select
+            placeholder="productTemplate"
+            onChange={(e) => getVariants(e)}
+          >
+            {productTemplates.map((temp) => (
+              <Option value={temp.id}>{temp.name}</Option>
             ))}
-            <Form.Item>
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                icon={<PlusOutlined />}
-              >
-                Add item
-              </Button>
-            </Form.Item>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="productVariantId"
+          label="productVariant"
+          rules={rules.productVariantId}
+        >
+          <Select placeholder="productVariant">
+            {variants?.map((variant) => (
+              <Option value={variant.id}>{variant.description}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="deliveryZoneId"
+          label="deliveryZone"
+          rules={rules.deliveryZoneId}
+        >
+          <Select placeholder="deliveryZoneId">
+            {deliveryZones.map((deliveryZone) => (
+              <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="status" label="Status" rules={rules.status}>
+          <Select placeholder="Status">
+            <Option value="Active">Active</Option>
+            <Option value="Hold">Hold</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name="qty" label="QTY" rules={rules.qty}>
+          <InputNumber placeholder="QTY" type="number" min={0} max={100000} />
+        </Form.Item>
+        <Form.Item
+          name="isUnlimited"
+          label="is Unlimited"
+          rules={rules.isUnlimited}
+        >
+          <Select placeholder="is Unlimited">
+            <Option value={true}>Yes</Option>
+            <Option value={false}>No</Option>
+          </Select>
+        </Form.Item>
+      </Card>
+
+      <Card title="Price Info">
+        <Form.Item
+          name="acquirementMethod"
+          label="Product Buy Type"
+          rules={rules.acquirementMethod}
+        >
+          <Select
+            placeholder="Acquirement Method"
+            onChange={(e) => setProductBuyType(e)}
+          >
+            <Option value="Purchase">Buy</Option>
+            <Option value="Lend">Lend</Option>
+            <Option value="Rent">Rent</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
+          <InputNumber
+            placeholder="mrp Price"
+            type="number"
+            min={0}
+            max={100000}
+          />
+        </Form.Item>
+        <Form.Item name="price" label="Sale Price" rules={rules.price}>
+          <InputNumber
+            placeholder="Sale Price"
+            type="number"
+            min={0}
+            max={100000}
+          />
+        </Form.Item>
+
+        {(productBuyType === 'Rent' || productBuyType === 'Lend') && (
+          <>
+            <label style={{ fontWeight: 500 }}>subscriptionPrice</label>
+            <Form.List name="subscriptionPrice">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map((field) => (
+                    <Space
+                      key={field.key}
+                      style={{ display: 'flex' }}
+                      align="baseline"
+                    >
+                      <Form.Item
+                        {...field}
+                        rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'price']}
+                        fieldKey={[field.fieldKey, 'price']}
+                      >
+                        <Input placeholder="price" />
+                      </Form.Item>
+                      <Form.Item
+                        {...field}
+                        rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'month']}
+                        fieldKey={[field.fieldKey, 'month']}
+                      >
+                        <Input placeholder="Month" />
+                      </Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(field.name)} />
+                    </Space>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      icon={<PlusOutlined />}
+                    >
+                      Add item
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
           </>
         )}
-      </Form.List>
 
-      <label style={{ fontWeight: 500 }}>Bulk Price</label>
-      <Form.List name="bulkPrice">
-        {(fields, { add, remove }) => {
-          console.log(fields, 'show-filelds')
-          return (
-            <>
-              {fields.map((field) => (
-                <Space
-                  key={field.key}
-                  style={{ display: 'flex' }}
-                  align="baseline"
-                >
-                  <Form.Item
-                    {...field}
-                    rules={[{ required: true, message: 'required' }]}
-                    name={[field.name, 'price']}
-                    fieldKey={[field.fieldKey, 'price']}
+        <label style={{ fontWeight: 500 }}>Bulk Price</label>
+        <Form.List name="bulkPrice">
+          {(fields, { add, remove }) => {
+            console.log(fields, 'show-filelds')
+            return (
+              <>
+                {fields.map((field) => (
+                  <Space
+                    key={field.key}
+                    style={{ display: 'flex' }}
+                    align="baseline"
                   >
-                    <Input placeholder="price" />
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    rules={[{ required: true, message: 'required' }]}
-                    name={[field.name, 'qty']}
-                    fieldKey={[field.fieldKey, 'qty']}
+                    <Form.Item
+                      {...field}
+                      rules={[{ required: true, message: 'required' }]}
+                      name={[field.name, 'price']}
+                      fieldKey={[field.fieldKey, 'price']}
+                    >
+                      <Input placeholder="price" />
+                    </Form.Item>
+                    <Form.Item
+                      {...field}
+                      rules={[{ required: true, message: 'required' }]}
+                      name={[field.name, 'qty']}
+                      fieldKey={[field.fieldKey, 'qty']}
+                    >
+                      <Input placeholder="Qty" />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(field.name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    icon={<PlusOutlined />}
                   >
-                    <Input placeholder="Qty" />
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(field.name)} />
-                </Space>
-              ))}
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  icon={<PlusOutlined />}
-                >
-                  Add item
-                </Button>
-              </Form.Item>
-            </>
-          )
-        }}
-      </Form.List>
-    </Card>
+                    Add item
+                  </Button>
+                </Form.Item>
+              </>
+            )
+          }}
+        </Form.List>
+      </Card>
+    </>
   )
 }
 

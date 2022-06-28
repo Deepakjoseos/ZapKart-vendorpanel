@@ -125,6 +125,7 @@ const DeliveryZoneList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
+
     {
       title: '',
       dataIndex: 'actions',

@@ -28,6 +28,7 @@ const ProductForm = (props) => {
   const [bulkPrice, setBulkPrice] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [productBuyType, setProductBuyType] = useState(null)
 
   // // For selecting DELIVERY LOCATION PARENT
   // const getDeliveryLocations = async () => {
@@ -84,6 +85,7 @@ const ProductForm = (props) => {
             bulkPrice: data.bulkPrice,
           })
           setProductTemplateId(data.productTemplateId)
+          setProductBuyType(data.acquirementMethod)
 
           // const subscriptionPrice = data.subscriptionPrice.map((item) => {
           //   return {
@@ -104,6 +106,8 @@ const ProductForm = (props) => {
     getProductTemplates()
     getDeliveryZones()
   }, [form, mode, param, props])
+
+  console.log(productBuyType, 'productBuyType')
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -186,6 +190,8 @@ const ProductForm = (props) => {
                 productTemplates={productTemplates}
                 deliveryZones={deliveryZones}
                 productTemplateId={productTemplateId}
+                productBuyType={productBuyType}
+                setProductBuyType={setProductBuyType}
                 // subscriptionPrice={subscriptionPrice}
                 // bulkPrice={bulkPrice}
                 // isFinalTrue={isFinalTrue}

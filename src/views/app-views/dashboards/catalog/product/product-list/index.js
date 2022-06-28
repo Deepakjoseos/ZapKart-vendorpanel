@@ -116,23 +116,46 @@ const ProductList = () => {
       dataIndex: 'acquirementMethod',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
     },
-    {
-      title: 'MRP Price',
-      dataIndex: 'mrpPrice',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'mrpPrice'),
-    },
+    // {
+    //   title: 'MRP Price',
+    //   dataIndex: 'mrpPrice',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'mrpPrice'),
+    // },
     {
       title: 'Price',
       dataIndex: 'price',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'price'),
-    },
-    {
-      title: 'DeliveryZone',
-      dataIndex: 'deliveryZone',
-      render: (deliveryZone) => {
-        return <Flex>{deliveryZone.name}</Flex>
+      render: (price, row) => {
+        return (
+          <Flex flexDirection="column">
+            <div style={{ color: 'gray', textDecoration: 'line-through' }}>
+              {row.mrpPrice}
+            </div>{' '}
+            <div>{price}</div>
+          </Flex>
+        )
       },
     },
+    {
+      title: 'Brand',
+      dataIndex: 'brand',
+      render: (brand) => {
+        return <Flex flexDirection="column">{brand.name}</Flex>
+      },
+    },
+    {
+      title: 'Category',
+      dataIndex: 'category',
+      render: (category) => {
+        return <Flex flexDirection="column">{category.name}</Flex>
+      },
+    },
+    // {
+    //   title: 'DeliveryZone',
+    //   dataIndex: 'deliveryZone',
+    //   render: (deliveryZone) => {
+    //     return <Flex>{deliveryZone.name}</Flex>
+    //   },
+    // },
     {
       title: 'Variant',
       dataIndex: 'variant',
@@ -147,10 +170,10 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
-      title: 'isUnlimited',
-      dataIndex: 'isUnlimited',
-      render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'isUnlimited'),
+      title: 'approval',
+      dataIndex: 'approval',
+      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
       title: 'Status',

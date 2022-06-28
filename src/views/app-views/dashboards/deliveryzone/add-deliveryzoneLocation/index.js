@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom'
 
 const DeliveryZoneLocation = ({ history }) => {
   const { Option } = Select
+  const [deliveryZoneTitle, setDeliveryZoneTitle] = useState('')
   const [deliveryZoneLocation, setDeliveryZoneLocation] = useState([])
   const [deliveryLocations, setDeliveryLocations] = useState([])
   const [selectedDeliveryLocationId, setSelectedDeliveryLocationId] =
@@ -30,6 +31,7 @@ const DeliveryZoneLocation = ({ history }) => {
     const data = await deliveryZoneService.getDeliveryZoneById(id)
     if (data) {
       setDeliveryZoneLocation(data.deliveryLocations)
+      setDeliveryZoneTitle(data.name)
     } else {
       history.replace('/app/dashboards/deliveryzone/deliveryzone-list')
     }
@@ -61,7 +63,7 @@ const DeliveryZoneLocation = ({ history }) => {
   }
 
   return (
-    <Card title="Delivery Locations">
+    <Card title={deliveryZoneTitle}>
       <Flex>
         <Select
           placeholder="Delivery Locations"

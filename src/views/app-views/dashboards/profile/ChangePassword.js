@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Form, Button, Input, Row, Col, message } from 'antd'
 import firebase from 'firebase/app'
+import { connect } from 'react-redux'
+import { signOut } from 'redux/actions/Auth'
 
 export class ChangePassword extends Component {
   changePasswordFormRef = React.createRef()
@@ -17,7 +19,13 @@ export class ChangePassword extends Component {
       })
       .catch((err) => {
         // An error ocurred
-        message.error({ content: err.code, duration: 2 })
+        message.error({ content: err.message, duration: 2 })
+
+        message.error({ content: err.message, duration: 2 })
+        if (err.code === 'auth/requires-recent-login') {
+          firebase.auth().signOut()
+          this.props.signOut()
+        }
         // ...
       })
 
@@ -95,4 +103,8 @@ export class ChangePassword extends Component {
   }
 }
 
-export default ChangePassword
+const mapDispatchToProps = {
+  signOut,
+}
+
+export default connect(null, mapDispatchToProps)(ChangePassword)
