@@ -113,8 +113,6 @@ service.interceptors.response.use(
     //   notification.error(notificationParam)
     // }
 
-    console.log(error, 'plss')
-
     Utils.errorValidator(error.response.data)
 
     return Promise.reject(error)
