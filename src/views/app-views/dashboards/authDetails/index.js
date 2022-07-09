@@ -253,6 +253,8 @@ const AuthDetails = () => {
             displayImage: data.displayImage,
             emailVerified: emailVerified,
             phoneVerified: user.phoneNumber ? true : false,
+            business: data.business,
+            address: data.address,
           }
 
           await dispatch(
@@ -289,6 +291,8 @@ const AuthDetails = () => {
             displayImage: data.displayImage,
             emailVerified: emailVerified,
             phoneVerified: user.phoneNumber ? true : false,
+            business: data.business,
+            address: data.address,
           }
 
           await dispatch(

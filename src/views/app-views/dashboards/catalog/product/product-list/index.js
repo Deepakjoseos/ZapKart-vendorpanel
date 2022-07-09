@@ -160,7 +160,7 @@ const ProductList = () => {
       title: 'Variant',
       dataIndex: 'variant',
       render: (variant) => {
-        return <Flex>{variant.description}</Flex>
+        return <Flex>{variant.name}</Flex>
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
     },

@@ -114,7 +114,6 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        setSubmitLoading(false)
         values.productBuyType = values.acquirementMethod
         if (mode === ADD) {
           const created = await productService.createProduct(values)
@@ -130,6 +129,7 @@ const ProductForm = (props) => {
             history.goBack()
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

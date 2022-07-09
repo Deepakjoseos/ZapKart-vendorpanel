@@ -43,6 +43,8 @@ function App() {
               displayImage: data.displayImage,
               emailVerified: user.emailVerified,
               phoneVerified: user.phoneNumber ? true : false,
+              address: data.address,
+              business: data.business,
             }
 
             dispatch(
@@ -65,6 +67,8 @@ function App() {
             phone: user.phoneNumber,
             emailVerified: user.emailVerified,
             phoneVerified: user.phoneNumber ? true : false,
+            address: {},
+            business: {},
             // passwordVerified: passwordAvailable?.providerId ? true : false,
           }
           dispatch(

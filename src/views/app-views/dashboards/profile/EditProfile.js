@@ -39,6 +39,23 @@ const EditProfile = () => {
         lastName: user.lastName,
         email: user.email,
         phone: user.phone,
+
+        // address:
+        'address.line1': user?.address?.line1,
+        'address.city': user?.address?.city,
+        'address.state': user?.address?.state,
+        'address.country': user?.address?.country,
+        'address.phone': user?.address?.phone,
+        'address.zipcode': user?.address?.zipcode,
+
+        // Bussiness
+        'business.name': user?.business?.name,
+        'business.address.line1': user?.business?.address?.line1,
+        'business.address.city': user?.business?.address?.city,
+        'business.address.state': user?.business?.address?.state,
+        'business.address.country': user?.business?.address?.country,
+        'business.address.phone': user?.business?.address?.phone,
+        'business.address.zipcode': user?.business?.address?.zipcode,
       })
       let himg = []
 
@@ -56,7 +73,7 @@ const EditProfile = () => {
         setFileListImages(himg)
       }
     }
-  }, [user])
+  }, [])
 
   const {
     fileList: fileListImages,
@@ -70,6 +87,44 @@ const EditProfile = () => {
     form
       .validateFields()
       .then(async (values) => {
+        const sendingValues = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          address: {
+            line1: values['address.line1'],
+            city: values['address.city'],
+            state: values['address.state'],
+            country: values['address.country'],
+            phone: values['address.phone'],
+            zipcode: values['address.zipcode'],
+          },
+          business: {
+            name: values['business.name'],
+            address: {
+              line1: values['business.address.line1'],
+              city: values['business.address.city'],
+              state: values['business.address.state'],
+              country: values['business.address.country'],
+              phone: values['business.address.phone'],
+              zipcode: values['business.address.zipcode'],
+            },
+          },
+        }
+
+        if (JSON.stringify(sendingValues.address) === '{}') {
+          delete sendingValues.address
+        }
+
+        if (JSON.stringify(sendingValues.business) === '{}') {
+          delete sendingValues.business
+        } else if (JSON.stringify(sendingValues.business.address) === '{}') {
+          if (sendingValues.business.name) {
+            delete sendingValues.business.address
+          } else {
+            delete sendingValues.business
+          }
+        }
+
         // Checking if image exists
         console.log(values, 'plss')
         if (displayImage?.length !== 0 && displayImage !== null) {
@@ -79,12 +134,12 @@ const EditProfile = () => {
             displayImage[0].url,
             'profile'
           )
-          values.displayImage = imgValue
+          sendingValues.displayImage = imgValue
         } else {
-          values.displayImage = null
+          sendingValues.displayImage = null
         }
 
-        const edited = await authVendorService.editProfile(values)
+        const edited = await authVendorService.editProfile(sendingValues)
         if (edited) {
           message.success(`Edited Profile Successfully`)
 
@@ -97,6 +152,8 @@ const EditProfile = () => {
               firstName: data.firstName,
               lastName: data.lastName,
               displayImage: data.displayImage,
+              address: data.address,
+              business: data.business,
             }
             dispatch(
               authenticated({
@@ -267,7 +324,91 @@ const EditProfile = () => {
                 <Input disabled />
               </Form.Item>
             </Col>
+
+            <Card title="Address" style={{ width: '100%' }}>
+              <Row gutter={ROW_GUTTER}>
+                <Col xs={24} sm={24} md={24}>
+                  <Form.Item name="address.line1" label="Line1">
+                    <Input placeholder="Line 1" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="address.city" label="City">
+                    <Input placeholder="City" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="address.state" label="State">
+                    <Input placeholder="State" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="address.country" label="Country">
+                    <Input placeholder="Country" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="address.phone" label="Phone">
+                    <Input placeholder="Phone" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="address.zipcode" label="Zipcode">
+                    <Input placeholder="Zipcode" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
+
+            {/* Bussiness */}
+
+            <Card title="Business">
+              <Form.Item name="business.name" label="Bussiness Name">
+                <Input placeholder="Bussiness Name" />
+              </Form.Item>
+              <br />
+              <h4>Bussiness Addresss</h4>
+              <Row gutter={ROW_GUTTER}>
+                <Col xs={24} sm={24} md={24}>
+                  <Form.Item name="business.address.line1" label="Line1">
+                    <Input placeholder="Line1" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="business.address.city" label="City">
+                    <Input placeholder="City" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="business.address.state" label="State">
+                    <Input placeholder="State" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="business.address.country" label="Country">
+                    <Input placeholder="Country" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="business.address.phone" label="Phone">
+                    <Input placeholder="Phone" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="business.address.zipcode" label="Zipcode">
+                    <Input placeholder="Zipcode" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
           </Row>
+
           <Button type="primary" htmlType="submit" onClick={onFinish}>
             Save Change
           </Button>

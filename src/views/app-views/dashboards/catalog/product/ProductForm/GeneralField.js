@@ -160,7 +160,7 @@ const GeneralField = ({
         >
           <Select placeholder="productVariant">
             {variants?.map((variant) => (
-              <Option value={variant.id}>{variant.description}</Option>
+              <Option value={variant.id}>{variant.name}</Option>
             ))}
           </Select>
         </Form.Item>
