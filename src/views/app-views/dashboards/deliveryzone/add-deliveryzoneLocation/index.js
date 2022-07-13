@@ -1,10 +1,19 @@
-import { Button, Card, Divider, List, Select, Typography } from 'antd'
+import {
+  Button,
+  Card,
+  Divider,
+  List,
+  Select,
+  TreeSelect,
+  Typography,
+} from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 import deliveryZoneService from 'services/deliveryZone'
 import deliveryLocationService from 'services/deliveryLocation'
 import Flex from 'components/shared-components/Flex'
 import { useParams } from 'react-router-dom'
+import Utils from 'utils'
 
 const DeliveryZoneLocation = ({ history }) => {
   const { Option } = Select
@@ -16,14 +25,36 @@ const DeliveryZoneLocation = ({ history }) => {
 
   const { id } = useParams()
 
+  // const getDeliveryLocations = async () => {
+  //   const data = await deliveryLocationService.getDeliveryLocations()
+
+  //   if (data) {
+  //     const onlyActiveDeliveryLocations = data.filter(
+  //       (cur) => cur.status !== 'Hold'
+  //     )
+  //     setDeliveryLocations(onlyActiveDeliveryLocations)
+  //   }
+  // }
+
   const getDeliveryLocations = async () => {
     const data = await deliveryLocationService.getDeliveryLocations()
-
     if (data) {
       const onlyActiveDeliveryLocations = data.filter(
         (cur) => cur.status !== 'Hold'
       )
-      setDeliveryLocations(onlyActiveDeliveryLocations)
+      if (id) {
+        const restLocs = onlyActiveDeliveryLocations.filter(
+          (loc) => loc.id !== id
+        )
+        const list = Utils.createDeliveryLocationList(restLocs)
+        // setCategories(list)
+        setDeliveryLocations(list)
+      } else {
+        const list = Utils.createCategoryList(onlyActiveDeliveryLocations)
+        setDeliveryLocations(list)
+
+        // setCategories(list)
+      }
     }
   }
 
@@ -40,6 +71,7 @@ const DeliveryZoneLocation = ({ history }) => {
   useEffect(() => {
     fetchDeliveryZoneById()
     getDeliveryLocations()
+    // getTreeLocs()
   }, [])
 
   const onAddHandler = async (deliveryZoneId, deliveryLocationId) => {
@@ -65,7 +97,7 @@ const DeliveryZoneLocation = ({ history }) => {
   return (
     <Card title={deliveryZoneTitle}>
       <Flex>
-        <Select
+        {/* <Select
           placeholder="Delivery Locations"
           className="w-50 mr-2"
           onChange={(val) => setSelectedDeliveryLocationId(val)}
@@ -73,7 +105,22 @@ const DeliveryZoneLocation = ({ history }) => {
           {deliveryLocations?.map((cur) => (
             <Option value={cur.id}>{cur.name}</Option>
           ))}
-        </Select>
+        </Select> */}
+
+        <TreeSelect
+          style={{ width: 550 }}
+          // value={props.form.getFieldValue('parentId')}
+          // dropdownStyle={dropdownStyle}
+          treeData={deliveryLocations}
+          placeholder="Please select Delivery Location"
+          treeDefaultExpandAll
+          onChange={(val) => setSelectedDeliveryLocationId(val)}
+          // onChange={(e) =>
+          //   props.form.setFieldsValue({
+          //     parentId: e,
+          //   })
+          // }
+        />
         <Button
           icon={<CheckCircleOutlined />}
           onClick={() => onAddHandler(id, selectedDeliveryLocationId)}
