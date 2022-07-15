@@ -139,14 +139,14 @@ const ProductList = () => {
       title: 'Brand',
       dataIndex: 'brand',
       render: (brand) => {
-        return <Flex flexDirection="column">{brand.name}</Flex>
+        return <Flex flexDirection="column">{brand?.name}</Flex>
       },
     },
     {
       title: 'Category',
       dataIndex: 'category',
       render: (category) => {
-        return <Flex flexDirection="column">{category.name}</Flex>
+        return <Flex flexDirection="column">{category?.name}</Flex>
       },
     },
     // {
@@ -160,7 +160,7 @@ const ProductList = () => {
       title: 'Variant',
       dataIndex: 'variant',
       render: (variant) => {
-        return <Flex>{variant.name}</Flex>
+        return <Flex>{variant?.name}</Flex>
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
     },

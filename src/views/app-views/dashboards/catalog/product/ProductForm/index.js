@@ -54,8 +54,9 @@ const ProductForm = (props) => {
 
   const getProductTemplates = async () => {
     const data = await productTemplateService.getProductTemplates()
-    if (data) {
-      setTemplates(data)
+    const activeProductTemplates = data.filter((cur) => cur.status === 'Active')
+    if (activeProductTemplates) {
+      setTemplates(activeProductTemplates)
     }
   }
 
@@ -83,6 +84,7 @@ const ProductForm = (props) => {
             isUnlimited: data.isUnlimited,
             subscriptionPrice: data.subscriptionPrice,
             bulkPrice: data.bulkPrice,
+            productCode: data.productCode,
           })
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
@@ -114,7 +116,14 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        values.productBuyType = values.acquirementMethod
+        // values.productBuyType = values.acquirementMethod
+        values.acquirementMethod = 'Purchase'
+        values.productBuyType = 'Purchase'
+
+        if (values.productVariantId === '') {
+          delete values.productVariantId
+        }
+
         if (mode === ADD) {
           const created = await productService.createProduct(values)
           if (created) {

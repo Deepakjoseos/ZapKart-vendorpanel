@@ -255,6 +255,8 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
+            gst: data.gst,
+            tanNumber: data.tanNumber,
           }
 
           await dispatch(
@@ -293,6 +295,8 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
+            gst: data.gst,
+            tanNumber: data.tanNumber,
           }
 
           await dispatch(

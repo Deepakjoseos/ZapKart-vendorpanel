@@ -49,12 +49,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  productVariantId: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // productVariantId: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   acquirementMethod: [
     {
       required: true,
@@ -62,6 +62,12 @@ const rules = {
     },
   ],
   mrpPrice: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  productCode: [
     {
       required: true,
       message: 'Required',
@@ -153,10 +159,19 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
+
+        <Form.Item
+          name="productCode"
+          label="productCode"
+          rules={rules.productCode}
+        >
+          <Input placeholder="Product Code" />
+        </Form.Item>
+
         <Form.Item
           name="productVariantId"
           label="productVariant"
-          rules={rules.productVariantId}
+          // rules={rules.productVariantId}
         >
           <Select placeholder="productVariant">
             {variants?.map((variant) => (
@@ -198,7 +213,7 @@ const GeneralField = ({
       </Card>
 
       <Card title="Price Info">
-        <Form.Item
+        {/* <Form.Item
           name="acquirementMethod"
           label="Product Buy Type"
           rules={rules.acquirementMethod}
@@ -211,7 +226,7 @@ const GeneralField = ({
             <Option value="Lend">Lend</Option>
             <Option value="Rent">Rent</Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
           <InputNumber

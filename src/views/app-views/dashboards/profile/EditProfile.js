@@ -39,6 +39,9 @@ const EditProfile = () => {
         lastName: user.lastName,
         email: user.email,
         phone: user.phone,
+        gst: user.gst,
+        address: user.address,
+        tanNumber: user.tanNumber,
 
         // address:
         'address.line1': user?.address?.line1,
@@ -90,6 +93,8 @@ const EditProfile = () => {
         const sendingValues = {
           firstName: values.firstName,
           lastName: values.lastName,
+          gst: values.gst,
+          tanNumber: values.tanNumber,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -152,6 +157,8 @@ const EditProfile = () => {
               firstName: data.firstName,
               lastName: data.lastName,
               displayImage: data.displayImage,
+              gst: data.gst,
+              tanNumber: data.tanNumber,
               address: data.address,
               business: data.business,
             }
@@ -325,6 +332,18 @@ const EditProfile = () => {
               </Form.Item>
             </Col>
 
+            <Col xs={24} sm={24} md={12}>
+              <Form.Item label="GST" name="gst">
+                <Input />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={12}>
+              <Form.Item label="Tan Number" name="tanNumber">
+                <Input />
+              </Form.Item>
+            </Col>
+
             <Card title="Address" style={{ width: '100%' }}>
               <Row gutter={ROW_GUTTER}>
                 <Col xs={24} sm={24} md={24}>
@@ -350,7 +369,7 @@ const EditProfile = () => {
                 </Col>
                 <Col xs={24} sm={24} md={12}>
                   <Form.Item name="address.phone" label="Phone">
-                    <Input placeholder="Phone" />
+                    <Input placeholder="Eg: +919988776655" />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={12}>

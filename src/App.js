@@ -45,6 +45,8 @@ function App() {
               phoneVerified: user.phoneNumber ? true : false,
               address: data.address,
               business: data.business,
+              gst: data.gst,
+              tanNumber: data.tanNumber,
             }
 
             dispatch(
@@ -69,6 +71,8 @@ function App() {
             phoneVerified: user.phoneNumber ? true : false,
             address: {},
             business: {},
+            tanNumber: null,
+            gst: null,
             // passwordVerified: passwordAvailable?.providerId ? true : false,
           }
           dispatch(
