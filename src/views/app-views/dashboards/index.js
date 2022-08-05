@@ -51,6 +51,11 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./deliveryzone`))}
         />
 
+        <Route
+          path={`${match.url}/orders`}
+          component={lazy(() => import(`./orders`))}
+        />
+
         {/* <Route
           path={`${match.url}/brand`}
           component={lazy(() => import(`./brand`))}

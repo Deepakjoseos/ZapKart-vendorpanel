@@ -213,20 +213,23 @@ const GeneralField = ({
       </Card>
 
       <Card title="Price Info">
-        {/* <Form.Item
-          name="acquirementMethod"
-          label="Product Buy Type"
-          rules={rules.acquirementMethod}
-        >
-          <Select
-            placeholder="Acquirement Method"
-            onChange={(e) => setProductBuyType(e)}
+        {process.env.REACT_APP_SITE_NAME === 'awen' && (
+          <Form.Item
+            name="acquirementMethod"
+            label="Product Buy Type"
+            rules={rules.acquirementMethod}
           >
-            <Option value="Purchase">Buy</Option>
-            <Option value="Lend">Lend</Option>
-            <Option value="Rent">Rent</Option>
-          </Select>
-        </Form.Item> */}
+            <Select
+              placeholder="Acquirement Method"
+              onChange={(e) => setProductBuyType(e)}
+            >
+              <Option value="Purchase">Buy</Option>
+              <Option value="Lend">Lend</Option>
+              <Option value="Rent">Rent</Option>
+              <Option value="Giveaway">Giveaway</Option>
+            </Select>
+          </Form.Item>
+        )}
 
         <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
           <InputNumber

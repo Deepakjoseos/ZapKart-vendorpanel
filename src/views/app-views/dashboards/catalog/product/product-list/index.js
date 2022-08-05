@@ -111,11 +111,7 @@ const ProductList = () => {
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Product Buy Type',
-      dataIndex: 'acquirementMethod',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
-    },
+
     // {
     //   title: 'MRP Price',
     //   dataIndex: 'mrpPrice',
@@ -193,6 +189,22 @@ const ProductList = () => {
       ),
     },
   ]
+
+  if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+    tableColumns.splice(tableColumns?.length - 4, 0, {
+      title: 'Pres Required',
+      dataIndex: 'prescriptionRequired',
+      render: (prescriptionRequired) => (
+        <Flex alignItems="center">{prescriptionRequired ? 'Yes' : 'No'}</Flex>
+      ),
+    })
+  } else if (process.env.REACT_APP_SITE_NAME === 'awen') {
+    tableColumns.splice(tableColumns?.length - 4, 0, {
+      title: 'Product Buy Type',
+      dataIndex: 'acquirementMethod',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
+    })
+  }
 
   const onSearch = (e) => {
     const value = e.currentTarget.value

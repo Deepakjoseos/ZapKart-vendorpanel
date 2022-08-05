@@ -117,8 +117,15 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         // values.productBuyType = values.acquirementMethod
-        values.acquirementMethod = 'Purchase'
-        values.productBuyType = 'Purchase'
+        if (
+          process.env.REACT_APP_SITE_NAME === 'zapkart' ||
+          process.env.REACT_APP_SITE_NAME === 'athathy'
+        ) {
+          values.acquirementMethod = 'Purchase'
+          values.productBuyType = 'Purchase'
+        } else if (process.env.REACT_APP_SITE_NAME === 'awen') {
+          values.productBuyType = values.acquirementMethod
+        }
 
         if (values.productVariantId === '') {
           delete values.productVariantId
