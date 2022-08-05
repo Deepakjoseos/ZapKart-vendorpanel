@@ -320,6 +320,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-shipment',
+        path: `${APP_PREFIX_PATH}/dashboards/shipment/shipment-list`,
+        title: 'Shipment',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
 ]

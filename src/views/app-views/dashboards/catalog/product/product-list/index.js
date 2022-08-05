@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
+  FileAddOutlined,
 } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -34,6 +35,7 @@ const getStockStatus = (status) => {
 }
 const ProductList = () => {
   let history = useHistory()
+  const fileInputRef = useRef()
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
@@ -249,20 +251,45 @@ const ProductList = () => {
     </Flex>
   )
 
+  const handleExcelUpload = (e) => {
+    let file = e.target.files[0]
+  }
+
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Product
-          </Button>
-        </div>
+        <Flex>
+          <div className="mr-2">
+            <Button
+              onClick={() => fileInputRef.current.click()}
+              type="primary"
+              icon={<FileAddOutlined />}
+              block
+            >
+              Excel Upload
+            </Button>
+            <input
+              accept=".xls,.xlsx"
+              multiple={false}
+              ref={fileInputRef}
+              type="file"
+              onchange={handleExcelUpload}
+              hidden
+            />
+          </div>
+
+          <div>
+            <Button
+              onClick={addProduct}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Product
+            </Button>
+          </div>
+        </Flex>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
