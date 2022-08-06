@@ -74,17 +74,17 @@ const ProductForm = (props) => {
         if (data) {
           form.setFieldsValue({
             productTemplateId: data.productTemplateId,
-            productVariantId: data.variant.id,
+            productVariantId: data?.variant?.id,
             acquirementMethod: data.acquirementMethod,
-            mrpPrice: data.mrpPrice,
-            price: data.price,
-            deliveryZoneId: data.deliveryZone.id,
+            mrpPrice: data?.mrpPrice,
+            price: data?.price,
+            deliveryZoneId: data?.deliveryZone?.id,
             status: data.status,
             qty: data.qty,
             isUnlimited: data.isUnlimited,
-            subscriptionPrice: data.subscriptionPrice,
-            bulkPrice: data.bulkPrice,
-            productCode: data.productCode,
+            subscriptionPrice: data?.subscriptionPrice,
+            bulkPrice: data?.bulkPrice,
+            productCode: data?.productCode,
           })
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)

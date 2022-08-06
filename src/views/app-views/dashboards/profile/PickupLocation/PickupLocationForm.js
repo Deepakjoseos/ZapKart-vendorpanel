@@ -12,7 +12,7 @@ import {
   Space,
 } from 'antd'
 import React, { useState } from 'react'
-import shipmentService from 'services/shipment'
+import authVendorService from 'services/auth/vendor'
 
 const { Option } = Select
 
@@ -34,7 +34,7 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen }) => {
       .validateFields()
       .then(async (values) => {
         values.country = 'India'
-        const data = await shipmentService.addPickupLocation(values)
+        const data = await authVendorService.addPickupLocation(values)
 
         if (data) {
           message.success('Pickup Location Added Successfully')

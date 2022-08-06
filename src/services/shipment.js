@@ -66,17 +66,4 @@ shipmentService.editShipment = async function (id, data) {
   }
 }
 
-shipmentService.addPickupLocation = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/pickupLocations/new`,
-      method: 'post',
-      data: data,
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
 export default shipmentService

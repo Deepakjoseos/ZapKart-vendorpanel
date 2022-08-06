@@ -70,6 +70,14 @@ const OrderView = () => {
     }
   }
 
+  const cancleOrderItem = async (itemId) => {
+    const cancel = await orderService.cancelOrderItem(id, itemId)
+
+    if (cancel) {
+      notification.success({ message: 'Order Item Cancelled' })
+    }
+  }
+
   return (
     <div className="container">
       <Card>
@@ -78,7 +86,7 @@ const OrderView = () => {
             <address>
               <p>
                 <span className="font-weight-semibold text-dark font-size-md">
-                  {order?.userId}
+                  {order?.userName}
                 </span>
                 <br />
                 <span>Invoice No: {order?.invoice?.invoiceNo}</span>
@@ -153,6 +161,15 @@ const OrderView = () => {
                     </Option>
                   ))}
                 </Select>
+              )}
+            />
+
+            <Column
+              title="Action"
+              render={(_, row) => (
+                <Button type="primary" onClick={() => cancleOrderItem(row.id)}>
+                  Cancel Order Item
+                </Button>
               )}
             />
             {/* <Column

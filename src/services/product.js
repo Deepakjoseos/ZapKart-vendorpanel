@@ -66,6 +66,23 @@ productService.editProduct = async function (id, data) {
   }
 }
 
+productService.createProductFromExcel = async function (data) {
+  const formData = new FormData()
+  formData.append('file', data.file)
+  formData.append('deliveryZoneId', data.deliveryZoneId)
+
+  try {
+    const res = await fetch({
+      url: `/products`,
+      method: 'post',
+      data: formData,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // productService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',

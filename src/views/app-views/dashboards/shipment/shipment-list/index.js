@@ -85,11 +85,11 @@ const ShipmentList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/shipments/shipment/add-shipment`)
+    history.push(`/app/dashboards/shipment/add-shipment`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/shipments/shipment/edit-shipment/${row.id}`)
+    history.push(`/app/dashboards/shipment/edit-shipment/${row.id}`)
   }
 
   // For deleting a row

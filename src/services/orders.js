@@ -42,6 +42,20 @@ orderService.updateOrderItemStatus = async function (id, data) {
   }
 }
 
+orderService.cancelOrderItem = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `/order/vendor/${id}`,
+      method: 'post',
+      data: [data],
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // orderService.getProductById = async function (id) {
 //   try {
 //     const res = await fetch({

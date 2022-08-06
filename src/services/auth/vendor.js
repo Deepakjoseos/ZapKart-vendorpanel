@@ -43,6 +43,19 @@ authVendorService.editProfile = async function (data) {
   }
 }
 
+authVendorService.addPickupLocation = async function (data) {
+  try {
+    const res = await fetch({
+      url: `/vendors/pickupLocation/new`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // authVendorService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',

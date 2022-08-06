@@ -416,7 +416,7 @@ const Orders = () => {
 
     {
       title: 'User Name',
-      dataIndex: 'userId',
+      dataIndex: 'userName',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
