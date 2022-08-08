@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  notification,
+} from 'antd'
 // import ShipmentListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -112,6 +121,26 @@ const ShipmentList = () => {
   //   }
   // }
 
+  const requestPickupOrder = async (shipmentId) => {
+    const resp = await shipmentService.requestPickupOrder({ shipmentId })
+    if (resp) {
+      notification.success({
+        message: 'Success',
+        description: 'Request pickup order successfully',
+      })
+    }
+  }
+
+  const cancelShipment = async (shipmentId) => {
+    const resp = await shipmentService.shipmentCancel({ shipmentId })
+    if (resp) {
+      notification.success({
+        message: 'Success',
+        description: 'Cancel shipment successfully',
+      })
+    }
+  }
+
   // Antd Table Columns
   const tableColumns = [
     {
@@ -143,9 +172,25 @@ const ShipmentList = () => {
       title: '',
       dataIndex: 'actions',
       render: (_, elm) => (
-        <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
-        </div>
+        <Flex>
+          <Button
+            type="primary"
+            className="ml-auto"
+            onClick={() => requestPickupOrder(elm.id)}
+          >
+            Request Shipment
+          </Button>
+          <Button
+            className="mr-auto ml-2"
+            onClick={() => cancelShipment(elm.id)}
+          >
+            Cancel Shipment
+          </Button>
+
+          <div className="text-right">
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          </div>
+        </Flex>
       ),
     },
   ]

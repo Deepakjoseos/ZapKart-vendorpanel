@@ -48,7 +48,7 @@ const rules = {
 }
 
 const GeneralField = ({ form }) => {
-  const [shippedByVendor, setShippedByVendor] = useState(false)
+  const [shippedByVendor, setShippedByVendor] = useState(null)
   const [pickupLocations, setPickUpLocations] = useState([])
 
   const getPickupLocations = async () => {
@@ -116,71 +116,74 @@ const GeneralField = ({ form }) => {
             <Input placeholder="Name" />
           </Form.Item> */}
         </Card>
+        {shippedByVendor === false && (
+          <Card title="Shipment Details">
+            <Form.Item name="description" label="Description">
+              <Input placeholder="Description" />
+            </Form.Item>
 
-        <Card title="Ship Rocket">
-          <Form.Item name="description" label="Description">
-            <Input placeholder="Description" />
-          </Form.Item>
+            <Form.Item name="pickup_location" label="Pickup Location">
+              <Select placeholder="Pickup Location">
+                {pickupLocations.map((item) => (
+                  <Option value={item?.pickup_location}>
+                    {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Row gutter={16}>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="length" label="Length">
+                  <InputNumber
+                    placeholder="Length"
+                    // size="large"
+                    style={{ width: '100%' }}
+                    min={0}
+                    max={100000}
+                    addonAfter="cm"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="breadth" label="Breadth">
+                  <InputNumber
+                    placeholder="Breadth"
+                    style={{ width: '100%' }}
+                    // size="large"
+                    min={0}
+                    max={100000}
+                    addonAfter="cm"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="height" label="Height">
+                  <InputNumber
+                    placeholder="Height"
+                    style={{ width: '100%' }}
+                    // size="large"
+                    min={0}
+                    max={100000}
+                    addonAfter="cm"
+                  />
+                </Form.Item>
+              </Col>
 
-          <Form.Item name="pickup_location" label="Pickup Location">
-            <Select placeholder="Pickup Location">
-              {pickupLocations.map((item) => (
-                <Option value={item.name}>{item.name}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Row gutter={16}>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item name="length" label="Length">
-                <InputNumber
-                  placeholder="Length"
-                  // size="large"
-                  style={{ width: '100%' }}
-                  min={0}
-                  max={100000}
-                  addonAfter="cm"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item name="breadth" label="Breadth">
-                <InputNumber
-                  placeholder="Breadth"
-                  style={{ width: '100%' }}
-                  // size="large"
-                  min={0}
-                  max={100000}
-                  addonAfter="cm"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item name="height" label="Height">
-                <InputNumber
-                  placeholder="Height"
-                  style={{ width: '100%' }}
-                  // size="large"
-                  min={0}
-                  max={100000}
-                  addonAfter="cm"
-                />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item name="weight" label="Weight">
-                <InputNumber
-                  placeholder="Weight"
-                  style={{ width: '100%' }}
-                  // size="large"
-                  min={0}
-                  max={100000}
-                  addonAfter="kg"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Card>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="weight" label="Weight">
+                  <InputNumber
+                    placeholder="Weight"
+                    style={{ width: '100%' }}
+                    // size="large"
+                    min={0}
+                    max={100000}
+                    addonAfter="kg"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+        )}
       </Col>
     </Row>
   )

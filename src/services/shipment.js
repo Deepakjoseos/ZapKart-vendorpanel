@@ -66,4 +66,30 @@ shipmentService.editShipment = async function (id, data) {
   }
 }
 
+shipmentService.requestPickupOrder = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/pickupOrder/request`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+shipmentService.shipmentCancel = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/cancel`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default shipmentService

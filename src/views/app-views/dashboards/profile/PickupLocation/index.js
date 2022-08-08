@@ -103,6 +103,7 @@ const PickupLocation = () => {
         <PickupLocationForm
           setIsFormOpen={setIsFormOpen}
           isFormOpen={isFormOpen}
+          getProfile={getProfile}
         />
       </div>
     </>

@@ -16,7 +16,7 @@ import authVendorService from 'services/auth/vendor'
 
 const { Option } = Select
 
-const PickupLocationForm = ({ isFormOpen, setIsFormOpen }) => {
+const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
 
@@ -40,15 +40,15 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen }) => {
           message.success('Pickup Location Added Successfully')
           onClose()
           form.resetFields()
+          getProfile()
         }
-
-        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)
         console.log('info', info)
         message.error('Please enter all required field ')
       })
+    setSubmitLoading(false)
   }
 
   return (

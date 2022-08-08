@@ -7,6 +7,7 @@ const OrderSelectionField = ({ fields, remove, add }) => {
   const { Option } = Select
 
   const [orders, setOrders] = useState([])
+  const [curOderItems, setCurOrderItems] = useState([])
 
   const getOrders = async () => {
     const data = await orderService.getOrders()
@@ -43,7 +44,10 @@ const OrderSelectionField = ({ fields, remove, add }) => {
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               onChange={(e) => {
-                console.log(e, 'e')
+                const curOrder = orders?.find((cur) => cur.id === e)
+                if (curOrder) {
+                  setCurOrderItems(curOrder.items)
+                }
               }}
             >
               {orders?.map((order) => (
@@ -68,13 +72,11 @@ const OrderSelectionField = ({ fields, remove, add }) => {
               //   onChange={handleChange}
               style={{ width: 300 }}
             >
-              {orders?.map((order) => {
-                return order?.items.map((item) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              })}
+              {curOderItems?.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           {fields.length > 1 && (

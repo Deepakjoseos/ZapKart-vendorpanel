@@ -73,7 +73,7 @@ productService.createProductFromExcel = async function (data) {
 
   try {
     const res = await fetch({
-      url: `/products`,
+      url: `/products/createFromExcel`,
       method: 'post',
       data: formData,
     })
