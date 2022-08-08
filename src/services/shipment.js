@@ -43,7 +43,7 @@ shipmentService.getShipmentById = async function (id) {
 shipmentService.createShipment = async function (data) {
   try {
     const res = await fetch({
-      url: apiRoute,
+      url: `${apiRoute}/create`,
       method: 'post',
       data: data,
     })
