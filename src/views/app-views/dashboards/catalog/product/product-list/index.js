@@ -24,6 +24,8 @@ import utils from 'utils'
 import productService from 'services/product'
 import DeliveryZoneService from 'services/deliveryZone'
 import { DownloadOutlined } from '@ant-design/icons'
+import brandService from 'services/brand'
+import categoryService from 'services/category'
 
 const { Option } = Select
 
@@ -56,6 +58,14 @@ const ProductList = () => {
   const [deliveryZones, setDeliveryZones] = useState([])
   const [deliveryZoneId, setDeliveryZoneId] = useState(null)
   const [excelFile, setExcelFile] = useState(null)
+  const [brands,setBrands] = useState([])
+  const [categories,setCategories] = useState([])
+  const [vendors,setVendors] = useState([])
+  const[selectedBrandId,setSelectedBrandId] = useState([])
+  const[selectedCategoryId,setSelectedCategoryId] = useState([])
+  const[selectedVendorId,setSelectedVendorId]=useState([])
+  const[selectedApproval,setSelectedApproval]=useState(null)
+  const[selectedacquirementMethod,setSelectedacquirementMethod] = useState(null)
 
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
@@ -78,7 +88,24 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
+    const getBrands = async() =>{
+      const data= await brandService.getBrands()
+      if(data){
+        setBrands(data)
+      }
+    }
+    const getCategories = async() =>{
+      const data= await categoryService.getCategories()
+      if(data){
+        setCategories(data)
+      }
+    }
+    // const getVendors = async () =>{
+    //   const data= await vendor
+    // }
     getProducts()
+    getBrands()
+    getCategories()
   }, [])
 
   useEffect(() => {
@@ -105,6 +132,35 @@ const ProductList = () => {
       notification.success({
         message: 'Product Excel File Uploaded',
       })
+    }
+  }
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedBrandId || selectedBrandId) !== 'All')
+      query.brandId = selectedBrandId
+    query.categoryId = selectedCategoryId
+    query.vendorId=selectedVendorId
+    query.approval=selectedApproval
+    query.acquirementMethod=selectedacquirementMethod
+    console.log('query', query)
+    const data = await productService.getProducts(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+  const handleClearFilter = async () => {
+    setSelectedBrandId(null)
+    setSelectedCategoryId(null)
+    setSelectedApproval(null)
+    setSelectedacquirementMethod(null)
+    setSelectedVendorId(null)
+
+    const data = await productService.getProducts({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
     }
   }
 
@@ -276,15 +332,20 @@ const ProductList = () => {
   }
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
+    <Flex className="mb-1 flex-wrap" mobileFlex={false}>
+     
+
       <div className="mr-md-3 mb-3">
+      <label className='mt-2'>Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Status</label>
+
         <Select
           defaultValue="All"
           className="w-100"
@@ -296,6 +357,104 @@ const ProductList = () => {
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
+      </div>
+      <div className=" mr-md-3 mb-3">
+        <label className='mt-2'>Brands</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedBrandId(value)}
+          // onSelect={handleQuery}
+          placeholder="Brand"
+          value={selectedBrandId}
+        >
+          <Option value="">All</Option>
+          {brands.map((brand) => (
+            <Option key={brand.id} value={brand.id}>
+              {brand.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Categories</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          value={selectedCategoryId}
+          placeholder="Category"
+        >
+          <Option value="">All</Option>
+          {categories.map((category) => (
+            <Option key={category.id} value={category.id}>
+              {category.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      {/* <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Vendors</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedVendorId(value)}
+          // onSelect={handleQuery}
+          value={selectedVendorId}
+          placeholder="Vendor">
+          <Option value="">All</Option>
+          {vendors?.map((vendor) => (
+            <Option value={vendor.id}>
+              {vendor?.firstName} {vendor?.lastName}
+            </Option>
+          ))}
+        </Select>
+      </div> */}
+      <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Approval</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedApproval(value)}
+          // onSelect={handleQuery}
+          value={selectedApproval}
+          placeholder="Approval Method">
+          <Option value="">All</Option>
+          <Option value="Pending">Pending</Option>
+          <Option value="Approved">Approved</Option>
+          <Option value="On Hold">On Hold</Option>
+          <Option value="Rejected">Rejected</Option>
+        </Select>
+      </div>
+      {process.env.REACT_APP_SITE_NAME === 'awen' ?
+        <div className="mr-md-3 mb-3">
+          <label className='mt-2'>Acquirement Method</label>
+          <Select
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => setSelectedacquirementMethod(value)}
+            // onSelect={handleQuery}
+            value={selectedacquirementMethod}
+            placeholder="AcquirementMethod">
+            <Option value="">All</Option>
+            <Option value="Rent">Rent</Option>
+            <Option value="Lend">Lend</Option>
+            <Option value="Purchase">Purchase</Option>
+            <Option value="Giveaway">Giveaway</Option>
+          </Select>
+        </div> : ""}
+
+      <div >
+        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
+          Clear
+        </Button>
       </div>
     </Flex>
   )
@@ -311,30 +470,27 @@ const ProductList = () => {
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
-          <Flex>
-            <div className="mr-2">
+        
+        </Flex>
+        <div className="mr-2">
               <Button
                 type="primary"
                 icon={<FileAddOutlined />}
                 onClick={() => setIsExcelModalOpen(true)}
-                block
+                className="mr-1"
               >
                 Excel Upload
               </Button>
-            </div>
-
-            <div>
               <Button
                 onClick={addProduct}
                 type="primary"
                 icon={<PlusCircleOutlined />}
-                block
+                className="mr-1"
               >
                 Add Product
               </Button>
             </div>
-          </Flex>
-        </Flex>
+
         <div className="table-responsive">
           <Table columns={tableColumns} dataSource={list} rowKey="id" />
         </div>

@@ -1,11 +1,16 @@
 import fetch from 'auth/FetchInterceptor'
 
 const orderService = {}
-
-orderService.getOrders = async function () {
+const api = '/order/vendor/view_all'
+orderService.getOrders = async function (query) {
   try {
+    let url = `${api}`
+    const status = query?.status
+    if (status) url = `${url}?status=${status}`;
+
+
     const res = await fetch({
-      url: '/order/vendor/view_all',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
