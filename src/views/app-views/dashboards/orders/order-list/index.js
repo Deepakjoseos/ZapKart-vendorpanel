@@ -336,6 +336,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 import utils from 'utils'
 import orderService from 'services/orders'
 import { useHistory } from 'react-router-dom'
+import customerService from 'services/customer'
 
 const { Option } = Select
 
@@ -370,7 +371,19 @@ const Orders = () => {
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const history = useHistory()
-
+  const [users,setUsers] = useState([])
+  const statuses= [ "Pending", "Received", "Confirmed", "Prescriptions Missing",
+    " Verifying Prescription", "Shipping Soon", "Shipped", "Shipment Delayed",
+      "Arriving Early", "Out for Delivery", "Delivery Refused by Customer",
+      " Delivery Rescheduled", "Delivered", "Shipment Failed",
+      "Items damaged during transit, and being returned back to us", 
+      "Payment Failed", "Cancelled", "Attempting Cancellation", 
+       " Return Requested", "Return Initiated", "Return Rescheduled", "Return Completed",
+       " Items Returning Back",
+        " Return Delayed", "Return Items Received", "Return Items Verification Failed", 
+        " Return Items Verification Completed", "Return Failed", "Return Cancelled"," Refund Initiated", 
+        " Refund Delayed", "Refund Completed", "Refund Failed"]
+const [selectedStatus,setSelectedStatus] = useState("")
   useEffect(() => {
     const getOrders = async () => {
       const data = await orderService.getOrders()
@@ -380,7 +393,10 @@ const Orders = () => {
         console.log(data, 'show-data')
       }
     }
+
+ 
     getOrders()
+    // getUsers()
   }, [])
 
   // const handleShowStatus = (value) => {
@@ -392,6 +408,29 @@ const Orders = () => {
   //     setList(OrderListData)
   //   }
   // }
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedStatus) !== 'All')
+      query.status = selectedStatus
+  
+    console.log('query', query)
+    const data = await orderService.getOrders(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+  const handleClearFilter = async () => {
+    setSelectedStatus(null)
+  
+
+    const data = await orderService.getOrders({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -509,17 +548,47 @@ const Orders = () => {
     }
   }
 
+
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         <Flex className="mb-1" mobileFlex={false}>
           <div className="mr-md-3 mb-3">
+            <label className='mt-2'>Search</label>
             <Input
               placeholder="Search"
               prefix={<SearchOutlined />}
               onChange={(e) => onSearch(e)}
             />
           </div>
+          <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Status</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedStatus(value)}
+          // onSelect={handleQuery}
+          value={selectedStatus}
+          placeholder="Status"
+        >
+          <Option value="">All</Option>
+          {statuses.map((status) => (
+            <Option key={status} value={status}>
+              {status}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
           {/* <div className="mb-3">
             <Select
               defaultValue="All"

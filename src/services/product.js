@@ -1,11 +1,52 @@
 import fetch from 'auth/FetchInterceptor'
 
 const productService = {}
-
-productService.getProducts = async function () {
+const api = '/products'
+productService.getProducts = async function (query) {
   try {
+    let url = `${api}`;
+    const brandId = query?.brandId;
+    const categoryId = query?.categoryId;
+    const status = query?.status;
+    const vendorId = query?.vendorId;
+    const approval = query?.approval;
+    const acquirementMethod = query?.acquirementMethod;
+    if (brandId) url = `${url}?brandId=${brandId}`;
+    if (categoryId)
+      url =
+        brandId && brandId !== null
+          ? `${url}&categoryId=${categoryId}`
+          : `${url}?categoryId=${categoryId}`;
+    if (status)
+      url =
+        (brandId && brandId !== null) ||
+          (categoryId && categoryId !== null)
+          ? `${url}&status=${status}`
+          : `${url}?status=${status}`;
+
+    if (vendorId)
+      url =
+        (brandId && brandId !== null) ||
+          (categoryId && categoryId !== null)
+          ? `${url}&vendorId=${vendorId}`
+          : `${url}?vendorId=${vendorId}`;
+    if (approval)
+      url =
+        (brandId && brandId !== null) ||
+          (categoryId && categoryId !== null) ||
+          (vendorId && vendorId !== null) 
+          ? `${url}&approval=${approval}`
+          : `${url}?approval=${approval}`;
+    if (acquirementMethod)
+      url =
+        (brandId && brandId !== null) ||
+          (categoryId && categoryId !== null) ||
+          (vendorId && vendorId !== null)||
+          (approval && approval!==null)
+          ? `${url}&acquirementMethod=${acquirementMethod}`
+          : `${url}?acquirementMethod=${acquirementMethod}`;
     const res = await fetch({
-      url: '/products',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
