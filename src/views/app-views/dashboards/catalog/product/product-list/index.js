@@ -58,14 +58,14 @@ const ProductList = () => {
   const [deliveryZones, setDeliveryZones] = useState([])
   const [deliveryZoneId, setDeliveryZoneId] = useState(null)
   const [excelFile, setExcelFile] = useState(null)
-  const [brands,setBrands] = useState([])
-  const [categories,setCategories] = useState([])
-  const [vendors,setVendors] = useState([])
-  const[selectedBrandId,setSelectedBrandId] = useState([])
-  const[selectedCategoryId,setSelectedCategoryId] = useState([])
-  const[selectedVendorId,setSelectedVendorId]=useState([])
-  const[selectedApproval,setSelectedApproval]=useState(null)
-  const[selectedacquirementMethod,setSelectedacquirementMethod] = useState(null)
+  const [brands, setBrands] = useState([])
+  const [categories, setCategories] = useState([])
+  const [vendors, setVendors] = useState([])
+  const [selectedBrandId, setSelectedBrandId] = useState([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState([])
+  const [selectedVendorId, setSelectedVendorId] = useState([])
+  const [selectedApproval, setSelectedApproval] = useState(null)
+  const [selectedacquirementMethod, setSelectedacquirementMethod] = useState(null)
 
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
@@ -88,15 +88,15 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
-    const getBrands = async() =>{
-      const data= await brandService.getBrands()
-      if(data){
+    const getBrands = async () => {
+      const data = await brandService.getBrands()
+      if (data) {
         setBrands(data)
       }
     }
-    const getCategories = async() =>{
-      const data= await categoryService.getCategories()
-      if(data){
+    const getCategories = async () => {
+      const data = await categoryService.getCategories()
+      if (data) {
         setCategories(data)
       }
     }
@@ -139,9 +139,9 @@ const ProductList = () => {
     if ((selectedBrandId || selectedBrandId) !== 'All')
       query.brandId = selectedBrandId
     query.categoryId = selectedCategoryId
-    query.vendorId=selectedVendorId
-    query.approval=selectedApproval
-    query.acquirementMethod=selectedacquirementMethod
+    query.vendorId = selectedVendorId
+    query.approval = selectedApproval
+    query.acquirementMethod = selectedacquirementMethod
     console.log('query', query)
     const data = await productService.getProducts(query)
     if (data) {
@@ -333,10 +333,10 @@ const ProductList = () => {
 
   const filters = () => (
     <Flex className="mb-1 flex-wrap" mobileFlex={false}>
-     
+
 
       <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Search</label>
+        <label className='mt-2'>Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
@@ -470,29 +470,31 @@ const ProductList = () => {
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
-        
+
         </Flex>
         <div className="mr-2">
-              <Button
-                type="primary"
-                icon={<FileAddOutlined />}
-                onClick={() => setIsExcelModalOpen(true)}
-                className="mr-1"
-              >
-                Excel Upload
-              </Button>
-              <Button
-                onClick={addProduct}
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                className="mr-1"
-              >
-                Add Product
-              </Button>
-            </div>
+          <Button
+            type="primary"
+            icon={<FileAddOutlined />}
+            onClick={() => setIsExcelModalOpen(true)}
+            className="mr-1"
+          >
+            Excel Upload
+          </Button>
+          <Button
+            onClick={addProduct}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            className="mr-1"
+          >
+            Add Product
+          </Button>
+        </div>
 
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table columns={tableColumns} scroll={{
+            x: 1500,
+          }} dataSource={list} rowKey="id" />
         </div>
       </Card>
 
