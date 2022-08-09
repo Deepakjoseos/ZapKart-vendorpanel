@@ -5,11 +5,10 @@ const deliveryLocation = {}
 deliveryLocation.getDeliveryZones = async function () {
   try {
     const res = await fetch({
-      url: '/deliveryZones',
+      url: '/deliveryzones?status=Active',
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }
