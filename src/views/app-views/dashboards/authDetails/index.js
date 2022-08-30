@@ -37,6 +37,7 @@ const AuthDetails = () => {
     // email: Yup.string().email('*Invalid Email').required('* Email Required'),
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
+    pan: Yup.string().required('Required'),
     // displayImage: Yup.string().required('* Password Required'),
     // phone: Yup.string().required('Phone Number Required'),
     // confirmPassword: Yup.string()
@@ -234,6 +235,7 @@ const AuthDetails = () => {
         firstName: values.firstName,
         lastName: values.lastName,
         displayImage: curUser.displayImage,
+        pan: values.pan,
       }
 
       if (!userAlreadyExistInDB) {
@@ -257,6 +259,7 @@ const AuthDetails = () => {
             address: data.address,
             gst: data.gst,
             tanNumber: data.tanNumber,
+            pan: data.pan,
           }
 
           await dispatch(
@@ -297,6 +300,7 @@ const AuthDetails = () => {
             address: data.address,
             gst: data.gst,
             tanNumber: data.tanNumber,
+            pan: data.pan,
           }
 
           await dispatch(
@@ -454,6 +458,21 @@ const AuthDetails = () => {
                             }}
                           />
                           <ErrorMessage name="email" />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="lastName">Pan Number</label>
+                          <Field
+                            as={Input}
+                            type="text"
+                            name="pan"
+                            className="form-control"
+                            style={{
+                              border: `${
+                                touched.pan && errors.pan ? '1px solid red' : ''
+                              }`,
+                            }}
+                          />
+                          <ErrorMessage name="pan" />
                         </div>
 
                         <div>

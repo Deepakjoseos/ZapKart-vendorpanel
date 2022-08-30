@@ -47,6 +47,7 @@ function App() {
               business: data.business,
               gst: data.gst,
               tanNumber: data.tanNumber,
+              pan: data.pan,
             }
 
             dispatch(
@@ -62,9 +63,9 @@ function App() {
           // Redux Store
           window.localStorage.setItem('auth_token', idTokenResult.token)
           const dispatchingData = {
-            firstName: user.displayName,
+            firstName: user.displayName?.split(' ')[0] || user.displayName,
             displayImage: user.photoURL,
-            lastName: null,
+            lastName: user.displayName?.split(' ')[1] || null,
             email: user.email,
             phone: user.phoneNumber,
             emailVerified: user.emailVerified,
@@ -73,6 +74,7 @@ function App() {
             business: {},
             tanNumber: null,
             gst: null,
+            pan: null,
             // passwordVerified: passwordAvailable?.providerId ? true : false,
           }
           dispatch(

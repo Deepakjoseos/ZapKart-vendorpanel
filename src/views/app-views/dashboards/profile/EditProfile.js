@@ -42,6 +42,7 @@ const EditProfile = () => {
         gst: user.gst,
         address: user.address,
         tanNumber: user.tanNumber,
+        pan: user.pan,
 
         // address:
         'address.line1': user?.address?.line1,
@@ -95,6 +96,7 @@ const EditProfile = () => {
           lastName: values.lastName,
           gst: values.gst,
           tanNumber: values.tanNumber,
+          pan: values.pan,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -159,6 +161,7 @@ const EditProfile = () => {
               displayImage: data.displayImage,
               gst: data.gst,
               tanNumber: data.tanNumber,
+              pan: data.pan,
               address: data.address,
               business: data.business,
             }
@@ -293,6 +296,20 @@ const EditProfile = () => {
               <Form.Item
                 label="Last Name"
                 name="lastName"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Required',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={12}>
+              <Form.Item
+                label="PAN Number"
+                name="pan"
                 rules={[
                   {
                     required: true,
