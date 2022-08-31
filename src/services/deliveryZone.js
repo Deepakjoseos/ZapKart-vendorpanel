@@ -76,7 +76,7 @@ deliveryLocation.removeDeliveryLocationZone = async function (
       url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}`,
       method: 'delete',
     })
-    return res
+    return res  
   } catch (err) {
     console.log(err, 'show-err')
   }
