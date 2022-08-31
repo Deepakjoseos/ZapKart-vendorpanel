@@ -32,6 +32,9 @@ import {
   FormatPainterOutlined,
   UserOutlined,
   ApartmentOutlined,
+  ShoppingFilled,
+  DeliveredProcedureOutlined,
+  NodeExpandOutlined
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -263,7 +266,7 @@ const dashBoardNavTree = [
             key: 'dashboards-catalog-product',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/product/product-list`,
             title: 'Products',
-            icon: FormatPainterOutlined,
+            icon: ShoppingFilled,
             breadcrumb: false,
             submenu: [],
           },
@@ -308,7 +311,7 @@ const dashBoardNavTree = [
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
         title: 'Orders',
-        icon: DotChartOutlined,
+        icon: ShoppingCartOutlined  ,
         breadcrumb: false,
         submenu: [],
       },
@@ -316,7 +319,7 @@ const dashBoardNavTree = [
         key: 'dashboards-deliveryzones',
         path: `${APP_PREFIX_PATH}/dashboards/deliveryzone/deliveryzone-list`,
         title: 'Delivery Zone',
-        icon: DotChartOutlined,
+        icon: DeliveredProcedureOutlined,
         breadcrumb: false,
         submenu: [],
       },
@@ -324,7 +327,7 @@ const dashBoardNavTree = [
         key: 'dashboards-shipment',
         path: `${APP_PREFIX_PATH}/dashboards/shipment/shipment-list`,
         title: 'Shipment',
-        icon: DotChartOutlined,
+        icon: NodeExpandOutlined,
         breadcrumb: false,
         submenu: [],
       },
