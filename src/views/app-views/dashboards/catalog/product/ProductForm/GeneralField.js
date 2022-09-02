@@ -168,7 +168,12 @@ const GeneralField = ({
           <Input placeholder="Product Code" />
         </Form.Item>
 
-        <Form.Item
+        <Form.Item rules={[
+              {
+                required: variants?.length > 0 ? true : false,
+                message: 'Product Template Have Variants. Please Select One',
+              },
+            ]}
           name="productVariantId"
           label="productVariant"
           // rules={rules.productVariantId}
