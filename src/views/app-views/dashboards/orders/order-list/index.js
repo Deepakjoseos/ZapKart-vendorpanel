@@ -335,7 +335,7 @@ import moment from 'moment'
 import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 import utils from 'utils'
 import orderService from 'services/orders'
-import { useHistory } from 'react-router-dom'
+import { useHistory,Link } from 'react-router-dom'
 import customerService from 'services/customer'
 
 const { Option } = Select
@@ -432,40 +432,49 @@ const [selectedStatus,setSelectedStatus] = useState("")
     }
   }
 
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item
-        onClick={() =>
-          history.push(`/app/dashboards/orders/order-view/${row.id}`)
-        }
-      >
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-    </Menu>
-  )
+  // const dropdownMenu = (row) => (
+  //   <Menu>
+  //     <Menu.Item
+  //       onClick={() =>
+  //         history.push(`/app/dashboards/orders/order-view/${row.id}`)
+  //       }
+  //     >
+  //       <Flex alignItems="center">
+  //         <EyeOutlined />
+  //         <span className="ml-2">View Details</span>
+  //       </Flex>
+  //     </Menu.Item>
+  //   </Menu>
+  // )
 
   const tableColumns = [
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'orderNo',
+    // },
     {
-      title: 'ID',
+      title: 'OrderNo',
       dataIndex: 'orderNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+          {text}
+        </Link>
+      ),
     },
 
     {
-      title: 'User Name',
+      title: 'Customer Name',
       dataIndex: 'userName',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
 
-    {
-      title: 'Products Count',
-      dataIndex: 'items',
-      render: (items, record) => <div>{items?.length}</div>,
-    },
+    // {
+    //   title: 'Products Count',
+    //   dataIndex: 'items',
+    //   render: (items, record) => <div>{items?.length}</div>,
+    // },
 
     {
       title: 'Total Amount',
@@ -489,6 +498,16 @@ const [selectedStatus,setSelectedStatus] = useState("")
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'date'),
     // },
     {
+      title: 'Order Date',
+      dataIndex: 'createdAt',
+      render: (createdAt) => (
+        <Flex alignItems="center">
+          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+        </Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+    },
+    {
       title: 'Order status',
       dataIndex: 'status',
       render: (status, record) => (
@@ -501,26 +520,22 @@ const [selectedStatus,setSelectedStatus] = useState("")
       sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
     },
     {
-      title: 'Payment status',
+      title: 'Payment Status',
       dataIndex: 'payment',
-      render: (payment, record) => (
-        <>
-          {/* <Badge status={getPaymentStatus(record.paymentStatus)} /> */}
-          <span>{payment.completed ? 'Completed' : 'Not Completed'}</span>
-        </>
-      ),
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentStatus'),
+      render: (payment) => {
+        return <Flex alignItems="centre">{payment?.status}</Flex>
+      },
     },
 
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
-        </div>
-      ),
-    },
+    // {
+    //   title: '',
+    //   dataIndex: 'actions',
+    //   render: (_, elm) => (
+    //     <div className="text-right">
+    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
+    //     </div>
+    //   ),
+    // },
   ]
 
   const rowSelection = {
