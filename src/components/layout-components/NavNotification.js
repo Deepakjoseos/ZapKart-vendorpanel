@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 import notificationData from 'assets/data/notification.data.json'
 import Flex from 'components/shared-components/Flex'
-
+import { useHistory } from 'react-router-dom'
 const getIcon = (icon) => {
   switch (icon) {
     case 'mail':
@@ -21,7 +21,6 @@ const getIcon = (icon) => {
       return <MailOutlined />
   }
 }
-
 const getNotificationBody = (list) => {
   return list.length > 0 ? (
     <List
@@ -64,11 +63,16 @@ const getNotificationBody = (list) => {
 export const NavNotification = () => {
   const [visible, setVisible] = useState(false)
   const [data, setData] = useState(notificationData)
+  let history = useHistory()
+
 
   const handleVisibleChange = (flag) => {
     setVisible(flag)
   }
+  const showNotificationlist = () =>{
+    history.push(`/app/dashboards/notifications/notification-list`)
 
+  }
   const notificationList = (
     <div className="nav-dropdown nav-notification">
       {/* <div className="nav-notification-header d-flex justify-content-between align-items-center">
@@ -98,10 +102,10 @@ export const NavNotification = () => {
       trigger={['click']}
     >
       <Menu mode="horizontal">
-        <Menu.Item key="notification">
-          <Badge count={data.length}>
+        <Menu.Item key="notification" onClick={()=>{showNotificationlist()}}>
+          {/* <Badge count={data.length}> */}
             <BellOutlined className="nav-icon mx-auto" type="bell" />
-          </Badge>
+          {/* </Badge> */}
         </Menu.Item>
       </Menu>
     </Dropdown>
