@@ -20,7 +20,7 @@ import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import NumberFormat from 'react-number-format'
-import { useHistory } from 'react-router-dom'
+import { useHistory ,Link} from 'react-router-dom'
 import utils from 'utils'
 import shipmentService from 'services/shipment'
 import CheckIfDeliverable from './CheckIfDeliverable'
@@ -146,13 +146,26 @@ const ShipmentList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
+      title:'ShipmentId',
+      dataIndex:'id',
+      render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
+      {text}
+   </Link>
+    },
+    {
       title: 'Shipment',
       dataIndex: 'items',
       render: (_, record) => (
         <div>
           {record.items.map((item, index) => (
             <>
-              <div>{`OrderId: ${item?.orderId}`}</div>
+             <div>
+              <span>OrderId:</span>
+                <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
+                   {item?.orderId}
+                </Link>
+                
+              </div>
               <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
             </>
           ))}

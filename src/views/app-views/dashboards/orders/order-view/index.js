@@ -188,7 +188,7 @@ const OrderView = () => {
 
                   <br />
                   <abbr className="text-dark" title="Phone">
-                    Phone:{' '}
+                    Phone: {' '}
                   </abbr>
                   <span>{order?.shippingAddress?.mobileNumber}</span>
                   <br />
@@ -247,10 +247,11 @@ const OrderView = () => {
             >
               <Column title="Product" dataIndex="name" key="name" />
               <Column title="Quantity" dataIndex="quantity" key="quantity" />
-              <Column title="Price" dataIndex="price" key="price" />
+              
               <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Column
+                
                   title="Prescription Required"
                   dataIndex="prescriptionRequired"
                   key="prescriptionRequired"
@@ -276,6 +277,7 @@ const OrderView = () => {
                   </Select>
                 )}
               />
+              <Column title="Price" dataIndex="price"  key="price" />
               {!printing && (
                 <Column
                   title="Action"
@@ -296,10 +298,7 @@ const OrderView = () => {
             </Table>
             <div className="d-flex justify-content-end">
               <div className="text-right ">
-                <h2 className="font-weight-semibold mt-3">
-                  <span className="mr-1">Grand Total: </span>₹
-                  {order?.totalAmount}
-                </h2>
+                
               </div>
             </div>
             {/* <p className="mt-5">
