@@ -147,11 +147,11 @@ const GeneralField = ({
       <Card title="Basic Info">
         <Form.Item
           name="productTemplateId"
-          label="productTemplate"
+          label="Product"
           rules={rules.productTemplateId}
         >
           <Select
-            placeholder="productTemplate"
+            placeholder="Product "
             onChange={(e) => getVariants(e)}
           >
             {productTemplates.map((temp) => (
@@ -159,26 +159,20 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
-
-        <Form.Item
-          name="productCode"
-          label="productCode"
-          rules={rules.productCode}
-        >
-          <Input placeholder="Product Code" />
-        </Form.Item>
-
         <Form.Item rules={[
               {
                 required: variants?.length > 0 ? true : false,
                 message: 'Product Template Have Variants. Please Select One',
+              
               },
+              
             ]}
+          
           name="productVariantId"
-          label="productVariant"
+          label= " Product Variant"
           // rules={rules.productVariantId}
         >
-          <Select placeholder="productVariant">
+          <Select placeholder="Product Variant">
             {variants?.map((variant) => (
               <Option value={variant.id}>{variant.name}</Option>
             ))}
@@ -186,11 +180,21 @@ const GeneralField = ({
         </Form.Item>
 
         <Form.Item
+          name="productCode"
+          label="Product Code"
+          rules={rules.productCode}
+        >
+          <Input placeholder="Product Code" />
+        </Form.Item>
+
+        
+
+        <Form.Item
           name="deliveryZoneId"
-          label="deliveryZone"
+          label="Delivery Zone"
           rules={rules.deliveryZoneId}
         >
-          <Select placeholder="deliveryZoneId">
+          <Select placeholder="Delivery Zone">
             {deliveryZones.map((deliveryZone) => (
               <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
             ))}
@@ -207,10 +211,10 @@ const GeneralField = ({
         </Form.Item>
         <Form.Item
           name="isUnlimited"
-          label="is Unlimited"
+          label="Is Unlimited"
           rules={rules.isUnlimited}
         >
-          <Select placeholder="is Unlimited">
+          <Select placeholder="Is Unlimited">
             <Option value={true}>Yes</Option>
             <Option value={false}>No</Option>
           </Select>
@@ -238,7 +242,7 @@ const GeneralField = ({
 
         <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
           <InputNumber
-            placeholder="mrp Price"
+            placeholder="MRP Price"
             type="number"
             min={0}
             max={100000}

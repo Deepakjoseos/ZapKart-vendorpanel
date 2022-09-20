@@ -1,4 +1,6 @@
 import fetch from 'auth/FetchInterceptor'
+import moment from 'moment'
+import { auth } from 'auth/FirebaseAuth'
 
 const authVendorService = {}
 
@@ -55,6 +57,19 @@ authVendorService.addPickupLocation = async function (data) {
     console.log(err, 'show-err')
   }
 }
+authVendorService.getStatistics = async function () {
+  try {
+    const res = await fetch({
+      url: `/vendors/statistics?year=${moment().year()}`,
+      method: 'get',
+    })
+
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 
 // authVendorService.setPost = function (data) {
 //   return fetch({
