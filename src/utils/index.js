@@ -1,4 +1,5 @@
 import { notification } from 'antd'
+import _, { isArray } from 'lodash'
 
 class Utils {
   /**
@@ -271,42 +272,93 @@ class Utils {
     return categoryList
   }
 
-    static createDeliveryLocationList(locations, parentId = null) {
-      const deliveryList = []
-      let delivery
-      if (parentId == null) {
-        delivery = locations.filter((cat) => !cat?.parentId)
-      } else {
-        delivery = locations.filter((cat) => cat?.parentId === parentId)
-      }
-      // eslint-disable-next-line prefer-const
-      for (let del of delivery) {
-        deliveryList.push({
-          id: del.id,
-          title: del.name,
-          value: del.id,
-          key: del.id,
-          children: this.createDeliveryLocationList(locations, del.id),
-        })
-      }
-
-      return deliveryList
+  static createDeliveryLocationList(locations, parentId = null) {
+    const deliveryList = []
+    let delivery
+    if (parentId == null) {
+      delivery = locations.filter((cat) => !cat?.parentId)
+    } else {
+      delivery = locations.filter((cat) => cat?.parentId === parentId)
+    }
+    // eslint-disable-next-line prefer-const
+    for (let del of delivery) {
+      deliveryList.push({
+        id: del.id,
+        title: del.name,
+        value: del.id,
+        key: del.id,
+        children: this.createDeliveryLocationList(locations, del.id),
+      })
     }
 
+    return deliveryList
+  }
+
+  // static errorValidator(res) {
+  //   console.log('my-res', res)
+  //   if (res) {
+  //     if (res?.errors) {
+  //       for (const [key, value] of Object.entries(res?.errors)) {
+  //         value.forEach((cur) => {
+  //           notification.error({
+  //             description: key,
+  //             message: cur,
+  //           })
+  //         })
+  //       }
+  //     } else {
+  //       // toast.error(res.title)
+  //       notification.error({
+  //         // description: res.title,
+  //         message: res.title,
+  //       })
+  //     }
+  //   }
+  //   //  else {
+  //   //   notification.error({
+  //   //     description: 'Something Went Wrong',
+  //   //     message: 'Error',
+  //   //   });
+  //   // }
+  // }
   static errorValidator(res) {
     console.log('my-res', res)
     if (res) {
       if (res?.errors) {
-        for (const [key, value] of Object.entries(res?.errors)) {
-          value.forEach((cur) => {
+        if (isArray(res?.errors)) {
+          res?.errors?.forEach((cur) => {
             notification.error({
-              description: key,
-              message: cur,
+              description: cur.itemName,
+              message: cur.type,
             })
           })
+        } else {
+          for (const [key, value] of Object.entries(res?.errors)) {
+            if (isArray(value)) {
+              value.forEach((cur) => {
+                notification.error({
+                  description: key,
+                  message: cur,
+                })
+              })
+            } else {
+              notification.error({
+                // description: res.title,
+                description: value,
+                message: key,
+              })
+            }
+          }
         }
       } else {
         // toast.error(res.title)
+        notification.error({
+          // description: res.title,
+          message: res.title,
+        })
+      }
+
+      if (_.isEmpty(res?.errors)) {
         notification.error({
           // description: res.title,
           message: res.title,
