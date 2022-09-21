@@ -347,6 +347,14 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          {
+            key: 'dashboards-wallet-bank-accounts',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet/bank-account/bank-account-list`,
+            title: 'Bank Accounts',
+            icon: MoneyCollectOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
          
         ],
       },

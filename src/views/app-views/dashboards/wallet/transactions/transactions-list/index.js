@@ -29,6 +29,7 @@ import constantsService from 'services/constants'
 import walletService from 'services/Wallet'
 import moment from 'moment'
 import authVendorService from 'services/auth/vendor'
+import WithdrawBalance from './withdrawBalance'
 
 const { Option } = Select
 
@@ -67,6 +68,9 @@ const TransactionList = () => {
     const [statuses, setStatuses] = useState([])
     const [currentUserId, setCurrentUserId] = useState([])
     const [wallet, setWallet] = useState({})
+    const [isFormOpen, setisFormOpen] = useState(false)
+    const [bank_accounts,setBankAccounts]= useState([])
+
 
     // const getUser = async ()=>{
     //     const data = await authVendorService.getProfile()
@@ -88,6 +92,9 @@ const TransactionList = () => {
         const data = await walletService.getWallet()
         if (data) {
             setWallet(data)
+        }
+        if(wallet){
+            setBankAccounts(bank_accounts)
         }
     }
 
@@ -289,6 +296,7 @@ const TransactionList = () => {
 
 
     return (
+        <>
         <Card>
             <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
                 {filters()}
@@ -321,12 +329,17 @@ const TransactionList = () => {
                             <p>Balance:{wallet.balance}</p>
                             <p>Pending Balance:{wallet.pendingBalance}</p>
                         </div>
+                        <Button className='ml-2' type="primary" onClick={() => { setisFormOpen(true) }} > Withdraw Balance From Wallet</Button>
+
                     </Flex>
                 </div>
                 <Table columns={tableColumns} dataSource={list} rowKey="id" />
             </div>
+            <WithdrawBalance setisFormOpen={setisFormOpen} isFormOpen={isFormOpen} bank_accounts={bank_accounts}  />
 
         </Card>
+
+        </>
     )
 }
 

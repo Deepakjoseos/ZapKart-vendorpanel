@@ -71,19 +71,18 @@ walletService.getWallet = async function () {
     console.log(err, 'show-err')
   }
 }
-
-walletService.editTaxCategory = async function (id, data) {
+walletService.getBankAccounts = async function () {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${id}`,
-      method: 'put',
-      data: data,
+      url: `${apiRoute}`,
+      method: 'get',
     })
     return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
+
 
 // medicineTypeService.setPost = function (data) {
 //   return fetch({
