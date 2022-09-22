@@ -19,13 +19,13 @@ const RegisterOne = (props) => {
             <Card>
               <div className="my-2">
                 <div className="text-center">
-                  {/* <img
+                  <img
                     className="img-fluid"
                     src={`/img/${
                       theme === 'light' ? 'logo.png' : 'logo-white.png'
                     }`}
                     alt=""
-                  /> */}
+                  />
                   <p>
                     Have an account yet? <a href="/auth/login">Sign In</a>
                   </p>
