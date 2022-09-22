@@ -55,9 +55,16 @@ const BankAccountForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setAccountTypes(Object.values(data.WALLET['FUND_ACCOUNT_TYPE']))
+     
+
+      
+
+      setAccountTypes(data.WALLET['FUND_ACCOUNT_TYPE'])
+
+      
+
       console.log('wallet',data.WALLET)
-      console.log('accountTypes',accountTypes);
+   
 
     }
   }
@@ -85,7 +92,7 @@ const BankAccountForm = (props) => {
         // Checking if image exists
 
 
-
+ 
         const created =
           await paymentService.createBankAccount(
             
@@ -138,7 +145,7 @@ const BankAccountForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/wallet/bank-account/product-list')
+                    history.push('/app/dashboards/wallet/bank-account/bank-account-list')
                   }
                 >
                   Discard
