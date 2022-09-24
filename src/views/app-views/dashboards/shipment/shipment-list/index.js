@@ -146,11 +146,13 @@ const ShipmentList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title:'ShipmentId',
-      dataIndex:'id',
-      render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
-      {text}
-   </Link>
+      title: 'Shipment',
+      dataIndex: 'shipmentNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/shipment/shipment-view/${record.id}`}>
+          {text}
+        </Link>
+      ),
     },
     {
       title: 'Shipment',

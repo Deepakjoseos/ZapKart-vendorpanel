@@ -305,7 +305,7 @@ const TransactionList = () => {
         <>
         <Card>
             <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-                {filters()}
+                {/* {filters()} */}
                 {/* <div className="d-flex">
                     <Button
                         onClick={() => setCheckIfDeliverableOpen(true)}

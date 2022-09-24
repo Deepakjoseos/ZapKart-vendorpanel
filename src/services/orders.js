@@ -80,5 +80,18 @@ orderService.cancelOrderItem = async function (id, data) {
 //     data: data
 //   })
 // }
+orderService.createVendorOrderInvoice = async function (orderId, data) {
+  try {
+    const res = await fetch({
+      url: `/order/VENDOR/addVendorInvoice/${orderId}`,
+      method: 'post',
+      data,
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
 export default orderService
