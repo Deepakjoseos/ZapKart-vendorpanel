@@ -93,11 +93,15 @@ const TransactionList = () => {
         if (data) {
             setWallet(data)
         }
-        if(wallet){
-            setBankAccounts(bank_accounts)
-        }
+        console.log('walletvendor',wallet)
+        console.log('walletbankaccounts',wallet.bankAccounts)
+        
     }
-
+ const getBankAccounts = async ()=>{
+    if(wallet){
+        setBankAccounts(wallet.bankAccounts)
+    }
+ }
 
     //   const fetchConstants = async () => {
     //     const data = await constantsService.getConstants()
@@ -113,8 +117,9 @@ const TransactionList = () => {
         // getUser()
         getTransactions()
         getWallet()
+        getBankAccounts()
 
-    }, [])
+    }, [wallet])
 
     // Dropdown menu for each row
     const dropdownMenu = (row) => (
@@ -217,7 +222,7 @@ const TransactionList = () => {
         {
             title: 'Date',
             dataIndex: 'createdAt',
-            render: (text) => <div>{moment(text).format('YYYY-MM-DD hh:mm:a')}</div>,
+            render: (text) => <div>{moment(new Date(text * 1000)).format('YYYY-MM-DD hh:mm:a')}</div>,
         },
         {
             title: 'User',
@@ -233,11 +238,12 @@ const TransactionList = () => {
                         <span>OrderId:</span>
                         <Link to={`/app/dashboards/orders/order-view/${row.orderId}`}>
                             {row.orderId}
-                            <p>Item Name:</p>
-                            {row.itemName}
-                            <p>Item Quantity</p>
-                            {row.itemQty}
                         </Link>
+                        <p>Item Name:</p>
+                        {row.itemName}
+                        <p>Item Quantity</p>
+                        {row.itemQty}
+
                     </Flex>
                 )
             }

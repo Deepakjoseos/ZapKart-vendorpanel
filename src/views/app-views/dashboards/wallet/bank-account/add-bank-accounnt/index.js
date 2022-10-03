@@ -1,8 +1,8 @@
 import React from 'react'
-import BankAccount from '..'
+import BankAccountForm from '../bank-account-form'
 
 const AddBankAccount = () => {
-  return <BankAccount mode="ADD" />
+  return <BankAccountForm/>
 }
 
 export default AddBankAccount

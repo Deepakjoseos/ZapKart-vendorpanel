@@ -107,42 +107,17 @@ const rules = {
 }
 
 const GeneralField = ({
-  form,
-  productTemplates,
-  deliveryZones,
-  productTemplateId,
-  productBuyType,
-  setProductBuyType,
+
   accountTypes
   // subscriptionPrice,
   // bulkPrice,
 }) => {
-  console.log(productTemplates, 'plss')
-  const [variants, setVariants] = useState([])
-  const [selectedAccountType,setSelectedAccountType] = useState('')
 
-  const getVariants = (id) => {
-    const curTemp = productTemplates.find((cur) => cur.id === id)
-    console.log(curTemp, 'hoooooo')
-    setVariants(curTemp.variants)
-    form.setFieldsValue({
-      productVariantId: '',
-    })
-  }
+  const [form] = Form.useForm()
 
-  useEffect(() => {
-    if (productTemplateId) {
-      // console.log(form.getFieldValue('templateId'), 'wedfefffe')
-      // getVariants(productTemplateId)
-      if (productTemplates?.length > 0) {
-        const curTemp = productTemplates.find(
-          (cur) => cur.id === productTemplateId
-        )
-
-        setVariants(curTemp.variants)
-      }
-    }
-  }, [productTemplateId, productTemplates])
+  const [submitLoading, setSubmitLoading] = useState(false)
+  // const [accountTypes, setAccountTypes] = useState([])
+  const [selectedAccountType, setSelectedAccountType] = useState('')
 
   return (
     <>
@@ -159,11 +134,22 @@ const GeneralField = ({
           >
             {/* <Input placeholder="Account Type" /> */}
             <Select placeholder="Account Type" onChange={(value) => { setSelectedAccountType(value) }}>
-              {accountTypes.map((item) => (
+              
+              {/* {accountTypes.map((item) => (
                 <Option key={item.id} value={item.key}>
                   {item}
                 </Option>
-              ))}
+              ))} */}
+              {
+                Object.keys(accountTypes).map(function(key) {
+                  return (
+                    <Option key={key} value={key}>
+                      {accountTypes[key]}
+                    </Option>
+                  )
+            // console.log(key, data.WALLET['FUND_ACCOUNT_TYPE'][key],'constants-wallent');
+               })
+              }
 
             </Select>
           </Form.Item>

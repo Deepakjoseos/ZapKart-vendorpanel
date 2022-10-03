@@ -83,7 +83,18 @@ walletService.getBankAccounts = async function () {
   }
 }
 
-
+walletService.withdrawBalance = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/withdraw`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 // medicineTypeService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',

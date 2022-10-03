@@ -40,8 +40,7 @@ import walletService from 'services/Wallet'
     const [form] = Form.useForm()
   
     const [submitLoading, setSubmitLoading] = useState(false)
-    const [accountTypes, setAccountTypes] = useState([])
-    const [selectedAccountType, setSelectedAccountType] = useState('')
+  
     const rules = {
       name: [
         {
@@ -98,12 +97,12 @@ import walletService from 'services/Wallet'
   
   
           const created =
-            await walletService.withdrawBalanceofVendor(
-                selectedVendorId,
+            await walletService.withdrawBalance(
+              
               sendingValues
             )
           if (created) {
-            message.success(`Created BankAccount Success`)
+            message.success(`Withdrawed ${values.amount} from wallet`)
             setisFormOpen(false)
             // setSelectedBankAccount(null)
             // refreshData()
@@ -178,7 +177,7 @@ import walletService from 'services/Wallet'
   
             <Form.Item name="bankAccountId" label="Bank Account" >
               <Select placeholder="Select Bank Account">
-              {bank_accounts.map((item) => (
+              {bank_accounts?.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.nickName}
                 </Option>
