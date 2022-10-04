@@ -932,14 +932,7 @@ const componentsNavTree = [
             breadcrumb: true,
             submenu: [],
           },
-          {
-            key: 'components-feedback-notification',
-            path: `${APP_PREFIX_PATH}/components/feedback/notification`,
-            title: 'sidenav.components.feedback.notification',
-            icon: '',
-            breadcrumb: true,
-            submenu: [],
-          },
+         
           {
             key: 'components-feedback-progress',
             path: `${APP_PREFIX_PATH}/components/feedback/progress`,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Menu, Dropdown, Badge, Avatar, List, Button } from 'antd'
 import {
   MailOutlined,
@@ -6,9 +6,10 @@ import {
   WarningOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons'
-import notificationData from 'assets/data/notification.data.json'
+// import notificationData from 'assets/data/notification.data.json'
 import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
+import notificationService from 'services/Notification'
+
 const getIcon = (icon) => {
   switch (icon) {
     case 'mail':
@@ -21,6 +22,7 @@ const getIcon = (icon) => {
       return <MailOutlined />
   }
 }
+
 const getNotificationBody = (list) => {
   return list.length > 0 ? (
     <List
@@ -61,35 +63,49 @@ const getNotificationBody = (list) => {
 }
 
 export const NavNotification = () => {
-  const [visible, setVisible] = useState(false)
-  const [data, setData] = useState(notificationData)
-  let history = useHistory()
 
+
+  const [visible, setVisible] = useState(false)
+  // const [data, setData] = useState(notificationData)
+  const [list,setList] = useState([])
+  const getNotifications  = () =>{
+
+    const data=notificationService.getNotifications()
+    if(data){
+      setList(data)
+    }
+  }
+  useEffect(()=>{
+   getNotifications()
+  },[])
 
   const handleVisibleChange = (flag) => {
     setVisible(flag)
   }
-  const showNotificationlist = () =>{
-    history.push(`/app/dashboards/notifications/notification-list`)
 
-  }
   const notificationList = (
     <div className="nav-dropdown nav-notification">
-      {/* <div className="nav-notification-header d-flex justify-content-between align-items-center">
+      <div className="nav-notification-header d-flex justify-content-between align-items-center">
         <h4 className="mb-0">Notification</h4>
-        <Button className="text-primary" type="text" onClick={() => setData([])} size="small">Clear </Button>
-      </div> */}
-      {/* <div className="nav-notification-body">
-        {getNotificationBody(data)}
+        <Button
+          // className="text-primary"
+          // type="text"
+          // onClick={() => setData([])}
+          // size="small"
+        >
+          Clear{' '}
+        </Button>
       </div>
-      {
-        data.length > 0 ? 
+      <div className="nav-notification-body">
+       {getNotificationBody(list)} 
+      </div>
+      {list.length > 0 ? (
         <div className="nav-notification-footer">
-          <a className="d-block" href="#/">View all</a>
+          <a className="d-block" href="#/">
+            View all
+          </a>
         </div>
-        :
-        null
-      } */}
+      ) : null}
     </div>
   )
 
@@ -102,10 +118,10 @@ export const NavNotification = () => {
       trigger={['click']}
     >
       <Menu mode="horizontal">
-        <Menu.Item key="notification" onClick={()=>{showNotificationlist()}}>
-          {/* <Badge count={data.length}> */}
+        <Menu.Item key="notification">
+          <Badge count={list.length}>
             <BellOutlined className="nav-icon mx-auto" type="bell" />
-          {/* </Badge> */}
+          </Badge>
         </Menu.Item>
       </Menu>
     </Dropdown>
