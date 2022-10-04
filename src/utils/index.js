@@ -272,6 +272,27 @@ class Utils {
     return categoryList
   }
 
+  // static createDeliveryLocationList(locations, parentId = null) {
+  //   const deliveryList = []
+  //   let delivery
+  //   if (parentId == null) {
+  //     delivery = locations.filter((cat) => !cat?.parentId)
+  //   } else {
+  //     delivery = locations.filter((cat) => cat?.parentId === parentId)
+  //   }
+  //   // eslint-disable-next-line prefer-const
+  //   for (let del of delivery) {
+  //     deliveryList.push({
+  //       id: del.id,
+  //       title: del.name,
+  //       value: del.id,
+  //       key: del.id,
+  //       children: this.createDeliveryLocationList(locations, del.id),
+  //     })
+  //   }
+
+  //   return deliveryList
+  // }
   static createDeliveryLocationList(locations, parentId = null) {
     const deliveryList = []
     let delivery
@@ -282,15 +303,47 @@ class Utils {
     }
     // eslint-disable-next-line prefer-const
     for (let del of delivery) {
+      console.log(del, 'lkjnljk')
       deliveryList.push({
-        id: del.id,
         title: del.name,
-        value: del.id,
-        key: del.id,
-        children: this.createDeliveryLocationList(locations, del.id),
+        key: del?.id,
+
+        // {
+        //   ...del,
+        //   currentStage: del?.cityId
+        //     ? `PINCODE`
+        //     : del?.districtId
+        //     ? `CITY`
+        //     : del?.stateId
+        //     ? `DISTRICT`
+        //     : del?.countryId
+        //     ? `STATE`
+        //     : `COUNTRY`,
+        // }
+        deliveryZoneName: del?.cityId
+          ? `PINCODE`
+          : del?.districtId
+          ? `CITY`
+          : del?.stateId
+          ? `DISTRICT`
+          : del?.countryId
+          ? `STATE`
+          : `COUNTRY`,
+
+        ...del,
+
+        // children: this.createDeliveryLocationList(locations, del.id),
+        // children: [{ title: '', value: Math.random() * 10 }],
       })
     }
 
+    // return deliveryList.map((cur) => {
+    //   return {
+    //     ...cur,
+    //     value: cur?.value,
+    //     key: JSON.stringify(cur?.key),
+    //   }
+    // })
     return deliveryList
   }
 
