@@ -5,6 +5,8 @@ import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import deliveryZoneService from 'services/deliveryZone'
 import { useHistory } from 'react-router-dom'
+import Utils from 'utils'
+import localityService from 'services/locality'
 
 const { TabPane } = Tabs
 
@@ -18,6 +20,12 @@ const ProductForm = (props) => {
   const [form] = Form.useForm()
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [allTreesData, setAllTreesData] = useState([])
+  // const [defaultDeliveryLocations, setDefaultDeliveryLocations] = useState([])
+  const [
+    checkedDeliveryZoneSendingValues,
+    setCheckedDeliveryZoneSendingValues,
+  ] = useState([])
 
   useEffect(() => {
     if (mode === EDIT) {
@@ -29,6 +37,14 @@ const ProductForm = (props) => {
             name: data.name,
             status: data.status,
           })
+          setCheckedDeliveryZoneSendingValues(
+            data.deliveryLocations?.map((cur) => ({
+              id: cur?.deliveryLocationId,
+              key: cur?.deliveryLocationId,
+              deliveryZoneName: cur?.deliveryLocationType,
+              fromInitial: true,
+            }))
+          )
         } else {
           history.replace('/app/dashboards/deliveryzone/deliveryzone-list')
         }
@@ -38,22 +54,49 @@ const ProductForm = (props) => {
     }
   }, [form, mode, param, props])
 
+  const getCountry = async () => {
+    const data = await localityService.getCountry()
+
+    if (data) {
+      const list = Utils.createDeliveryLocationList(data?.data)
+
+      console.log(list, 'hukjbujk')
+      setAllTreesData(list)
+    }
+  }
+
+  useEffect(() => {
+    getCountry()
+  }, [])
+
   const onFinish = async () => {
     setSubmitLoading(true)
     form
       .validateFields()
       .then(async (values) => {
+        const sendingValues = {
+          name: values?.name,
+          status: values?.status,
+          deliveryLocations: checkedDeliveryZoneSendingValues?.map((cur) => ({
+            deliveryLocationId: cur?.id,
+            deliveryLocationType: cur?.deliveryZoneName,
+          })),
+        }
         if (mode === ADD) {
-          const created = await deliveryZoneService.createDeliveryZone(values)
+          const created = await deliveryZoneService.createDeliveryZone(
+            sendingValues
+          )
           if (created) {
-            message.success(`Created ${values.name} to Delivery Zone List`)
+            message.success(
+              `Created ${sendingValues.name} to Delivery Zone List`
+            )
             history.goBack()
           }
         }
         if (mode === EDIT) {
           const edited = await deliveryZoneService.editDeliveryZone(
             param.id,
-            values
+            sendingValues
           )
           if (edited) {
             message.success(`Edited ${values.name} to Delivery Zone list`)
@@ -120,7 +163,16 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField />
+              <GeneralField
+                allTreesData={allTreesData}
+                setAllTreesData={setAllTreesData}
+                setCheckedDeliveryZoneSendingValues={
+                  setCheckedDeliveryZoneSendingValues
+                }
+                checkedDeliveryZoneSendingValues={
+                  checkedDeliveryZoneSendingValues
+                }
+              />
             </TabPane>
           </Tabs>
         </div>
