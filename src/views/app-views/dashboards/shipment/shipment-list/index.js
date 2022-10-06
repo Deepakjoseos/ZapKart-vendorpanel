@@ -20,7 +20,7 @@ import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import NumberFormat from 'react-number-format'
-import { useHistory ,Link} from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import utils from 'utils'
 import shipmentService from 'services/shipment'
 import CheckIfDeliverable from './CheckIfDeliverable'
@@ -161,12 +161,11 @@ const ShipmentList = () => {
         <div>
           {record.items.map((item, index) => (
             <>
-             <div>
-              <span>OrderId:</span>
+              <div>
+                <span>OrderId:</span>
                 <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                   {item?.orderId}
+                  {item?.orderId}
                 </Link>
-                
               </div>
               <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
             </>
@@ -190,13 +189,13 @@ const ShipmentList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <Flex>
-          <Button
+          {/* <Button
             type="primary"
             className="ml-auto"
             onClick={() => requestPickupOrder(elm.id)}
           >
             Request Shipment
-          </Button>
+          </Button> */}
           <Button
             className="mr-auto ml-2"
             onClick={() => cancelShipment(elm.id)}
@@ -204,9 +203,9 @@ const ShipmentList = () => {
             Cancel Shipment
           </Button>
 
-          <div className="text-right">
+          {/* <div className="text-right">
             <EllipsisDropdown menu={dropdownMenu(elm)} />
-          </div>
+          </div> */}
         </Flex>
       ),
     },
