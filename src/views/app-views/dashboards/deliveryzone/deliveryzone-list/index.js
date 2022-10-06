@@ -59,12 +59,7 @@ const DeliveryZoneList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item onClick={() => addDeliveryZoneLocation(row)}>
-        <Flex alignItems="center">
-          {/* <EyeOutlined /> */}
-          <span className="ml-2">Add Delivery Zone Location</span>
-        </Flex>
-      </Menu.Item>
+
       <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />

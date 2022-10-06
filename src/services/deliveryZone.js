@@ -5,7 +5,7 @@ const deliveryLocation = {}
 deliveryLocation.getDeliveryZones = async function () {
   try {
     const res = await fetch({
-      url: '/deliveryzones?status=Active',
+      url: '/deliveryzones',
       method: 'get',
     })
     return res.data
@@ -76,7 +76,7 @@ deliveryLocation.removeDeliveryLocationZone = async function (
       url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}`,
       method: 'delete',
     })
-    return res  
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }
