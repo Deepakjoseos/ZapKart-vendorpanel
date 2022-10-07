@@ -18,7 +18,7 @@ const dev = {
     SITE_NAME === 'zapkart'
       ? 'https://www.ecommerce.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
-      ? 'https://www.ecommercetest2.riolabz.com/api/v1'
+      ? 'https://api.athathy.ae/api/v1'
       : 'https://www.ecommerce.riolabz.com/api/v1',
 }
 
@@ -27,7 +27,7 @@ const prod = {
     SITE_NAME === 'zapkart'
       ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
-      ? 'https://www.ecommercetest2.riolabz.com/api/v1'
+      ? 'https://api.athathy.ae/api/v1'
       : 'https://ecommercelive.riolabz.com/api/v1',
 }
 
@@ -36,7 +36,7 @@ const test = {
     SITE_NAME === 'zapkart'
       ? 'https://www.ecommerce.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
-      ? 'https://www.ecommercetest2.riolabz.com/api/v1'
+      ? 'https://api.athathy.ae/api/v1'
       : 'https://www.ecommerce.riolabz.com/api/v1',
 }
 

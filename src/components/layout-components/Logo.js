@@ -39,7 +39,9 @@ const getLogo = (props) => {
   if (navCollapsed) {
     return '/img/logo-sm.png'
   }
-  return '/img/logo.png'
+  return process.env.REACT_APP_SITE_NAME === 'zapkart'
+    ? '/img/logo.png'
+    : process.env.REACT_APP_SITE_NAME === 'athathy' && '/img/athathy.png'
 }
 
 const getLogoDisplay = (isMobile, mobileLogo) => {
@@ -57,7 +59,10 @@ export const Logo = (props) => {
       className={getLogoDisplay(isMobile, props.mobileLogo)}
       style={{ width: `${getLogoWidthGutter(props, isMobile)}` }}
     >
-      <img src={getLogo(props)} alt={`${APP_NAME} logo`} />
+      {(process.env.REACT_APP_SITE_NAME === 'zapkart' ||
+        process.env.REACT_APP_SITE_NAME === 'athathy') && (
+        <img src={getLogo(props)} alt={`${APP_NAME} logo`} />
+      )}
     </div>
   )
 }
