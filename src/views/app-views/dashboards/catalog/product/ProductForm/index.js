@@ -81,6 +81,7 @@ const ProductForm = (props) => {
             deliveryZoneId: data?.deliveryZone?.id,
             status: data.status,
             qty: data.qty,
+            hsn:data.hsn,
             isUnlimited: data.isUnlimited,
             subscriptionPrice: data?.subscriptionPrice,
             bulkPrice: data?.bulkPrice,

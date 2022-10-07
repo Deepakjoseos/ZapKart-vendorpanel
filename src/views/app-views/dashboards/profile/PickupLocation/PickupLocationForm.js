@@ -10,14 +10,20 @@ import {
   Row,
   Select,
   Space,
+  TreeSelect,
 } from 'antd'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import authVendorService from 'services/auth/vendor'
+import localityService from 'services/locality'
+import Utils from 'utils'
 
 const { Option } = Select
 
-const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile }) => {
+const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [pincode ,setPincode]=useState([])
+  const [city ,setCity]=useState([])
+  const [state ,setState]=useState([])
   const [form] = Form.useForm()
 
   const showDrawer = () => {
@@ -27,6 +33,28 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile }) => {
   const onClose = () => {
     setIsFormOpen(false)
   }
+
+  const getPincode= async () => {
+    const data = await localityService.getPincode()
+    const list = Utils.createCategoryList(data)
+       setPincode(list)
+  }
+  const getCity= async () => {
+    const data = await localityService.getCity()
+    const list = Utils.createCategoryList(data)
+       setCity(list)
+  }
+  const getState= async () => {
+    const data = await localityService.getState()
+    const list = Utils.createCategoryList(data)
+       setState(list)
+  }
+  useEffect(()=>{
+    getPincode()
+    getState()
+    getCity()
+  },[])
+
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -117,48 +145,55 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile }) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="city"
-                label="City"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required',
-                  },
-                ]}
-              >
-                <Input placeholder="City" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="state"
-                label="State"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required',
-                  },
-                ]}
-              >
-                <Input placeholder="State" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="pin_code"
-                label="Pincode"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required',
-                  },
-                ]}
-              >
-                <Input placeholder="Pincode" />
-              </Form.Item>
+            <Form.Item name="stateId" label="state" >
+      <TreeSelect placeholder="State" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={state} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
+          <Option value={cur.id} key={cur.id}>
+            {cur.name}
+          </Option>
+        ))}  */}
+      </TreeSelect>
+    </Form.Item>
+    </Col>
+    </Row>
+    
+    <Row gutter={16}>
+        <Col span={12}>
+ <Form.Item name="cityId" label="city" >
+      <TreeSelect placeholder="city" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={city} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
+          <Option value={cur.id} key={cur.id}>
+            {cur.name}
+          </Option>
+        ))}  */}
+      </TreeSelect>
+    </Form.Item>
+    </Col>
+   
+    
+        <Col span={12}>
+    <Form.Item name="pincodeId" label="pincode" >
+      <TreeSelect placeholder="pincode" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={pincode} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
+          <Option value={cur.id} key={cur.id}>
+            {cur.name}
+          </Option>
+        ))}  */}
+      </TreeSelect>
+    </Form.Item>
+
             </Col>
           </Row>
           <Row gutter={16}>

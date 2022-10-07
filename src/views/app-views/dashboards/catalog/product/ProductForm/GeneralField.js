@@ -145,11 +145,23 @@ const GeneralField = ({
   return (
     <>
       <Card title="Basic Info">
+        
+      
+           <Form.Item
+          name="hsn"
+          label="HSN"
+          rules={rules.HSN}
+        >
+          <Input placeholder="HSN" />
+        </Form.Item>
+
+
         <Form.Item
           name="productTemplateId"
           label="Product"
           rules={rules.productTemplateId}
         >
+
           <Select
             placeholder="Product "
             onChange={(e) => getVariants(e)}
