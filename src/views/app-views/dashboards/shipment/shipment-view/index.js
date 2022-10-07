@@ -61,7 +61,7 @@ const ShipmentView = () => {
   console.log('shipmentidid', id)
 
   const getShipmentById = async () => {
-    console.log('shipment_id',id)
+    console.log('shipment_id', id)
     const shipmentData = await shipmentService.getShipmentById(id)
 
     if (shipmentData) {
@@ -161,7 +161,7 @@ const ShipmentView = () => {
 
     const data = await shipmentService.requestPickupOrder({
       shipmentId: id,
-      courierId: selectedCourierId,
+      // courierId: selectedCourierId,
     })
     if (data) {
       notification.success({
@@ -174,9 +174,26 @@ const ShipmentView = () => {
       window.location.reload(true)
       // getShipments()
       console.log('pickuprequested data', data)
-      if (!shipment.shiprocket?.awbDetails) {
-        showAWBButton(true)
-      }
+      // if (!shipment.shiprocket?.awbDetails) {
+      //   showAWBButton(true)
+      // }
+      // if (!shipment.shiprocket?.label) {
+      //   showLabelButton(true)
+      // }
+      // if (!shipment.shiprocket?.manifest) {
+      //   showManifestButton(true)
+      // }
+      // if (!shipment.shiprocket?.invoice) {
+      //   showInvoiceButton(true)
+      // }
+    }
+  }
+
+  useEffect(() => {
+    if (shipment?.shiprocket) {
+      // if (!shipment.shiprocket?.awbDetails) {
+      //   showAWBButton(true)
+      // }
       if (!shipment.shiprocket?.label) {
         showLabelButton(true)
       }
@@ -187,74 +204,77 @@ const ShipmentView = () => {
         showInvoiceButton(true)
       }
     }
-  }
-  const generateAwb = async () => {
-    const data = await shipmentService.generateAwb({
-      shipmentId: id,
-      courierId: selectedCourierId,
-    })
-    if (data) {
-      setCheckIfDeliverableOpen(false)
-      setSelectedCourierId(null)
-      setCurrentActionButton(null)
-      notification.success({
-        message: 'Success',
-        description: 'AWB Generated Successfully',
-      })
-      // getShipments()
-    }
-  }
+  }, [shipment])
+
+  // const generateAwb = async () => {
+  //   const data = await shipmentService.generateAwb({
+  //     shipmentId: id,
+  //     courierId: selectedCourierId,
+  //   })
+  //   if (data) {
+  //     setCheckIfDeliverableOpen(false)
+  //     setSelectedCourierId(null)
+  //     setCurrentActionButton(null)
+  //     notification.success({
+  //       message: 'Success',
+  //       description: 'AWB Generated Successfully',
+  //     })
+  //     // getShipments()
+  //   }
+  // }
   const showAWBDetails = () => {
     setAWB(true)
   }
 
-  const generateManifest = async (id) => {
-    const data = await shipmentService.generateManifest({
-      shipmentId: id,
-    })
-    if (data) {
-      notification.success({
-        message: 'Success',
-        description: 'Manifest Generated Successfully',
-      })
-      // getShipments()
-      // window.open(data.data.shiprocket.manifest, '_blank', 'noopener,noreferrer')
-    }
-  }
+  // const generateManifest = async (id) => {
+  //   const data = await shipmentService.generateManifest({
+  //     shipmentId: id,
+  //   })
+  //   if (data) {
+  //     notification.success({
+  //       message: 'Success',
+  //       description: 'Manifest Generated Successfully',
+  //     })
+  //     alert('msshjh')
+  //     // getShipments()
+  //     // window.open(data.data.shiprocket.manifest, '_blank', 'noopener,noreferrer')
+  //   }
+  // }
   const downloadManifest = () => {
     window.open(shipment.shiprocket?.manifest, '_blank', 'noopener,noreferrer')
   }
 
-  const generateLabel = async (id) => {
-    const data = await shipmentService.generateLabel({
-      shipmentId: id,
-    })
-    if (data) {
-      notification.success({
-        message: 'Success',
-        description: 'Label Generated Successfully',
-      })
-      // getShipments()
-      // window.open(data.data.shiprocket.label, '_blank', 'noopener,noreferrer')
-    }
-  }
+  // const generateLabel = async (id) => {
+  //   const data = await shipmentService.generateLabel({
+  //     shipmentId: id,
+  //   })
+  //   if (data) {
+  //     notification.success({
+  //       message: 'Success',
+  //       description: 'Label Generated Successfully',
+  //     })
+  //     // getShipments()
+  //     // window.open(data.data.shiprocket.label, '_blank', 'noopener,noreferrer')
+  //   }
+  // }
   const downloadLabel = () => {
     window.open(shipment.shiprocket?.label, '_blank', 'noopener,noreferrer')
   }
-  const generateInvoice = async (id) => {
-    const data = await shipmentService.generateInvoice({
-      shipmentId: id,
-    })
-    if (data) {
-      notification.success({
-        message: 'Success',
-        description: 'Invoice Generated Successfully',
-      })
-      // getShipments()
-      console.log('invoice,', data.data.shiprocket.invoice)
-      // window.open(data.data.shiprocket.invoice, '_blank', 'noopener,noreferrer')
-    }
-  }
+  // const generateInvoice = async (id) => {
+  //   const data = await shipmentService.generateInvoice({
+  //     shipmentId: id,
+  //   })
+
+  //   if (data) {
+  //     notification.success({
+  //       message: 'Success',
+  //       description: 'Invoice Generated Successfully',
+  //     })
+  //     // getShipments()
+  //     console.log('invoice,', data.data.shiprocket.invoice)
+  //     // window.open(data.data.shiprocket.invoice, '_blank', 'noopener,noreferrer')
+  //   }
+  // }
   const downlodInvoice = () => {
     window.open(shipment.shiprocket?.invoice, '_blank', 'noopener,noreferrer')
   }
@@ -262,15 +282,15 @@ const ShipmentView = () => {
     setPickupDetails(true)
   }
 
-  useEffect(() => {
-    if (selectedCourierId) {
-      if (currentActionButton === 'request-pickup') {
-        requestPickupOrder()
-      } else if (currentActionButton === 'AWB') {
-        generateAwb()
-      }
-    }
-  }, [selectedCourierId])
+  // useEffect(() => {
+  //   if (selectedCourierId) {
+  //     if (currentActionButton === 'request-pickup') {
+  //       requestPickupOrder()
+  //     } else if (currentActionButton === 'AWB') {
+  //       generateAwb()
+  //     }
+  //   }
+  // }, [selectedCourierId])
 
   return (
     <>
@@ -280,7 +300,7 @@ const ShipmentView = () => {
             ''
           ) : (
             <div className="d-flex right">
-              {AWB_button ? (
+              {/* {AWB_button ? (
                 <Button
                   onClick={() => {
                     // generateAwb(id)
@@ -295,7 +315,7 @@ const ShipmentView = () => {
                 </Button>
               ) : (
                 ''
-              )}
+              )} */}
               {/* {shipment.shiprocket?.awbDetails ? <Button
                   onClick={showAWBDetails}
                   block type="primary"
@@ -304,7 +324,7 @@ const ShipmentView = () => {
                   Show AWB Details
                 </Button> : ""} */}
 
-              {label_button ? (
+              {/* {label_button ? (
                 <Button
                   onClick={() => generateLabel(id)}
                   type="primary"
@@ -315,7 +335,7 @@ const ShipmentView = () => {
                 </Button>
               ) : (
                 ''
-              )}
+              )} */}
               {shipment.shiprocket?.label ? (
                 <Button
                   onClick={downloadLabel}
@@ -329,7 +349,7 @@ const ShipmentView = () => {
                 ''
               )}
 
-              {manifest_button ? (
+              {/* {manifest_button ? (
                 <Button
                   onClick={() => generateManifest(id)}
                   type="primary"
@@ -340,7 +360,7 @@ const ShipmentView = () => {
                 </Button>
               ) : (
                 ''
-              )}
+              )} */}
               {shipment.shiprocket?.manifest ? (
                 <Button
                   onClick={downloadManifest}
@@ -354,7 +374,7 @@ const ShipmentView = () => {
                 ''
               )}
 
-              {invoice_button ? (
+              {/* {invoice_button ? (
                 <Button
                   onClick={() => generateInvoice(id)}
                   type="primary"
@@ -365,7 +385,7 @@ const ShipmentView = () => {
                 </Button>
               ) : (
                 ''
-              )}
+              )} */}
               {shipment.shiprocket?.invoice ? (
                 <Button
                   onClick={downlodInvoice}
@@ -387,12 +407,14 @@ const ShipmentView = () => {
                 </Button>
                 : ""} */}
 
-              {!shipment.shiprocket?.pickup ? (
+              {!shipment.shiprocket?.pickup &&
+              shipment.shiprocket?.awbDetails ? (
                 <Button
                   onClick={() => {
                     // requestPickupOrder(id)
-                    setCheckIfDeliverableOpen(true)
-                    setCurrentActionButton('request-pickup')
+                    // setCheckIfDeliverableOpen(true)
+                    // setCurrentActionButton('request-pickup')
+                    requestPickupOrder()
                   }}
                   type="primary"
                 >
