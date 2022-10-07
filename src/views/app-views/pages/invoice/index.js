@@ -22,8 +22,12 @@ export class Invoice extends Component {
           <div className="d-md-flex justify-content-md-between">
             <div>
               {/* <img src="/img/logo.png" alt="" /> */}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
                 <img src="/img/logo.png" alt="" />
+              ) : (
+                process.env.REACT_APP_SITE_NAME === 'athathy' && (
+                  <img src="/img/athathy.png" alt="" />
+                )
               )}
               <address>
                 <p>
