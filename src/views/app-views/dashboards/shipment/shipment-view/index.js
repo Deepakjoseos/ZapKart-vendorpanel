@@ -443,8 +443,8 @@ const ShipmentView = () => {
         {shipment.status} <br />
         <span>Shipped By Vendor:</span>
         {shipment.shippedByVendor ? 'Yes' : 'No'}
-        <Row>
-          <Col>
+        <Row style={{ width: '100%' }}>
+          <Col md={12} sm={24} lg={12}>
             {shipment.shiprocket?.awbDetails ? (
               <Card>
                 <div className="mt-3">
@@ -596,7 +596,7 @@ const ShipmentView = () => {
               ''
             )}
           </Col>
-          <Col>
+          <Col md={12} sm={24} lg={12}>
             {shipment.shiprocket?.pickup ? (
               <Card>
                 <div className="mt-3">
