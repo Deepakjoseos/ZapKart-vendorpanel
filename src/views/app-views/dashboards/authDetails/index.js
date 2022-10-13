@@ -38,7 +38,7 @@ const AuthDetails = () => {
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     pan: Yup.string().required('Required'),
-    drugLicense:Yup.string().required('Required')
+    drugLicense: Yup.string().nullable(),
     // displayImage: Yup.string().required('* Password Required'),
     // phone: Yup.string().required('Phone Number Required'),
     // confirmPassword: Yup.string()
@@ -237,7 +237,9 @@ const AuthDetails = () => {
         lastName: values.lastName,
         displayImage: curUser.displayImage,
         pan: values.pan,
-        drugLicense:values.drugLicense
+      }
+      if (values?.drugLicense) {
+        sendingValues.drugLicense = values.drugLicense
       }
 
       if (!userAlreadyExistInDB) {
@@ -262,7 +264,7 @@ const AuthDetails = () => {
             gst: data.gst,
             tanNumber: data.tanNumber,
             pan: data.pan,
-            drugLicense:data.drugLicense
+            drugLicense: data?.drugLicense,
           }
 
           await dispatch(
@@ -304,7 +306,7 @@ const AuthDetails = () => {
             gst: data.gst,
             tanNumber: data.tanNumber,
             pan: data.pan,
-            drugLicense:data.drugLicense
+            drugLicense: data?.drugLicense,
           }
 
           await dispatch(
@@ -478,21 +480,27 @@ const AuthDetails = () => {
                           />
                           <ErrorMessage name="pan" />
                         </div>
-                        <div className="mb-3">
-                          <label htmlFor="drugLicense">Drug License Number</label>
-                          <Field
-                            as={Input}
-                            type="text"
-                            name="drugLicense"
-                            className="form-control"
-                            style={{
-                              border: `${
-                                touched.drugLicense && errors.drugLicense ? '1px solid red' : ''
-                              }`,
-                            }}
-                          />
-                          <ErrorMessage name="drugLicense" />
-                        </div>
+                        {process.env.SITE_NAME === 'zapkart' && (
+                          <div className="mb-3">
+                            <label htmlFor="drugLicense">
+                              Drug License Number
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="drugLicense"
+                              className="form-control"
+                              style={{
+                                border: `${
+                                  touched.drugLicense && errors.drugLicense
+                                    ? '1px solid red'
+                                    : ''
+                                }`,
+                              }}
+                            />
+                            <ErrorMessage name="drugLicense" />
+                          </div>
+                        )}
 
                         <div>
                           <Button

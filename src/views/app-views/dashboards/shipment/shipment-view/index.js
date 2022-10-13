@@ -200,9 +200,9 @@ const ShipmentView = () => {
       if (!shipment.shiprocket?.manifest) {
         showManifestButton(true)
       }
-      if (!shipment.shiprocket?.invoice) {
-        showInvoiceButton(true)
-      }
+      // if (!shipment.shiprocket?.invoice) {
+      //   showInvoiceButton(true)
+      // }
     }
   }, [shipment])
 
@@ -386,7 +386,7 @@ const ShipmentView = () => {
               ) : (
                 ''
               )} */}
-              {shipment.shiprocket?.invoice ? (
+              {/* {shipment.shiprocket?.invoice ? (
                 <Button
                   onClick={downlodInvoice}
                   type="primary"
@@ -397,7 +397,7 @@ const ShipmentView = () => {
                 </Button>
               ) : (
                 ''
-              )}
+              )} */}
 
               {/* {shipment.status === 'Pickup Requested' ?
                 <Button onClick={showPickUpDetails} type="primary">
