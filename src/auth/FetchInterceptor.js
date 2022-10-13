@@ -50,12 +50,17 @@ service.interceptors.request.use(
   }
 )
 
+let alreadyShownError = false
+
 // API respone interceptor
 service.interceptors.response.use(
   (response) => {
     return response.data
   },
   (error) => {
+    console.log('show-errerer')
+    // if (store.getState().auth.authorized) {
+
     let notificationParam = {
       message: '',
     }
@@ -63,7 +68,9 @@ service.interceptors.response.use(
     // Remove token and redirect
     if (error.response.status === 401) {
       if (store.getState().auth.authorized) {
-        notification.warning({ message: 'Verification needed' })
+        if (window.location.pathname !== '/app/dashboards/authdetails') {
+          notification.warning({ message: 'Verification needed' })
+        }
         // window.location.reload()
         if (!window.location.href.includes('/app/dashboards/authdetails')) {
           history.replace('/app/dashboards/authdetails')
