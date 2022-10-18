@@ -48,7 +48,7 @@ authVendorService.editProfile = async function (data) {
 authVendorService.addPickupLocation = async function (data) {
   try {
     const res = await fetch({
-      url: `/vendors/pickupLocation/new`,
+      url: `/vendors/pickupLocation/new/`,
       method: 'post',
       data: data,
     })

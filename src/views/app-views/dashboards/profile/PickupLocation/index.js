@@ -17,11 +17,15 @@ import Flex from 'components/shared-components/Flex'
 import { useSelector } from 'react-redux'
 import authVendorService from 'services/auth/vendor'
 import PickupLocationForm from './PickupLocationForm'
+import localityService from 'services/locality'
 
 const PickupLocation = () => {
   const { user } = useSelector((state) => state.auth)
   const [pickUpLocations, setPickUpLocations] = useState('')
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [pincode ,setPincode]=useState([])
+  const [city ,setCity]=useState([])
+  const [state ,setState]=useState([])
 
   const getProfile = async () => {
     const data = await authVendorService.getProfile()
@@ -34,6 +38,35 @@ const PickupLocation = () => {
   useEffect(() => {
     getProfile()
   }, [])
+
+  
+
+  const getCity = async ()=>{
+    const data = await localityService.getCity()
+    if(data){
+      setCity(data.data)
+    }
+  }
+  const getState = async ()=>{
+    const data = await localityService.getState()
+    if(data){
+      setState(data.data)
+    }
+  }
+  const getPincode = async ()=>{
+    const data = await localityService.getPincode()
+    if(data){
+      setPincode(data.data)
+    }
+      }
+  
+  useEffect(()=>{
+ 
+  getCity()
+  getState()
+  getPincode()
+  
+  },[])
 
   const IconText = ({ icon, text }) => (
     <Space>
@@ -104,6 +137,9 @@ const PickupLocation = () => {
           setIsFormOpen={setIsFormOpen}
           isFormOpen={isFormOpen}
           getProfile={getProfile}
+          city={city}
+          state={state}
+          pincode={pincode}
         />
       </div>
     </>

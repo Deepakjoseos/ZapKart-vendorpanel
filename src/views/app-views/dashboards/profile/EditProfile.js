@@ -5,8 +5,10 @@ import {
   Button,
   Input,
   DatePicker,
-  Row,
+  Select,
+  Option,
   Col,
+  Row,
   message,
   Upload,
   Card,
@@ -22,15 +24,39 @@ import Utils from 'utils'
 import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import authVendorService from 'services/auth/vendor'
 import { authenticated } from 'redux/actions/Auth'
+import localityService from 'services/locality'
 
 const EditProfile = () => {
   const [previewUrl, setPreviewUrl] = useState(null)
   const [displayImage, setDisplayImage] = useState(null)
   const { user } = useSelector((state) => state.auth)
+  const [country ,setCountry]=useState([])
+  const [state ,setState]=useState([])
+
   console.log(user, 'mine')
   const dispatch = useDispatch()
+  const { Option } = Select
 
   const [form] = Form.useForm()
+  const getCountry = async ()=>{
+    const data = await localityService.getCountry()
+    if(data){
+      setCountry(data.data)
+    }
+      }
+      const getState = async ()=>{
+        const data = await localityService.getState()
+        if(data){
+          setState(data.data)
+        }
+          }
+          
+  
+  useEffect(()=>{
+ getState()
+  getCountry()
+  
+  },[])
 
   useEffect(() => {
     if (user) {
@@ -43,6 +69,8 @@ const EditProfile = () => {
         address: user.address,
         tanNumber: user.tanNumber,
         pan: user.pan,
+        country: user.country,
+        state:user.state,
 
         // address:
         'address.line1': user?.address?.line1,
@@ -375,13 +403,25 @@ const EditProfile = () => {
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={12}>
-                  <Form.Item name="address.state" label="State">
-                    <Input placeholder="State" />
-                  </Form.Item>
+                <Form.Item name="stateId" label="emirates" >
+          <Select placeholder="emirates">
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={12}>
-                  <Form.Item name="address.country" label="Country">
-                    <Input placeholder="Country" />
+                <Form.Item name="countryId" label="Country" >
+          <Select placeholder="pincode">
+              {country.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+                    ))}
+                 </Select>
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={12}>
@@ -419,15 +459,27 @@ const EditProfile = () => {
                 </Col>
 
                 <Col xs={24} sm={24} md={12}>
-                  <Form.Item name="business.address.state" label="State">
-                    <Input placeholder="State" />
+                 <Form.Item name="countryId" label="Country" >
+          <Select placeholder="pincode">
+              {country.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+                    ))}
+                 </Select>
                   </Form.Item>
                 </Col>
 
                 <Col xs={24} sm={24} md={12}>
-                  <Form.Item name="business.address.country" label="Country">
-                    <Input placeholder="Country" />
-                  </Form.Item>
+                <Form.Item name="stateId" label="emirates" >
+          <Select placeholder="emirates">
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
                 </Col>
 
                 <Col xs={24} sm={24} md={12}>
