@@ -1,6 +1,7 @@
 // import ReactS3Client from 'utils/s3/s3Bucket'
 
 import S3 from 'react-aws-s3'
+import fileManagerService from 'services/fileManager'
 
 const { notification } = require('antd')
 
@@ -77,4 +78,33 @@ const singleImageUploader = async (file, imgValue, defaultValueUrl, folder) => {
   return imgValue
 }
 
-export { multipleImageUpload, singleImageUploader }
+const fileDocUpload = async (
+  file,
+  fileValue,
+  defaultValueUrl,
+  imageFor = 'Users'
+) => {
+  if (file) {
+    console.log(file, 'show-correct')
+    try {
+      const asyncResult = await fileManagerService.uploadFile(
+        imageFor,
+        file
+        // formValues.images[1].originFileObj.name,
+      )
+      fileValue = asyncResult.file
+    } catch (err) {
+      // (await result).push(result.location);
+      notification.error({
+        message: 'Cannot upload Newly added File',
+      })
+
+      console.log(err.message, 'pls')
+    }
+  } else {
+    fileValue = defaultValueUrl
+  }
+  return fileValue
+}
+
+export { multipleImageUpload, singleImageUploader, fileDocUpload }

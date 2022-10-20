@@ -35,7 +35,7 @@ import {
   ShoppingFilled,
   DeliveredProcedureOutlined,
   NodeExpandOutlined,
-  MoneyCollectOutlined
+  MoneyCollectOutlined,
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -312,7 +312,7 @@ const dashBoardNavTree = [
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
         title: 'Orders',
-        icon: ShoppingCartOutlined  ,
+        icon: ShoppingCartOutlined,
         breadcrumb: false,
         submenu: [],
       },
@@ -332,6 +332,7 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+
       {
         key: 'dashboards-wallet',
         path: `${APP_PREFIX_PATH}/dashboards/wallet`,
@@ -355,8 +356,15 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
-         
         ],
+      },
+      {
+        key: 'dashboards-document-upload',
+        path: `${APP_PREFIX_PATH}/dashboards/document-upload`,
+        title: 'Document Upload',
+        icon: NodeExpandOutlined,
+        breadcrumb: false,
+        submenu: [],
       },
     ],
   },

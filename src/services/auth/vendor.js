@@ -1,6 +1,5 @@
 import fetch from 'auth/FetchInterceptor'
 import moment from 'moment'
-import { auth } from 'auth/FirebaseAuth'
 
 const authVendorService = {}
 
@@ -70,6 +69,29 @@ authVendorService.getStatistics = async function () {
   }
 }
 
+authVendorService.uploadDocuments = async function (data) {
+  try {
+    const res = await fetch({
+      url: `/vendors/documents`,
+      method: 'put',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+authVendorService.getDocuments = async function () {
+  try {
+    const res = await fetch({
+      url: `/vendors/documents`,
+      method: 'get',
+    })
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
 // authVendorService.setPost = function (data) {
 //   return fetch({
