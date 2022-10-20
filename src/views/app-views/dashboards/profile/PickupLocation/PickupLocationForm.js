@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Col,
@@ -11,73 +11,54 @@ import {
   Select,
   Space,
   TreeSelect,
-} from 'antd'
-import React, { useState,useEffect } from 'react'
-import authVendorService from 'services/auth/vendor'
-import localityService from 'services/locality'
-import Utils from 'utils'
+} from "antd";
+import React, { useState, useEffect } from "react";
+import authVendorService from "services/auth/vendor";
 
-const { Option } = Select
+const { Option } = Select;
 
-const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [pincode ,setPincode]=useState([])
-  const [city ,setCity]=useState([])
-  const [state ,setState]=useState([])
-  const [form] = Form.useForm()
+const PickupLocationForm = ({
+  isFormOpen,
+  setIsFormOpen,
+  getProfile,
+  city,
+  pincode,
+  state,
+}) => {
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [form] = Form.useForm();
 
   const showDrawer = () => {
-    setIsFormOpen(true)
-  }
+    setIsFormOpen(true);
+  };
 
   const onClose = () => {
-    setIsFormOpen(false)
-  }
-
-  const getPincode= async () => {
-    const data = await localityService.getPincode()
-    const list = Utils.createCategoryList(data)
-       setPincode(list)
-  }
-  const getCity= async () => {
-    const data = await localityService.getCity()
-    const list = Utils.createCategoryList(data)
-       setCity(list)
-  }
-  const getState= async () => {
-    const data = await localityService.getState()
-    const list = Utils.createCategoryList(data)
-       setState(list)
-  }
-  useEffect(()=>{
-    getPincode()
-    getState()
-    getCity()
-  },[])
-
+    setIsFormOpen(false);
+  };
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
-        values.country = 'India'
-        const data = await authVendorService.addPickupLocation(values)
+        values.country = "India";
+        const data = await authVendorService.addPickupLocation(values);
 
         if (data) {
-          message.success('Pickup Location Added Successfully')
-          onClose()
-          form.resetFields()
-          getProfile()
+          message.success("Pickup Location Added Successfully");
+          onClose();
+          form.resetFields();
+          getProfile();
         }
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-    setSubmitLoading(false)
-  }
+        setSubmitLoading(false);
+        console.log("info", info);
+        message.error("Please enter all required field ");
+      });
+    setSubmitLoading(false);
+  };
 
   return (
     <>
@@ -107,7 +88,7 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Required',
+                    message: "Required",
                   },
                 ]}
               >
@@ -121,7 +102,7 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Required',
+                    message: "Required",
                   },
                 ]}
               >
@@ -137,7 +118,7 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Required',
+                    message: "Required",
                   },
                 ]}
               >
@@ -145,55 +126,41 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-            <Form.Item name="stateId" label="state" >
-      <TreeSelect placeholder="State" showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        } treeData={state} treeDefaultExpandAll>
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
-      </TreeSelect>
-    </Form.Item>
-    </Col>
-    </Row>
-    
-    <Row gutter={16}>
-        <Col span={12}>
- <Form.Item name="cityId" label="city" >
-      <TreeSelect placeholder="city" showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        } treeData={city} treeDefaultExpandAll>
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
-      </TreeSelect>
-    </Form.Item>
-    </Col>
-   
-    
-        <Col span={12}>
-    <Form.Item name="pincodeId" label="pincode" >
-      <TreeSelect placeholder="pincode" showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        } treeData={pincode} treeDefaultExpandAll>
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
-      </TreeSelect>
-    </Form.Item>
+              <Form.Item name="stateId" label="state">
+                <Select placeholder="state">
+                  {state.map((item) => (
+                    <Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
 
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="cityId" label="City">
+                <Select placeholder="City">
+                  {city.map((item) => (
+                    <Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item name="pincodeId" label="pincode">
+                <Select placeholder="pincode">
+                  {pincode.map((item) => (
+                    <Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
@@ -204,7 +171,7 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Required',
+                    message: "Required",
                   },
                 ]}
               >
@@ -222,7 +189,7 @@ const PickupLocationForm = ({ isFormOpen, setIsFormOpen, getProfile}) => {
         </Form>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default PickupLocationForm
+export default PickupLocationForm;
