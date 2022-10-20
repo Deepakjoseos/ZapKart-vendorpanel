@@ -40,7 +40,7 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/authdetails`}
           component={lazy(() => import(`./authDetails`))}
         />
-       
+
         <Route
           path={`${match.url}/wallet`}
           component={lazy(() => import(`./wallet`))}
@@ -60,6 +60,10 @@ const Dashboards = ({ match }) => {
         <Route
           path={`${match.url}/shipment`}
           component={lazy(() => import(`./shipment`))}
+        />
+        <Route
+          path={`${match.url}/document-upload`}
+          component={lazy(() => import(`./documentUpload`))}
         />
 
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
