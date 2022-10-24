@@ -80,6 +80,13 @@ const EditProfile = () => {
         'address.phone': user?.address?.phone,
         'address.zipcode': user?.address?.zipcode,
 
+         //Bank
+         'bank.name':user?.bank?.name,
+         'bank.accountNumber':user?.bank?.accountNumber,
+         'bank.branch':user?.bank?.branch,
+         'bank.swiftCode':user?.bank?.swiftCode,
+         'bank.iBanNo':user?.bank?.iBanNo,
+
         // Bussiness
         'business.name': user?.business?.name,
         'business.address.line1': user?.business?.address?.line1,
@@ -125,6 +132,14 @@ const EditProfile = () => {
           gst: values.gst,
           tanNumber: values.tanNumber,
           pan: values.pan,
+
+          bank:{
+            name: values['bank.name'],
+            accountNumber:values['bank.accountNumber'],
+            branch:values['bank.branch'],
+            swiftCode:values['bank.swiftCode'],
+            iBanNo:values['bank.iBanNo']
+          },
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -192,6 +207,8 @@ const EditProfile = () => {
               pan: data.pan,
               address: data.address,
               business: data.business,
+              bank:data.bank,
+              country:data.country
             }
             dispatch(
               authenticated({
@@ -334,20 +351,7 @@ const EditProfile = () => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item
-                label="PAN Number"
-                name="pan"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
+         
             <Col xs={24} sm={24} md={12}>
               <Form.Item
                 label="Email"
@@ -383,11 +387,7 @@ const EditProfile = () => {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item label="Tan Number" name="tanNumber">
-                <Input />
-              </Form.Item>
-            </Col>
+           
 
             <Card title="Address" style={{ width: '100%' }}>
               <Row gutter={ROW_GUTTER}>
@@ -415,7 +415,7 @@ const EditProfile = () => {
                 </Col>
                 <Col xs={24} sm={24} md={12}>
                 <Form.Item name="countryId" label="Country" >
-          <Select placeholder="pincode">
+          <Select placeholder="Country">
               {country.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
@@ -496,6 +496,51 @@ const EditProfile = () => {
               </Row>
             </Card>
           </Row>
+
+
+
+
+          
+           {/* Bank account details */}
+
+              
+           <Card title="Bank account details">
+           <Form.Item name="bank.name" label="Bank Name">
+            
+           <Input placeholder="Bank Name" />
+              </Form.Item>
+              <Row gutter={ROW_GUTTER}>
+                <Col xs={24} sm={24} md={24}>
+                  <Form.Item name="bank.accountNumber" label="accountNumber">
+                    <Input placeholder="accountNumber" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="bank.branch" label="branch">
+                    <Input placeholder="branch" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                <Form.Item name="bank.swiftCode" label="swiftCode">
+                    <Input placeholder="swiftCode" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                <Form.Item name="bank.iBanNo" label="iBanNo">
+                    <Input placeholder="iBanNo" />
+                  </Form.Item>
+                </Col>
+
+                </Row>
+           </Card>
+
+
+
+
+          
 
           <Button type="primary" htmlType="submit" onClick={onFinish}>
             Save Change
