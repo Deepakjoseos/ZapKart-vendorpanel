@@ -57,7 +57,7 @@ const AuthDetails = () => {
         })
         setCurrentUserFormData({
           email: data.email || '',
-          phone: data?.phone?.slice(3) || '',
+          phone: data?.phone || '',
           firstName: data.firstName || '',
           lastName: data.lastName || '',
           displayImage: data.displayImage,
@@ -84,7 +84,7 @@ const AuthDetails = () => {
         console.log(user, 'sjowww')
         setCurrentUserFormData({
           email: user.email || '',
-          phone: user?.phone?.slice(3) || '',
+          phone: user?.phone || '',
           firstName: user.firstName || '',
           lastName: user.lastName || '',
           displayImage: user.displayImage,
@@ -155,7 +155,7 @@ const AuthDetails = () => {
     firebase
       .auth()
       .currentUser.linkWithPhoneNumber(
-        `+91 ${phoneNumber}`,
+        `${phoneNumber}`,
         window.recaptchaVerifier
       )
       .then(function (confirmationResult) {
@@ -429,7 +429,7 @@ const AuthDetails = () => {
                           {!phoneVerified && (
                             <p
                               onClick={() => {
-                                if (values.phone?.length === 10) {
+                                if (values.phone?.length >= 10) {
                                   linkPhoneNumber(values.phone)
                                 } else {
                                   notification.error({
