@@ -19,7 +19,8 @@ const dev = {
       ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
-      : 'https://www.ecommerce.riolabz.com/api/v1',
+      : // For AWEN
+        'https://www.ecommerce.riolabz.com/api/v1',
 }
 
 const prod = {
@@ -28,7 +29,8 @@ const prod = {
       ? 'https://api.zapkart.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
-      : 'https://www.ecommerce.riolabz.com/api/v1',
+      : // For AWEN
+        'https://www.ecommerce.riolabz.com/api/v1',
 }
 
 const test = {
@@ -37,7 +39,8 @@ const test = {
       ? 'https://www.ecommerce.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
-      : 'https://www.ecommerce.riolabz.com/api/v1',
+      : // For AWEN
+        'https://www.ecommerce.riolabz.com/api/v1',
 }
 
 const getEnv = () => {
