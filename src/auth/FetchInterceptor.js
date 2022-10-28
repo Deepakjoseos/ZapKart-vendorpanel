@@ -69,8 +69,18 @@ service.interceptors.response.use(
     if (error.response.status === 401) {
       if (store.getState().auth.authorized) {
         if (window.location.pathname !== '/app/dashboards/authdetails') {
-          notification.warning({ message: 'Verification needed' })
+          if (!alreadyShownError) {
+            notification.warning({ message: 'Verification needed' })
+          }
+          alreadyShownError = true
         }
+
+        if (alreadyShownError) {
+          setTimeout(() => {
+            alreadyShownError = false
+          }, 3000)
+        }
+
         // window.location.reload()
         if (!window.location.href.includes('/app/dashboards/authdetails')) {
           history.replace('/app/dashboards/authdetails')
