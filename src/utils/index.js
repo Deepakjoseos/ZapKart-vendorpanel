@@ -413,18 +413,22 @@ class Utils {
           }
         }
       } else {
-        // toast.error(res.title)
-        notification.error({
-          // description: res.title,
-          message: res.title,
-        })
+        if (res.status !== 401) {
+          // toast.error(res.title)
+          notification.error({
+            // description: res.title,
+            message: res.title,
+          })
+        }
       }
 
       if (_.isEmpty(res?.errors)) {
-        notification.error({
-          // description: res.title,
-          message: res.title,
-        })
+        if (res.status !== 401) {
+          notification.error({
+            // description: res.title,
+            message: res.title,
+          })
+        }
       }
     }
     //  else {

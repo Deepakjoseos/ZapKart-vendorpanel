@@ -45,6 +45,18 @@ const AuthDetails = () => {
     //   .oneOf([Yup.ref('password'), null], '* Passwords must match')
     //   .required('* Password Confirm Required'),
   })
+  const validationSchemaUAE = Yup.object({
+    // email: Yup.string().email('*Invalid Email').required('* Email Required'),
+    firstName: Yup.string().required('Required'),
+    lastName: Yup.string().required('Required'),
+    // pan: Yup.string().required('Required'),
+    // drugLicense: Yup.string().nullable(),
+    // displayImage: Yup.string().required('* Password Required'),
+    // phone: Yup.string().required('Phone Number Required'),
+    // confirmPassword: Yup.string()
+    //   .oneOf([Yup.ref('password'), null], '* Passwords must match')
+    //   .required('* Password Confirm Required'),
+  })
 
   useEffect(() => {
     const getProfile = async () => {
@@ -70,7 +82,7 @@ const AuthDetails = () => {
           data.firstName &&
           data.lastName
         ) {
-          notification.success({ message: 'User Fully Authenticated' })
+          notification.success({ message: 'Sign in Success' })
           history.replace('/')
         }
 
@@ -275,8 +287,7 @@ const AuthDetails = () => {
           )
 
           if (res) {
-            notification.success({ message: 'Authentication Success: Create' })
-            notification.success({ message: 'User Fully Authenticated' })
+            notification.success({ message: 'Sign in Success' })
             // window.location.href = '/'
             history.push('/')
           }
@@ -317,8 +328,7 @@ const AuthDetails = () => {
           )
 
           if (res) {
-            notification.success({ message: 'Authentication Success: Edit' })
-            notification.success({ message: 'User Fully Authenticated' })
+            notification.success({ message: 'Signin Success' })
 
             // window.location.href = '/'
             history.push('/')
@@ -346,7 +356,11 @@ const AuthDetails = () => {
             initialValues={currentUserFormData}
             onSubmit={onSubmitHandler}
             enableReinitialize={true}
-            validationSchema={validationSchema}
+            validationSchema={
+              process.env.REACT_APP_SITE_NAME === 'zapkart'
+                ? validationSchema
+                : validationSchemaUAE
+            }
           >
             {(fomrik) => {
               const { touched, errors, isSubmitting, values, setFieldValue } =
@@ -465,22 +479,27 @@ const AuthDetails = () => {
                           />
                           <ErrorMessage name="email" />
                         </div>
-                        {/* <div className="mb-3">
-                          <label htmlFor="lastName">Pan Number</label>
-                          <Field
-                            as={Input}
-                            type="text"
-                            name="pan"
-                            className="form-control"
-                            style={{
-                              border: `${
-                                touched.pan && errors.pan ? '1px solid red' : ''
-                              }`,
-                            }}
-                          />
-                          <ErrorMessage name="pan" />
-                        </div> */}
-                        {process.env.SITE_NAME === 'zapkart' && (
+                        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                          <div className="mb-3">
+                            <label htmlFor="lastName">Pan Number</label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="pan"
+                              className="form-control"
+                              style={{
+                                border: `${
+                                  touched.pan && errors.pan
+                                    ? '1px solid red'
+                                    : ''
+                                }`,
+                              }}
+                            />
+                            <ErrorMessage name="pan" />
+                          </div>
+                        )}
+
+                        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                           <div className="mb-3">
                             <label htmlFor="drugLicense">
                               Drug License Number
