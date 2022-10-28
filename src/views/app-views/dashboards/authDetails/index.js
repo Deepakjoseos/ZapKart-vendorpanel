@@ -37,7 +37,7 @@ const AuthDetails = () => {
     // email: Yup.string().email('*Invalid Email').required('* Email Required'),
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
-    pan: Yup.string().required('Required'),
+    pan: Yup.string().nullable(),
     drugLicense: Yup.string().nullable(),
     // displayImage: Yup.string().required('* Password Required'),
     // phone: Yup.string().required('Phone Number Required'),
