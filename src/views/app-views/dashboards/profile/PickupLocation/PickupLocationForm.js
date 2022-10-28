@@ -126,8 +126,8 @@ const PickupLocationForm = ({
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="stateId" label="state">
-                <Select placeholder="state">
+              <Form.Item name="state" label="Country">
+                <Select placeholder="Country">
                   {state.map((item) => (
                     <Option key={item.id} value={item.id}>
                       {item.name}
@@ -140,8 +140,8 @@ const PickupLocationForm = ({
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="cityId" label="City">
-                <Select placeholder="City">
+              <Form.Item name="city" label="Emirates">
+                <Select placeholder="Emirates">
                   {city.map((item) => (
                     <Option key={item.id} value={item.id}>
                       {item.name}
@@ -152,8 +152,8 @@ const PickupLocationForm = ({
             </Col>
 
             <Col span={12}>
-              <Form.Item name="pincodeId" label="pincode">
-                <Select placeholder="pincode">
+              <Form.Item name="pin_code" label="City">
+                <Select placeholder="City">
                   {pincode.map((item) => (
                     <Option key={item.id} value={item.id}>
                       {item.name}

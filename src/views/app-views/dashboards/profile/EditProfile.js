@@ -68,7 +68,7 @@ const EditProfile = () => {
         gst: user.gst,
         address: user.address,
         tanNumber: user.tanNumber,
-        pan: user.pan,
+        // pan: user.pan,
         country: user.country,
         state:user.state,
 
@@ -131,7 +131,7 @@ const EditProfile = () => {
           lastName: values.lastName,
           gst: values.gst,
           tanNumber: values.tanNumber,
-          pan: values.pan,
+          // pan: values.pan,
 
           bank:{
             name: values['bank.name'],
@@ -204,7 +204,7 @@ const EditProfile = () => {
               displayImage: data.displayImage,
               gst: data.gst,
               tanNumber: data.tanNumber,
-              pan: data.pan,
+              // pan: data.pan,
               address: data.address,
               business: data.business,
               bank:data.bank,
