@@ -261,10 +261,10 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
-            gst: data.gst,
-            tanNumber: data.tanNumber,
-            pan: data.pan,
-            drugLicense: data?.drugLicense,
+            // gst: data.gst,
+            // tanNumber: data.tanNumber,
+            // pan: data.pan,
+            // drugLicense: data?.drugLicense,
           }
 
           await dispatch(
@@ -303,10 +303,10 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
-            gst: data.gst,
-            tanNumber: data.tanNumber,
-            pan: data.pan,
-            drugLicense: data?.drugLicense,
+            // gst: data.gst,
+            // tanNumber: data.tanNumber,
+            // pan: data.pan,
+            // drugLicense: data?.drugLicense,
           }
 
           await dispatch(
@@ -465,7 +465,7 @@ const AuthDetails = () => {
                           />
                           <ErrorMessage name="email" />
                         </div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                           <label htmlFor="lastName">Pan Number</label>
                           <Field
                             as={Input}
@@ -479,7 +479,7 @@ const AuthDetails = () => {
                             }}
                           />
                           <ErrorMessage name="pan" />
-                        </div>
+                        </div> */}
                         {process.env.SITE_NAME === 'zapkart' && (
                           <div className="mb-3">
                             <label htmlFor="drugLicense">

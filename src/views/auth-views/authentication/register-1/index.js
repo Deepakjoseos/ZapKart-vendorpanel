@@ -22,7 +22,7 @@ const RegisterOne = (props) => {
                   <img
                     className="img-fluid"
                     src={`/img/${
-                      theme === 'light' ? 'logo.png' : 'logo-white.png'
+                      theme === 'light' ? 'athathy.png' : 'logo-white.png'
                     }`}
                     alt=""
                   />

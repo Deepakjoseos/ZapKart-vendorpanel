@@ -47,7 +47,7 @@ function App() {
               business: data.business,
               gst: data.gst,
               tanNumber: data.tanNumber,
-              pan: data.pan,
+              // pan: data.pan,
             }
 
             dispatch(
@@ -74,7 +74,7 @@ function App() {
             business: {},
             tanNumber: null,
             gst: null,
-            pan: null,
+            // pan: null,
             // passwordVerified: passwordAvailable?.providerId ? true : false,
           }
           dispatch(
