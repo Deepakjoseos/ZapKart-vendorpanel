@@ -67,8 +67,20 @@ const ProductForm = (props) => {
     }
   }
 
+  const getDistrict = async () => {
+    const data = await localityService.getDistrict('', `status=Active`)
+    if (data?.data?.length > 0) {
+      const list = Utils.createDeliveryLocationList(data?.data)
+      setAllTreesData(list)
+    }
+  }
+
   useEffect(() => {
-    getCountry()
+    if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+      getCountry()
+    } else {
+      getDistrict()
+    }
   }, [])
 
   const getParentBasedDeliveryZones = () => {
