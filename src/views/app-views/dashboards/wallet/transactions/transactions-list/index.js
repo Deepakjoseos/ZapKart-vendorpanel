@@ -119,7 +119,7 @@ const TransactionList = () => {
         getWallet()
         getBankAccounts()
 
-    }, [wallet])
+    }, [])
 
     // Dropdown menu for each row
     const dropdownMenu = (row) => (

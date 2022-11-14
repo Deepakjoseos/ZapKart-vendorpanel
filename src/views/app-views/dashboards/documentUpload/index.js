@@ -29,7 +29,9 @@ const Documents = () => {
   const [isVerifiedEmiratesId, setIsVerifiedEmiratesId] = useState(false)
   const [isVerifiedSignedContractCopy, setIsVerifiedSignedContractCopy] =
     useState(false)
-  const [isVerifiedPassportOrVisa, setIsVerifiedPassportOrVisa] =
+  const [isVerifiedvisa, setIsVerifiedvisa] =
+    useState(false)
+     const [isVerifiedPassport, setIsVerifiedPassport] =
     useState(false)
   const [isVerifiedVatTrnCertificate, setIsVerifiedVatTrnCertificate] =
     useState(false)
@@ -37,7 +39,8 @@ const Documents = () => {
   const [tradeLicense, setTradeLicense] = useState(null)
   const [emiratesID, setEmiratesID] = useState(null)
   const [signedContractCopy, setSignedContractCopy] = useState(null)
-  const [passportOrVisa, setPassportOrVisa] = useState(null)
+  const [visa, setvisa] = useState(null)
+  const [passport, setPassport] = useState(null)
   const [vatTrnCertificate, setVatTrnCertificate] = useState(null)
 
   // For Trade Liences
@@ -105,24 +108,46 @@ const Documents = () => {
 
   // For passportOrVisa
   const {
-    fileList: fileListPassportOrVisa,
-    beforeUpload: beforeUploadPassportOrVisa,
-    onChange: onChangePassportOrVisa,
-    onRemove: onRemovePassportOrVisa,
-    setFileList: setFileListPassportOrVisa,
+    fileList: fileListPassport,
+    beforeUpload: beforeUploadPassport,
+    onChange: onChangePassport,
+    onRemove: onRemovePassport,
+    setFileList: setFileListPassport,
   } = useUpload(1)
 
-  const propsPassportOrVisa = {
+  const propsPassport = {
     multiple: false,
-    beforeUpload: beforeUploadPassportOrVisa,
-    onRemove: onRemovePassportOrVisa,
-    onChange: onChangePassportOrVisa,
-    fileList: fileListPassportOrVisa,
+    beforeUpload: beforeUploadPassport,
+    onRemove: onRemovePassport,
+    onChange: onChangePassport,
+    fileList: fileListPassport,
   }
 
   useEffect(() => {
-    setPassportOrVisa(fileListPassportOrVisa)
-  }, [fileListPassportOrVisa])
+    setPassport(fileListPassport)
+  }, [fileListPassport])
+
+
+
+  const {
+    fileList: fileListvisa,
+    beforeUpload: beforeUploadvisa,
+    onChange: onChangevisa,
+    onRemove: onRemovevisa,
+    setFileList: setFileListvisa,
+  } = useUpload(1)
+
+  const propsvisa = {
+    multiple: false,
+    beforeUpload: beforeUploadvisa,
+    onRemove: onRemovevisa,
+    onChange: onChangevisa,
+    fileList: fileListvisa,
+  }
+
+  useEffect(() => {
+    setvisa(fileListvisa)
+  }, [fileListvisa])
 
   // For passportOrVisa
   const {
@@ -152,7 +177,8 @@ const Documents = () => {
       setIsVerifiedEmiratesId(getDoc?.emiratesID?.isVerified)
       setIsVerifiedTradeLicense(getDoc?.tradelicense?.isVerified)
       setIsVerifiedSignedContractCopy(getDoc?.signedContractCopy?.isVerified)
-      setIsVerifiedPassportOrVisa(getDoc?.passportOrVisa?.isVerified)
+      setIsVerifiedvisa(getDoc?.rvisa?.isVerified)
+      setIsVerifiedPassport(getDoc?.passport?.isVerified)
       setIsVerifiedVatTrnCertificate(getDoc?.vatTrnCertificate?.isVerified)
       let himg = []
       if (getDoc?.emiratesID?.url) {
@@ -191,18 +217,33 @@ const Documents = () => {
         setSignedContractCopy(himg)
         setFileListSignedContractCopy(himg)
       }
-      if (getDoc?.passportOrVisa?.url) {
+      if (getDoc?.visa?.url) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(getDoc?.passportOrVisa?.url),
-            url: getDoc.passportOrVisa.url,
-            thumbUrl: getDoc.passportOrVisa.url,
+            name: Utils.getBaseName(getDoc?.visa?.url),
+            url: getDoc.visa.url,
+            thumbUrl: getDoc.visa.url,
           },
         ]
-        setPassportOrVisa(himg)
-        setFileListPassportOrVisa(himg)
+        setvisa(himg)
+        setFileListvisa(himg)
       }
+
+
+      if (getDoc?.passport?.url) {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            name: Utils.getBaseName(getDoc?.passport?.url),
+            url: getDoc.passport.url,
+            thumbUrl: getDoc.passport.url,
+          },
+        ]
+        setPassport(himg)
+        setFileListPassport(himg)
+      }
+
       if (getDoc?.vatTrnCertificate?.url) {
         himg = [
           {
@@ -227,7 +268,8 @@ const Documents = () => {
     let tradeLicenseFileUrl,
       emiratesIDFileUrl,
       signedContractCopyFileUrl,
-      passportOrVisaFileUrl,
+      passportFileUrl,
+      visaFileUrl,
       vatTrnCertificateFileUrl
     setSubmitLoading(true)
     // for tradeLic ense
@@ -264,17 +306,34 @@ const Documents = () => {
       signedContractCopyFileUrl = signedContractCopyFileValue
     }
 
-    if (passportOrVisa?.length > 0) {
-      console.log(passportOrVisa, 'uypeouipo')
-      const passportOrVisaFileValue = await fileDocUpload(
-        passportOrVisa[0].originFileObj,
-        passportOrVisa,
-        passportOrVisa[0].url,
+    if (visa?.length > 0) {
+      console.log(visa, 'uypeouipo')
+      const visaFileValue = await fileDocUpload(
+        visa[0].originFileObj,
+        visa,
+        visa[0].url,
         'Users'
       )
 
-      passportOrVisaFileUrl = passportOrVisaFileValue
+      visaFileUrl = visaFileValue
     }
+
+
+
+    if (passport?.length > 0) {
+      console.log(passport, 'uypeouipo')
+      const passportFileValue = await fileDocUpload(
+        passport[0].originFileObj,
+        passport,
+        passport[0].url,
+        'Users'
+      )
+
+      passportFileUrl = passportFileValue
+    }
+
+
+
 
     if (vatTrnCertificate?.length > 0) {
       const vatTrnCertificateFileValue = await fileDocUpload(
@@ -292,7 +351,8 @@ const Documents = () => {
       tradelicense: tradeLicenseFileUrl,
       emiratesID: emiratesIDFileUrl,
       signedContractCopy: signedContractCopyFileUrl,
-      passportOrVisa: passportOrVisaFileUrl,
+      visa: visaFileUrl,
+      passport: passportFileUrl,
       vatTrnCertificate: vatTrnCertificateFileUrl,
     }
 
@@ -396,11 +456,11 @@ const Documents = () => {
         </Col>
 
         <Col span={12} className="mt-4">
-          <Card title="Passport Or Visa">
+          <Card title="Passport">
             <Upload
               listType="picture-card"
               name="image-2"
-              {...propsPassportOrVisa}
+              {...propsPassport}
             >
               <CustomIcon className="display-3" svg={ImageSvg} />
             </Upload>
@@ -408,15 +468,46 @@ const Documents = () => {
 
           <Form.Item
             hasFeedback
-            validateStatus={isVerifiedPassportOrVisa ? 'success' : 'error'}
+            validateStatus={isVerifiedPassport ? 'success' : 'error'}
           >
             <Input
               disabled
               id="success"
-              value={isVerifiedPassportOrVisa ? 'Verified' : 'Not Verified'}
+              value={isVerifiedPassport ? 'Verified' : 'Not Verified'}
             />
           </Form.Item>
         </Col>
+
+
+
+        <Col span={12} className="mt-4">
+          <Card title=" visa">
+            <Upload
+              listType="picture-card"
+              name="image-2"
+              {...propsvisa}
+            >
+              <CustomIcon className="display-3" svg={ImageSvg} />
+            </Upload>
+          </Card>
+
+          <Form.Item
+            hasFeedback
+            validateStatus={isVerifiedvisa ? 'success' : 'error'}
+          >
+            <Input
+              disabled
+              id="success"
+              value={isVerifiedvisa ? 'Verified' : 'Not Verified'}
+            />
+          </Form.Item>
+        </Col>
+
+
+
+
+
+
 
         <Col span={12} className="mt-4">
           <Card title="VatTrnCertificate">
