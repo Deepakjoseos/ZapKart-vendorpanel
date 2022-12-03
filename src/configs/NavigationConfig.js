@@ -71,6 +71,14 @@ const extraNavTree = [
             submenu: [],
           },
           {
+            key: 'dashboards-sales',
+            path: `${APP_PREFIX_PATH}/dashboards/sales`,
+            title: 'Sales',
+            icon: '',
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
             key: 'extra-pages-invoice',
             path: `${APP_PREFIX_PATH}/pages/invoice`,
             title: 'sidenav.pages.invoice',

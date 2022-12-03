@@ -14,7 +14,7 @@ import {
 } from "antd";
 import React, { useState, useEffect } from "react";
 import authVendorService from "services/auth/vendor";
-
+const SITE_NAME = process.env.REACT_APP_SITE_NAME
 const { Option } = Select;
 
 const PickupLocationForm = ({
@@ -23,7 +23,10 @@ const PickupLocationForm = ({
   getProfile,
   city,
   pincode,
+  country,
   state,
+  getPincode,
+  getCity,
 }) => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -43,7 +46,10 @@ const PickupLocationForm = ({
       .validateFields()
       .then(async (values) => {
         values.country = "India";
-        const data = await authVendorService.addPickupLocation(values);
+        const data = await authVendorService.addPickupLocation(  SITE_NAME === 'zapkart'
+        ? { ...values, country: country[0].name }
+        : { ...values, country: country[0].name, state: state[0].name }
+    )
 
         if (data) {
           message.success("Pickup Location Added Successfully");
@@ -125,43 +131,80 @@ const PickupLocationForm = ({
                 <Input placeholder="Phone" type="tel" />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item name="state" label="Country">
-                <Select placeholder="Country">
-                  {state.map((item) => (
-                    <Option key={item.id} value={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
+           
+        <Col span={8}>
+          {SITE_NAME === 'zapkart' && (
+            <Form.Item name="state" label="State">
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                placeholder="State"
+                onChange={(val) => {
+                  form.setFieldsValue({ city: null, zipcode: null })
+                  getCity(`stateName=${val}`)
+                }}
+              >
+                {state.map((item) => (
+                  <Option key={item.name} value={item.name}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            name="city"
+            label={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+          >
+            <Select
+              placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              onChange={(val) => {
+                form.setFieldsValue({ zipcode: null })
+                getPincode(`cityName=${val}`)
+              }}
+            >
+              {city.map((item) => (
+                <Option key={item.name} value={item.name}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
 
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="city" label="Emirates">
-                <Select placeholder="Emirates">
-                  {city.map((item) => (
-                    <Option key={item.id} value={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-
-            <Col span={12}>
-              <Form.Item name="pin_code" label="City">
-                <Select placeholder="City">
-                  {pincode.map((item) => (
-                    <Option key={item.id} value={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+        <Col span={8}>
+          <Form.Item
+            name="pin_code"
+            label={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
+            >
+              {pincode.map((pincode) => (
+                <Option key={pincode.name} value={pincode.name}>
+                  {pincode.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+    
           </Row>
           <Row gutter={16}>
             <Col span={24}>

@@ -165,32 +165,32 @@ if (process.env.REACT_APP_SITE_NAME === 'athathy') {
         // messagingSenderId: '812753080859',
         // appId: '1:812753080859:web:63d1a2c52ff2a2a5161ebe',
        
-        apiKey: 'AIzaSyDE96sBpGy5JJKHNwTHP3OuUSChRCIgH_U',
-        authDomain: 'ecommerce-74b71.firebaseapp.com',
-        projectId: 'ecommerce-74b71',
-        storageBucket: 'ecommerce-74b71.appspot.com',
-        messagingSenderId: '1031062435017',
-        appId: '1:1031062435017:web:d6b5ac03cd40d344480918'
+        apiKey: 'AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM',
+        authDomain: 'zapkartlive.firebaseapp.com',
+        projectId: 'zapkartlive',
+        storageBucket: 'zapkartlive.appspot.com',
+        messagingSenderId: '1010821971171',
+        appId: '1:1010821971171:web:dcd6a429a1f65cb3ead9d6',
       }
       break
     case 'production':
       FirebaseConfig = {
-        apiKey: 'AIzaSyDE96sBpGy5JJKHNwTHP3OuUSChRCIgH_U',
-  authDomain: 'ecommerce-74b71.firebaseapp.com',
-  projectId: 'ecommerce-74b71',
-  storageBucket: 'ecommerce-74b71.appspot.com',
-  messagingSenderId: '1031062435017',
-  appId: '1:1031062435017:web:d6b5ac03cd40d344480918'
+        apiKey: 'AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM',
+        authDomain: 'zapkartlive.firebaseapp.com',
+        projectId: 'zapkartlive',
+        storageBucket: 'zapkartlive.appspot.com',
+        messagingSenderId: '1010821971171',
+        appId: '1:1010821971171:web:dcd6a429a1f65cb3ead9d6',
       }
       break
     case 'test':
       FirebaseConfig = {
-        apiKey: 'AIzaSyDE96sBpGy5JJKHNwTHP3OuUSChRCIgH_U',
-        authDomain: 'ecommerce-74b71.firebaseapp.com',
-        projectId: 'ecommerce-74b71',
-        storageBucket: 'ecommerce-74b71.appspot.com',
-        messagingSenderId: '1031062435017',
-        appId: '1:1031062435017:web:d6b5ac03cd40d344480918'
+        apiKey: 'AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM',
+        authDomain: 'zapkartlive.firebaseapp.com',
+        projectId: 'zapkartlive',
+        storageBucket: 'zapkartlive.appspot.com',
+        messagingSenderId: '1010821971171',
+        appId: '1:1010821971171:web:dcd6a429a1f65cb3ead9d6',
       }
       break
     default:

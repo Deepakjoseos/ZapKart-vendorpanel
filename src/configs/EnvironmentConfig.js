@@ -16,7 +16,7 @@ const dev = {
   //   https://ecommercelive.riolabz.com'
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://ecommercelive.riolabz.com/api/v1'
+      ? 'https://api.zapkart.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // For AWEN
@@ -26,7 +26,7 @@ const dev = {
 const prod = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://ecommercelive.riolabz.com/api/v1'
+      ? 'https://api.zapkart.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // For AWEN
@@ -36,7 +36,7 @@ const prod = {
 const test = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://ecommercelive.riolabz.com/api/v1'
+      ? 'https://api.zapkart.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // For AWEN
