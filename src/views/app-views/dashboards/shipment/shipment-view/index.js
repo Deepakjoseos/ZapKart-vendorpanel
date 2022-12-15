@@ -408,7 +408,7 @@ const ShipmentView = () => {
                 : ""} */}
 
               {!shipment.shiprocket?.pickup &&
-              shipment.shiprocket?.awbDetails ? (
+              shipment.shiprocket?.awbDetails?.awb_code ? (
                 <Button
                   onClick={() => {
                     // requestPickupOrder(id)
@@ -441,11 +441,18 @@ const ShipmentView = () => {
         ))}
         <span>Status:</span>
         {shipment.status} <br />
-        <span>Shipped By Vendor:</span>
+        <span>Shipped By Vendor: </span>
         {shipment.shippedByVendor ? 'Yes' : 'No'}
+        <br />
+        {shipment?.shippedBy && (
+          <>
+            <span>Shipped By: </span>
+            {shipment?.shippedBy}
+          </>
+        )}
         <Row style={{ width: '100%' }}>
           <Col md={12} sm={24} lg={12}>
-            {shipment.shiprocket?.awbDetails ? (
+            {shipment.shiprocket?.awbDetails?.awb_code ? (
               <Card>
                 <div className="mt-3">
                   <Row>
@@ -477,13 +484,13 @@ const ShipmentView = () => {
                       </p>
                       <p>
                         Courier Company Id:{' '}
-                        {shipment.shiprocket?.awbDetails.courier_company_id}
+                        {shipment.shiprocket?.awbDetails?.courier_company_id}
                       </p>
                       <p>
                         Date:{' '}
                         {
-                          shipment.shiprocket?.awbDetails.assigned_date_time
-                            .date
+                          shipment.shiprocket?.awbDetails?.assigned_date_time
+                            ?.date
                         }
                       </p>
                       <p>
@@ -504,88 +511,91 @@ const ShipmentView = () => {
                       <p>
                         Shipper Company Name :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_company_name
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_company_name
                         }{' '}
                       </p>
                       <p>
                         RTO Country :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_country}{' '}
+                        {
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.rto_country
+                        }{' '}
                       </p>
                       <p>
                         RTO State :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_state}{' '}
+                        {shipment.shiprocket?.awbDetails?.shipped_by?.rto_state}{' '}
                       </p>
                       <p>
                         RTO City :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_city}{' '}
+                        {shipment.shiprocket?.awbDetails?.shipped_by?.rto_city}{' '}
                       </p>
                       <p>
                         RTO Phone :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_phone}{' '}
+                        {shipment.shiprocket?.awbDetails?.shipped_by?.rto_phone}{' '}
                       </p>
                       <p>
                         RTO Phone :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_phone}{' '}
+                        {shipment.shiprocket?.awbDetails?.shipped_by?.rto_phone}{' '}
                       </p>
                       <p>
                         RTO PostCode :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .rto_postcode
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.rto_postcode
                         }{' '}
                       </p>
                       <p>
                         RTO Email :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_email}{' '}
+                        {shipment.shiprocket?.awbDetails?.shipped_by?.rto_email}{' '}
                       </p>
                       <p>
                         Shipper Address :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_address_1
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_address_1
                         }{' '}
                       </p>
                       <p>
                         Shipper City :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_city
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_city
                         }{' '}
                       </p>
                       <p>
                         Shipper Country :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_country
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_country
                         }{' '}
                       </p>
                       <p>
                         Shipper Email :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_email
+                          shipment?.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_email
                         }{' '}
                       </p>
                       <p>
                         Shipper Phone :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_phone
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_phone
                         }{' '}
                       </p>
                       <p>
                         Shipper PostCode :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_postcode
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_postcode
                         }{' '}
                       </p>
                       <p>
                         Shipper State :
                         {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_state
+                          shipment.shiprocket?.awbDetails?.shipped_by
+                            ?.shipper_state
                         }{' '}
                       </p>
                     </Col>
@@ -593,7 +603,9 @@ const ShipmentView = () => {
                 </div>
               </Card>
             ) : (
-              ''
+              shipment?.shippedBy !== 'Vendor' && (
+                <h2 className="mt-3">Waiting For Admin Pending...</h2>
+              )
             )}
           </Col>
           <Col md={12} sm={24} lg={12}>

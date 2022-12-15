@@ -6,8 +6,7 @@ orderService.getOrders = async function (query) {
   try {
     let url = `${api}`
     const status = query?.status
-    if (status) url = `${url}?status=${status}`;
-
+    if (status) url = `${url}?status=${status}`
 
     const res = await fetch({
       url,
@@ -83,7 +82,7 @@ orderService.cancelOrderItem = async function (id, data) {
 orderService.createVendorOrderInvoice = async function (orderId, data) {
   try {
     const res = await fetch({
-      url: `/order/VENDOR/addVendorInvoice/${orderId}`,
+      url: `/order/vendor/addVendorInvoice/${orderId}`,
       method: 'post',
       data,
     })

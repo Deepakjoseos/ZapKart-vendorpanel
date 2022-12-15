@@ -66,6 +66,19 @@ shipmentService.editShipment = async function (id, data) {
   }
 }
 
+shipmentService.updateShipmentStatus = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/update/status/vendor`,
+      method: 'put',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 shipmentService.requestPickupOrder = async function (data) {
   try {
     const res = await fetch({

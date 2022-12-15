@@ -21,13 +21,8 @@ import { useHistory } from 'react-router-dom'
 import shipmentService from 'services/shipment'
 import orderService from 'services/orders'
 import authVendorService from 'services/auth/vendor'
-const CreateInvoiceForm = ({
-  orderId,
-  setIsInvoiceFormOpen,
-  isInvoiceFormOpen,
-  refetchOrderData,
-  items,
-}) => {
+import taxCategoryService from 'services/taxCategory'
+const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
   const [form] = Form.useForm()
   const history = useHistory()
 
@@ -37,6 +32,7 @@ const CreateInvoiceForm = ({
   const [submitLoading, setSubmitLoading] = useState(false)
 
   const [vendorBasedInvoiceData, setVendorBasedInvoiceData] = useState([])
+  const [taxCategories, setTaxCategories] = useState([])
 
   const [creatingInvoiceValue, setCreatingInvoiceValue] = useState({
     items: [],
@@ -50,6 +46,8 @@ const CreateInvoiceForm = ({
   // Items Form
   const [batch, setBatch] = useState(null)
   const [expiry, setExpiry] = useState(null)
+  const [hsn, setHsn] = useState(null)
+  const [taxCategoryId, setTaxCategoryId] = useState(null)
 
   // const getPickupLocations = async () => {
   //   const data = await shipmentService.getPickupLocations()
@@ -68,8 +66,18 @@ const CreateInvoiceForm = ({
     }
     console.log('currentUser', currentUser)
   }
+
+  const getTaxCategories = async () => {
+    const data = await taxCategoryService.getTaxCategories()
+
+    if (data) {
+      setTaxCategories(data)
+    }
+  }
+
   useEffect(() => {
     getCurrentUser()
+    // getTaxCategories()
   }, [])
 
   // useEffect(() => {
@@ -105,10 +113,13 @@ const CreateInvoiceForm = ({
   }
 
   const addToCreatingInvoiceValue = () => {
-    console.log('invoicedara')
+    console.log(creatingInvoiceValue, 'djhk')
     setCreatingInvoiceValue((prev) => ({
       ...prev,
-      items: [...prev?.items, { id: selectedCurrentItemId, batch, expiry }],
+      items: [
+        ...prev?.items,
+        { id: selectedCurrentItemId, batch, expiry, hsn },
+      ],
     }))
     resetInvoiceItemStateValues()
     setIsAddInvoiceModalOpen(false)
@@ -150,14 +161,13 @@ const CreateInvoiceForm = ({
         message: 'invoice Created',
       })
       resetMainStates()
-      setIsInvoiceFormOpen(false)
-      refetchOrderData()
+      reFetchOrderData()
     }
   }
 
   const resetMainStates = () => {
     setVendorBasedInvoiceData([])
-    setCreatingInvoiceValue({})
+    setCreatingInvoiceValue({ items: [] })
     setIsAddInvoiceModalOpen(false)
     setSelectedCurrentItemId(null)
     setIsAddInvoiceModalOpen(false)
@@ -167,119 +177,97 @@ const CreateInvoiceForm = ({
 
   return (
     <>
-      <Drawer
-        title="Invoice Form"
-        width={'70%'}
-        onClose={() => {
-          setIsInvoiceFormOpen(false)
-          form.resetFields()
-        }}
-        visible={isInvoiceFormOpen}
-        bodyStyle={{
-          paddingBottom: 80,
-        }}
-        extra={
-          <Space>
-            <Button
-              onClick={() => {
-                setIsInvoiceFormOpen(false)
-                form.resetFields()
-              }}
-            >
-              Cancel
-            </Button>
-            <Button type="primary" loading={submitLoading} onClick={onFinish}>
-              Submit
-            </Button>
-          </Space>
-        }
-      >
-        <Row gutter={16}>
-          <Col xs={24} sm={24} md={24}>
-            <Card title="Basic Info">
-              {/* <Select
-                  className="w-100 mb-3"
-                  placeholder="Select Vendor"
-                  value={creatingInvoiceValue?.vendorId}
-                  onChange={(val) =>
-                    setCreatingInvoiceValue((prev) => ({
-                      ...prev,
-                      vendorId: val,
-                      items: [],
-                    }))
-                  }
-                >
-                  {vendorBasedInvoiceData?.map((cur) => (
-                    <Option value={cur?.vendorId}>{cur?.vendorName}</Option>
-                  ))}
-                </Select> */}
-
-              <Input
-                placeholder="Invoice No"
-                value={creatingInvoiceValue?.invoice}
-                onChange={(e) =>
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={24}>
+          <Card title="Invoice">
+            {/* <Select
+                className="w-100 mb-3"
+                placeholder="Select Vendor"
+                value={creatingInvoiceValue?.vendorId}
+                onChange={(val) =>
                   setCreatingInvoiceValue((prev) => ({
                     ...prev,
-                    invoice: e.target.value,
+                    vendorId: val,
+                    items: [],
                   }))
                 }
-              />
+              >
+                {vendorBasedInvoiceData?.map((cur) => (
+                  <Option value={cur?.vendorId}>{cur?.vendorName}</Option>
+                ))}
+              </Select> */}
 
-              <Table dataSource={items} pagination={false} className="mb-5">
-                <Column title="Product" dataIndex="name" key="name" />
-                <Column title="Quantity" dataIndex="quantity" key="quantity" />
-                <Column title="Price" dataIndex="price" key="price" />
+            <Input
+              placeholder="Invoice No"
+              value={creatingInvoiceValue?.invoice}
+              onChange={(e) =>
+                setCreatingInvoiceValue((prev) => ({
+                  ...prev,
+                  invoice: e.target.value,
+                }))
+              }
+            />
+
+            <Table dataSource={items} pagination={false} className="mb-5">
+              <Column title="Product" dataIndex="name" key="name" />
+              <Column title="Quantity" dataIndex="quantity" key="quantity" />
+              <Column title="Price" dataIndex="price" key="price" />
+              <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Column
-                  title="Vendor"
-                  dataIndex="vendorName"
-                  key="vendorName"
+                  title="Prescription Required"
+                  dataIndex="prescriptionRequired"
+                  key="prescriptionRequired"
+                  render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
                 />
-                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                  <Column
-                    title="Prescription Required"
-                    dataIndex="prescriptionRequired"
-                    key="prescriptionRequired"
-                    render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
-                  />
+              )}
+
+              <Column title="Status" dataIndex="status" key="status" />
+              <Column
+                title="Action"
+                render={(_, row) => (
+                  <>
+                    {ifItemIdIsInCreatingInvoiceValue(row.id) ? (
+                      <Button
+                        onClick={() =>
+                          removeProductItemFromCreatingInvoiceValue(row.id)
+                        }
+                      >
+                        Remove
+                      </Button>
+                    ) : (
+                      <>
+                        {!row?.invoiceId ? (
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              setIsAddInvoiceModalOpen(true)
+                              setSelectedCurrentItemId(row.id)
+                              setBatch(row.batch ? row.batch : null)
+                              setExpiry(row.expiry ? moment(row.expiry) : null)
+                              setHsn(row.hsn ? row.hsn : null)
+                              setTaxCategoryId(
+                                row?.taxCategoryId ? row?.taxCategoryId : null
+                              )
+                            }}
+                          >
+                            Add To Invoice
+                          </Button>
+                        ) : (
+                          <b>Already Have Invoice</b>
+                        )}
+                      </>
+                    )}
+                  </>
                 )}
-
-                <Column title="Status" dataIndex="status" key="status" />
-                <Column
-                  title="Action"
-                  render={(_, row) => (
-                    <>
-                      {ifItemIdIsInCreatingInvoiceValue(row.id) ? (
-                        <Button
-                          onClick={() =>
-                            removeProductItemFromCreatingInvoiceValue(row.id)
-                          }
-                        >
-                          Remove
-                        </Button>
-                      ) : (
-                        <Button
-                          type="primary"
-                          onClick={() => {
-                            setIsAddInvoiceModalOpen(true)
-                            setSelectedCurrentItemId(row.id)
-                            setBatch(row.batch ? row.batch : null)
-                            setExpiry(row.expiry ? moment(row.expiry) : null)
-                          }}
-                        >
-                          Add To Invoice
-                        </Button>
-                      )}
-                    </>
-                  )}
-                />
-              </Table>
-            </Card>
-          </Col>
-        </Row>
-      </Drawer>
+              />
+            </Table>
+          </Card>
+        </Col>
+      </Row>
 
       <Modal
-        title="Add Item"
+        title={`Add Item`}
         style={{ top: 20 }}
         visible={isAddInvoiceModalOpen}
         onCancel={() => setIsAddInvoiceModalOpen(false)}
@@ -301,6 +289,19 @@ const CreateInvoiceForm = ({
           onChange={(e) => setBatch(e.target.value)}
           value={batch}
         />
+        <Input
+          placeholder="Hsn"
+          className="mb-3"
+          onChange={(e) => setHsn(e.target.value)}
+          value={hsn}
+        />
+
+        {/* <Select placeholder="Tax Category" className="mb-3">
+          {taxCategories?.map((cur) => (
+            <Option value={cur.id}>{cur?.name}</Option>
+          ))}
+        </Select> */}
+
         <DatePicker
           placeholder="Expiry Date"
           format="YYYY-MM-DD"
@@ -309,8 +310,13 @@ const CreateInvoiceForm = ({
           onChange={(date, dateString) => setExpiry(dateString)}
         />
       </Modal>
+      {creatingInvoiceValue?.items?.length > 0 && (
+        <Button type="primary" loading={submitLoading} onClick={onFinish}>
+          Generate Invoice
+        </Button>
+      )}
     </>
   )
 }
 
-export default CreateInvoiceForm
+export default GenerateInvoice
