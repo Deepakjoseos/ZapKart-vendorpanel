@@ -337,15 +337,15 @@ const OrderView = () => {
                 />
 
                 <Column title="Product Name" dataIndex="name" key="name" />
-                <Column title="HSN" dataIndex="hsn" key="hsn" />
-                <Column title="BATCH" dataIndex="batch" key="batch" />
+                {/* <Column title="HSN" dataIndex="hsn" key="hsn" />
+                <Column title="BATCH" dataIndex="batch" key="batch" /> */}
 
-                <Column title="EXP" dataIndex="expiry" key="expiry" />
+                {/* <Column title="EXP" dataIndex="expiry" key="expiry" /> */}
                 <Column title="QTY" dataIndex="quantity" key="quantity" />
                 <Column title="PRICE" dataIndex="price" key="price" />
                 <Column title="DISC" dataIndex="discount" key="discount" />
                 {/* <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" /> */}
-                <Column
+                {/* <Column
                   title="TAX"
                   dataIndex="taxSplitup"
                   render={(taxSplitup) => {
@@ -361,7 +361,7 @@ const OrderView = () => {
                       </>
                     )
                   }}
-                />
+                /> */}
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 

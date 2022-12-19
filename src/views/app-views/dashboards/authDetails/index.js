@@ -353,10 +353,10 @@ const AuthDetails = () => {
             business: data.business,
             address: data.address,
             
-            // gst: data.gst,
-            // tanNumber: data.tanNumber,
-            // pan: data.pan,
-            // drugLicense: data?.drugLicense,
+            gst: data.gst,
+            tanNumber: data.tanNumber,
+            pan: data.pan,
+            drugLicense: data?.drugLicense,
           }
 
           await dispatch(
@@ -599,6 +599,27 @@ const AuthDetails = () => {
                               }}
                             />
                             <ErrorMessage name="pan" />
+                          </div>
+                        )}
+
+
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                          <div className="mb-3">
+                            <label htmlFor="lastName">GST</label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="gst"
+                              className="form-control"
+                              style={{
+                                border: `${
+                                  touched.gst && errors.gst
+                                    ? '1px solid red'
+                                    : ''
+                                }`,
+                              }}
+                            />
+                            <ErrorMessage name="gst" />
                           </div>
                         )}
 
