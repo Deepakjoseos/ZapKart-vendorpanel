@@ -16,7 +16,7 @@ const dev = {
   //   https://ecommercelive.riolabz.com'
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://api.zapkart.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // For AWEN
@@ -26,7 +26,7 @@ const dev = {
 const prod = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://api.zapkart.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // For AWEN
@@ -36,7 +36,7 @@ const prod = {
 const test = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://api.zapkart.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // For AWEN
@@ -48,7 +48,7 @@ const getEnv = () => {
     case 'development':
       return dev
     case 'production':
-      return prod
+      return process.env.REACT_APP_API_STAGE === 'Dev' ? dev : prod
     case 'test':
       return test
     default:

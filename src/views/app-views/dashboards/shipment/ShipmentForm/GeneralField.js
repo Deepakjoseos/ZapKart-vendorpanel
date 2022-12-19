@@ -66,18 +66,18 @@ const GeneralField = ({ form }) => {
       <Col xs={24} sm={24} md={24}>
         <Card title="Basic Info">
           <Form.Item
-            name="shippedByVendor"
+            name="shippedBy"
             label="Shipped By Vendor"
             rules={rules.shippedByVendor}
           >
             <Select
-              placeholder="Shipped By Vendoratus"
+              placeholder="Shipped By Vendor"
               onChange={(e) => {
                 setShippedByVendor(e)
               }}
             >
-              <Option value={true}>Yes</Option>
-              <Option value={false}>No</Option>
+              <Option value={'Vendor'}>Yes</Option>
+              <Option value={'Not Selected'}>No</Option>
             </Select>
           </Form.Item>
 

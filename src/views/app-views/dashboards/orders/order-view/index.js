@@ -13,6 +13,8 @@ import customerService from 'services/customer'
 import PrescriptionSelector from './PrescriptionSelector'
 import CreateInvoiceForm from './CreateInvoiceForm'
 import './Order.css'
+import OrderVerification from './OrderVerification'
+import constantsService from 'services/constants'
 
 const { Column } = Table
 const { Option } = Select
@@ -23,8 +25,8 @@ const OrderView = () => {
   const [printing, setPrinting] = useState(false)
   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
   const [isInvoiceFormOpen, setIsInvoiceFormOpen] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [orderItemsStatuses, setOrderItemsStatuses] = useState([])
 
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
@@ -57,52 +59,30 @@ const OrderView = () => {
   useEffect(() => {
     getOrderById()
   }, [id])
+
+  useEffect(() => {
+    fetchConstants()
+  }, [])
+
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+      setOrderItemsStatuses(Object.values(data.ORDER['ORDER_ITEM_STATUS']))
+    }
+  }
+
   const showModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleOk = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const orderStatuses = [
-    'Pending',
-    'Received',
-    'Confirmed',
-    'Shipping Soon',
-    'Shipped',
-    'Shipment Delayed',
-    'Arriving Early',
-    'Out for Delivery',
-    'Delivery Refused by Customer',
-    'Delivery Rescheduled',
-    'Delivered',
-    'Shipment Failed',
-    'Items damaged during transit',
-    'and being returned back to us',
-    'Payment Failed',
-    'Cancelled',
-    'Attempting Cancellation',
-    'Return Requested',
-    'Return Initiated',
-    'Return Rescheduled',
-    'Return Completed',
-    'Items Returning Back',
-    'Return Delayed',
-    'Return Items Received',
-    'Return Items Verification Failed',
-    'Return Items Verification Completed',
-    'Return Failed',
-    'Return Cancelled',
-    'Refund Initiated',
-    'Refund Delayed',
-    'Refund Completed',
-    'Refund Failed',
-  ]
+    setIsModalOpen(false)
+  }
 
   const handleOrderStatusChange = async (value, selectedRow) => {
     const updatedOrderStatus = await orderService.updateOrderItemStatus(id, {
@@ -154,7 +134,7 @@ const OrderView = () => {
     <>
       <div className="container">
         <Flex justifyContent="end">
-          {order.status === 'Verifying Prescription' && (
+          {/* {order.status === 'Verifying Prescription' && (
             <Button
               type="primary"
               className="mb-4 mr-2"
@@ -162,9 +142,9 @@ const OrderView = () => {
             >
               Verify Prescription
             </Button>
-          )}
+          )} */}
 
-          {order?.status === 'Prescriptions Missing' && (
+          {/* {order?.status === 'Prescriptions Missing' && (
             <Button
               type="primary"
               className="mb-4 mr-2"
@@ -172,8 +152,8 @@ const OrderView = () => {
             >
               Re-Upload Prescription
             </Button>
-          )}
-          {order.status === 'Cancelled' ? (
+          )} */}
+          {/* {order.status === 'Cancelled' ? (
             ''
           ) : (
             <>
@@ -192,14 +172,20 @@ const OrderView = () => {
                 Create Invoice
               </Button>
             </>
-          )}
-          {
-            order?.invoice?.vendorInvoices && (
-              <Button type="primary" className='mb-4 mr-2' onClick={showModal}>
-                Download Invoices
-              </Button>
-            )
-          }
+          )} */}
+
+          <Button
+            type="primary"
+            className="mb-4 mr-2"
+            onClick={() => setIsFormOpen(true)}
+          >
+            See Order Informations
+          </Button>
+          {/* {order?.invoice?.vendorInvoices && (
+            <Button type="primary" className="mb-4 mr-2" onClick={showModal}>
+              Download Invoices
+            </Button>
+          )} */}
 
           <Button type="primary" className="mb-4" onClick={handlePrint}>
             Print this out!
@@ -260,7 +246,9 @@ const OrderView = () => {
 
                 <h6>
                   Order Date:
-                  {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY')}
+                  {moment(new Date(order?.createdAt * 1000)).format(
+                    'DD-MM-YYYY'
+                  )}
                   {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
                 </h6>
                 {/* <p>Status: {order?.status}</p> */}
@@ -365,7 +353,11 @@ const OrderView = () => {
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
-                <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
+                <Column
+                  title="Vendor"
+                  dataIndex="vendorName"
+                  key="vendorName"
+                />
 
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column
@@ -383,10 +375,10 @@ const OrderView = () => {
                   render={(status, row) => (
                     <Select
                       defaultValue={status}
-                      style={{ width: 150 }}
+                      style={{ width: 200 }}
                       onChange={(e) => handleOrderStatusChange(e, row)}
                     >
-                      {orderStatuses.map((item) => (
+                      {orderItemsStatuses.map((item) => (
                         <Option key={item} value={item}>
                           {item}
                         </Option>
@@ -420,7 +412,9 @@ const OrderView = () => {
                   <div>Payment method : {order?.payment?.type}</div>
                   <div>
                     {order?.couponCode ? (
-                      <div className="mr-1">Coupon Code: {order?.couponCode}</div>
+                      <div className="mr-1">
+                        Coupon Code: {order?.couponCode}
+                      </div>
                     ) : (
                       ''
                     )}
@@ -491,7 +485,8 @@ const OrderView = () => {
                       </span>
                       <br />
                       <p className="" title="Phone">
-                        Phone: <span>{order?.shippingAddress?.mobileNumber}</span>
+                        Phone:{' '}
+                        <span>{order?.shippingAddress?.mobileNumber}</span>
                       </p>
                     </p>
                   </address>
@@ -649,8 +644,8 @@ const OrderView = () => {
           </div>
         </div>
 
-        <Modal
-          title="Product Excel Upload"
+        {/* <Modal
+          title="Re upload prescription"
           visible={isPrescriptionModalOpen}
           onCancel={() => {
             setIsPrescriptionModalOpen(false)
@@ -662,14 +657,27 @@ const OrderView = () => {
             userId={order.userId}
             setIsPrescriptionModalOpen={setIsPrescriptionModalOpen}
           />
-        </Modal>
+        </Modal> */}
 
-        <ShipmentCreateForm
+        {/* <ShipmentCreateForm
           setIsFormOpen={setIsFormOpen}
           isFormOpen={isFormOpen}
           orderItems={order?.items}
           orderNo={order?.orderNo}
           orderId={order?.id}
+        /> */}
+
+        <OrderVerification
+          setOpen={setIsFormOpen}
+          open={isFormOpen}
+          products={order?.items}
+          orderId={id}
+          userId={order?.userId}
+          orderStatus={order?.status}
+          reFetchOrderData={getOrderById}
+          prescriptions={order?.prescriptions}
+          orderNo={order?.orderNo}
+          vendorInvoices={order?.invoice?.vendorInvoices}
         />
 
         <CreateInvoiceForm
@@ -681,7 +689,12 @@ const OrderView = () => {
         />
       </div>
 
-      <Modal title="Invoices" visible={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title="Invoices"
+        visible={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
         <Table
           dataSource={order?.invoice?.vendorInvoices}
           pagination={false}
@@ -689,10 +702,15 @@ const OrderView = () => {
         >
           {/* <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Shipment not available"} /> */}
 
-          <Column title="Invoice Number" dataIndex="invoiceId" key="invoiceId" />
-          <Column title="Actions" 
-           render={(_, row) => {
-            return (
+          <Column
+            title="Invoice Number"
+            dataIndex="invoiceId"
+            key="invoiceId"
+          />
+          <Column
+            title="Actions"
+            render={(_, row) => {
+              return (
                 <Button
                   type="primary"
                   onClick={() => downloadInvoice(row.invoiceUrl)}
@@ -700,10 +718,8 @@ const OrderView = () => {
                   Download
                 </Button>
               )
-            
-          }}
+            }}
           />
-
         </Table>
       </Modal>
     </>
