@@ -93,20 +93,20 @@ export const RegisterForm = (props) => {
 
   const renderOtherSignIn = (
     <div>
-      <Divider>
+      {/* <Divider>
         <span className="text-muted font-size-base font-weight-normal">
           or connect with
         </span>
       </Divider>
-      <div className="d-flex justify-content-center">
-        <Button
+      <div className="d-flex justify-content-center"> */}
+        {/* <Button
           onClick={() => onGoogleLogin()}
           className="mr-2"
           disabled={loading}
           icon={<CustomIcon svg={GoogleSVG} />}
         >
           Google
-        </Button>
+        </Button> */}
         {/* <Button
 			  onClick={() => onFacebookLogin()}
 			  icon={<CustomIcon svg={FacebookSVG} />}
@@ -114,7 +114,7 @@ export const RegisterForm = (props) => {
 			>
 			  Facebook
 			</Button> */}
-      </div>
+      {/* </div> */}
     </div>
   )
 

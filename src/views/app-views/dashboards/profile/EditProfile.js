@@ -32,6 +32,7 @@ const EditProfile = () => {
   const { user } = useSelector((state) => state.auth)
   const [country ,setCountry]=useState([])
   const [state ,setState]=useState([])
+  const [Logo, setLogo] = useState(null)
 
   console.log(user, 'mine')
   const dispatch = useDispatch()
@@ -71,6 +72,7 @@ const EditProfile = () => {
         // pan: user.pan,
         country: user.country,
         state:user.state,
+        business:user.business,
 
         // address:
         'address.line1': user?.address?.line1,
@@ -111,6 +113,19 @@ const EditProfile = () => {
         setDisplayImage(himg)
         setFileListImages(himg)
       }
+      
+      if (user.logo) {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            name: Utils.getBaseName(user.logo),
+            url: user.logo,
+            thumbUrl: user.logo,
+          },
+        ]
+        setLogo(himg)
+        setFileListLogo(himg)
+      }
     }
   }, [])
 
@@ -121,6 +136,16 @@ const EditProfile = () => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1)
+
+  const {
+    fileList: fileListLogo,
+    beforeUpload: beforeUploadLogo,
+    onChange: onChangeLogo,
+    onRemove: onRemoveLogo,
+    setFileList: setFileListLogo,
+  } = useUpload(1)
+
+
 
   const onFinish = (values) => {
     form
@@ -133,33 +158,33 @@ const EditProfile = () => {
           tanNumber: values.tanNumber,
           // pan: values.pan,
 
-          bank:{
-            name: values['bank.name'],
-            accountNumber:values['bank.accountNumber'],
-            branch:values['bank.branch'],
-            swiftCode:values['bank.swiftCode'],
-            iBanNo:values['bank.iBanNo']
+          bank: {
+            name: values["bank.name"],
+            accountNumber: values["bank.accountNumber"],
+            branch: values["bank.branch"],
+            swiftCode: values["bank.swiftCode"],
+            iBanNo: values["bank.iBanNo"],
           },
           address: {
-            line1: values['address.line1'],
-            city: values['address.city'],
-            state: values['address.state'],
-            country: values['address.country'],
-            phone: values['address.phone'],
-            zipcode: values['address.zipcode'],
+            line1: values["address.line1"],
+            city: values["address.city"],
+            state: values["address.state"],
+            country: values["address.country"],
+            phone: values["address.phone"],
+            zipcode: values["address.zipcode"],
           },
           business: {
-            name: values['business.name'],
+            name: values["business.name"],
             address: {
-              line1: values['business.address.line1'],
-              city: values['business.address.city'],
-              state: values['business.address.state'],
-              country: values['business.address.country'],
-              phone: values['business.address.phone'],
-              zipcode: values['business.address.zipcode'],
+              line1: values["business.address.line1"],
+              city: values["business.address.city"],
+              state: values["business.address.state"],
+              country: values["business.address.country"],
+              phone: values["business.address.phone"],
+              zipcode: values["business.address.zipcode"],
             },
           },
-        }
+        };
 
         if (JSON.stringify(sendingValues.address) === '{}') {
           delete sendingValues.address
@@ -275,6 +300,20 @@ const EditProfile = () => {
       setDisplayImage(fileListImages)
     }
   }, [fileListImages])
+
+
+  const propsLogo = {
+    multiple: false,
+    beforeUpload: beforeUploadLogo,
+    onRemove: onRemoveLogo,
+    onChange: onChangeLogo,
+    fileList: fileListLogo,
+  }
+
+  useEffect(() => {
+    setLogo(fileListLogo)
+  }, [fileListLogo])
+
 
   return (
     <>
@@ -439,10 +478,26 @@ const EditProfile = () => {
 
             {/* Bussiness */}
 
+
+           
+
             <Card title="Business">
               <Form.Item name="business.name" label="Bussiness Name">
                 <Input placeholder="Bussiness Name" />
               </Form.Item>
+
+              <Card  title="Business logo">
+        <Upload className='flex-column'
+          listType="picture-card"
+          name="business.address.logo"
+          {...propsLogo}
+          accept="image/*"
+        >
+          <CustomIcon className="display-3 " svg={ImageSvg} />
+        </Upload>
+        
+      </Card>
+
               <br />
               <h4>Bussiness Addresss</h4>
               <Row gutter={ROW_GUTTER}>

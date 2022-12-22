@@ -55,6 +55,32 @@ const memberChartOption = {
   },
 }
 
+
+
+function refreshPage() {
+  window.location.reload(false);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const newJoinMemberOption = (
   <Menu>
     <Menu.Item key="0">
@@ -82,7 +108,7 @@ const latestTransactionOption = (
       <span>
         <div className="d-flex align-items-center">
           <ReloadOutlined />
-          <span className="ml-2">Refresh</span>
+          <span onClick={refreshPage} className="ml-2">Refresh</span>
         </div>
       </span>
     </Menu.Item>

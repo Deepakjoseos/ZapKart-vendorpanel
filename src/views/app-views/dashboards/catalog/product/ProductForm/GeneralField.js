@@ -61,12 +61,14 @@ const rules = {
       message: 'Required',
     },
   ],
-  mrpPrice: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  
+  // mrpPrice: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+
   productCode: [
     {
       required: true,
@@ -146,8 +148,17 @@ const GeneralField = ({
     <>
       <Card title="Basic Info">
         
-      
+      {process.env.REACT_APP_SITE_NAME === 'athathy' && (
            <Form.Item
+          name="SKU"
+          label="SKU"
+          rules={rules.SKU}
+        >
+          <Input placeholder="SKU" />
+        </Form.Item>
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+  <Form.Item
           name="hsn"
           label="HSN"
           rules={rules.HSN}
@@ -155,7 +166,7 @@ const GeneralField = ({
           <Input placeholder="HSN" />
         </Form.Item>
 
-
+)}
         <Form.Item
           name="productTemplateId"
           label="Product"
@@ -218,7 +229,7 @@ const GeneralField = ({
             <Option value="Hold">Hold</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="qty" label="QTY" rules={rules.qty}>
+        <Form.Item name="qty" label="Quantity" rules={rules.qty}>
           <InputNumber placeholder="QTY" type="number" min={0} max={100000} />
         </Form.Item>
         <Form.Item
@@ -251,8 +262,18 @@ const GeneralField = ({
             </Select>
           </Form.Item>
         )}
-
-        <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
+{process.env.REACT_APP_SITE_NAME === 'athathy' && (
+        <Form.Item name="mrpPrice" label="AED Price" >
+          <InputNumber
+            placeholder="AED Price"
+            type="number"
+            min={0}
+            max={100000}
+          />
+        </Form.Item>
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+<Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
           <InputNumber
             placeholder="MRP Price"
             type="number"
@@ -260,6 +281,7 @@ const GeneralField = ({
             max={100000}
           />
         </Form.Item>
+        )}
         <Form.Item name="price" label="Sale Price" rules={rules.price}>
           <InputNumber
             placeholder="Sale Price"

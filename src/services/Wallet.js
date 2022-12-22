@@ -19,14 +19,14 @@ const apiRoute = '/wallet'
 //       console.log(err, 'show-err')
 //     }
 //   }
-walletService.getTransactions = async function (query) {
+walletService.getTransactions = async function () {
     try {
       let url=  `${apiRoute}/transactions`
     //   const userId= query.userId
     //   if (userId)  url = `${url}?userId=${userId}`;
       const res = await fetch({
         url: url,
-        method: 'post',
+        method: 'get',
       })
       // const data = res.data.filter((cur) => cur.status !== 'Deleted')
       return res
@@ -52,7 +52,7 @@ walletService.getTransactionByUserId = async function (userId) {
   try {
     const res = await fetch({
       url: `${apiRoute}/transactions/${userId}`,
-      method: 'post',
+      method: 'get',
     })
     return res.data
   } catch (err) {

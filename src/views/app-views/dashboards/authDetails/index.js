@@ -2,17 +2,21 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import fetch from 'auth/FetchInterceptor'
-import { Button, Card, Col, Input, Modal, notification, Row } from 'antd'
+import { Button, Card, Col,  Upload, Input, Modal, notification, Row } from 'antd'
 import { auth, currentUser } from 'auth/FirebaseAuth'
 import firebase from 'firebase/app'
 import { authenticated } from 'redux/actions/Auth'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import authVendorService from 'services/auth/vendor'
-
+import { ImageSvg } from 'assets/svg/icon'
+import Utils from 'utils'
+import useUpload from 'hooks/useUpload'
+import CustomIcon from 'components/util-components/CustomIcon'
+import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 const AuthDetails = () => {
   const [phoneVerificationOtp, setPhoneVerificationOtp] = useState(null)
-
+  const [Logo, setLogo] = useState(null)
   const [showPhoneOtpModal, setShowPhoneOtpModal] = useState(false)
 
   const captchaCont = useRef(null)
@@ -33,12 +37,25 @@ const AuthDetails = () => {
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
+
+
+  const {
+    fileList: fileListLogo,
+    beforeUpload: beforeUploadLogo,
+    onChange: onChangeLogo,
+    onRemove: onRemoveLogo,
+    setFileList: setFileListLogo,
+  } = useUpload(1)
   const validationSchema = Yup.object({
     // email: Yup.string().email('*Invalid Email').required('* Email Required'),
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     pan: Yup.string().nullable(),
     drugLicense: Yup.string().nullable(),
+    drugLicense: Yup.string().nullable(),
+    drugLicense: Yup.string().nullable(),
+    drugLicense: Yup.string().nullable(),
+    
     // displayImage: Yup.string().required('* Password Required'),
     // phone: Yup.string().required('Phone Number Required'),
     // confirmPassword: Yup.string()
@@ -167,7 +184,7 @@ const AuthDetails = () => {
     firebase
       .auth()
       .currentUser.linkWithPhoneNumber(
-        `${phoneNumber}`,
+        `+971${phoneNumber}`,
         window.recaptchaVerifier
       )
       .then(function (confirmationResult) {
@@ -249,6 +266,9 @@ const AuthDetails = () => {
         lastName: values.lastName,
         displayImage: curUser.displayImage,
         pan: values.pan,
+       
+
+    
       }
       if (values?.drugLicense) {
         sendingValues.drugLicense = values.drugLicense
@@ -273,11 +293,29 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
+            
             // gst: data.gst,
             // tanNumber: data.tanNumber,
             // pan: data.pan,
             // drugLicense: data?.drugLicense,
           }
+
+
+          let himg = []
+          if (user.logo) {
+            himg = [
+              {
+                uid: Math.random() * 1000,
+                name: Utils.getBaseName(user.logo),
+                url: user.logo,
+                thumbUrl: user.logo,
+              },
+            ]
+            setLogo(himg)
+            setFileListLogo(himg)
+          }
+
+
 
           await dispatch(
             authenticated({
@@ -314,10 +352,11 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
-            // gst: data.gst,
-            // tanNumber: data.tanNumber,
-            // pan: data.pan,
-            // drugLicense: data?.drugLicense,
+            
+            gst: data.gst,
+            tanNumber: data.tanNumber,
+            pan: data.pan,
+            drugLicense: data?.drugLicense,
           }
 
           await dispatch(
@@ -347,6 +386,20 @@ const AuthDetails = () => {
     await emailVerification(firebase.auth().currentUser.email)
     history.push('/')
   }
+
+
+
+  const propsLogo = {
+    multiple: false,
+    beforeUpload: beforeUploadLogo,
+    onRemove: onRemoveLogo,
+    onChange: onChangeLogo,
+    fileList: fileListLogo,
+  }
+
+  useEffect(() => {
+    setLogo(fileListLogo)
+  }, [fileListLogo])
 
   return (
     <>
@@ -427,7 +480,52 @@ const AuthDetails = () => {
                               as={Input}
                               type="phone"
                               name="phone"
-                              value={values.phone}
+                             value={values.phone}
+                              className="form-control"
+                              disabled={phoneVerified}
+                              style={{
+                                border: `${
+                                  touched.phone && errors.phone
+                                    ? '1px solid red'
+                                    : ''
+                                }`,
+                              }}
+                            />
+                            <ErrorMessage name="phone" />
+                          </div>
+                          {!phoneVerified && (
+                            <p
+                              onClick={() => {
+                                if (values.phone?.length >= 9) {
+                                  linkPhoneNumber(values.phone)
+                                } else {
+                                  notification.error({
+                                    message: 'Please Enter Valid Phone Number',
+                                  })
+                                }
+                              }}
+                              style={{
+                                textDecoration: 'underline',
+                                cursor: 'pointer',
+                                marginBottom: '10px',
+                              }}
+                            >
+                              Verify PhoneNumber
+                            </p>
+                          )}
+                          
+                        </>
+
+                        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+
+                        <>
+                          <div>
+                            <label htmlFor="phone">Phone</label>
+                            <Field
+                              as={Input}
+                              type="phone"
+                              name="phone"
+                             value={values.phone}
                               className="form-control"
                               disabled={phoneVerified}
                               style={{
@@ -460,7 +558,12 @@ const AuthDetails = () => {
                               Verify PhoneNumber
                             </p>
                           )}
+                          
                         </>
+                        )}
+
+
+                        
                         <div className="mb-3">
                           <label htmlFor="lastName">Email</label>
                           <Field
@@ -499,6 +602,27 @@ const AuthDetails = () => {
                           </div>
                         )}
 
+
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                          <div className="mb-3">
+                            <label htmlFor="lastName">GST</label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="gst"
+                              className="form-control"
+                              style={{
+                                border: `${
+                                  touched.gst && errors.gst
+                                    ? '1px solid red'
+                                    : ''
+                                }`,
+                              }}
+                            />
+                            <ErrorMessage name="gst" />
+                          </div>
+                        )}
+
                         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                           <div className="mb-3">
                             <label htmlFor="drugLicense">
@@ -521,7 +645,164 @@ const AuthDetails = () => {
                           </div>
                         )}
 
-                        <div>
+
+
+
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+           <Card> <h4>Bussiness Addresss</h4>
+            
+                          <div className="mb-3">
+                            <label htmlFor="business.name">
+                           Name
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="business.name"
+                              className="form-control"
+                              // style={{
+                              //   border: `${
+                              //     touched.business.address.city && errors.business.address.city
+                              //       ? '1px solid red'
+                              //       : ''
+                              //   }`,
+                              // }}
+                            />
+                            <ErrorMessage name="business.name" />
+                          </div>
+
+
+
+
+
+  <div className="mb-3">
+   <Card title="Tarde License">
+     <Upload
+       listType="picture-card"
+       name="image-1"
+       {...propsLogo}
+       accept="document/*"
+     >
+       <CustomIcon className="display-3" svg={ImageSvg} />
+     </Upload>
+   </Card>
+   </div>
+      
+ 
+
+
+
+                          <div className="mb-3">
+                            <label htmlFor="business.address.city">
+                            City
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="business.address.line1"
+                              className="form-control"
+                              // style={{
+                              //   border: `${
+                              //     touched.business.address.city && errors.business.address.city
+                              //       ? '1px solid red'
+                              //       : ''
+                              //   }`,
+                              // }}
+                            />
+                            <ErrorMessage name="business.address.city" />
+                          </div>
+
+
+
+
+                          
+                          <div className="mb-3">
+                            <label htmlFor="business.address.state">
+                            State
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="business.address.state"
+                              className="form-control"
+                              style={{
+                                // border: `${
+                                //   touched.business.address.state && errors.business.address.state
+                                //     ? '1px solid red'
+                                //     : ''
+                                // }`,
+                              }}
+                            />
+                            {/* <ErrorMessage name="business.address.state" /> */}
+                          </div>
+
+                          <div className="mb-3">
+                            <label htmlFor="business.address.country">
+                           Country
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="business.address.country"
+                              className="form-control"
+                              // style={{
+                              //   border: `${
+                              //     touched.business.address.state && errors.business.address.state
+                              //       ? '1px solid red'
+                              //       : ''
+                              //   }`,
+                              // }}
+                            />
+                            <ErrorMessage name="business.address.country" />
+                          </div>
+
+
+  
+                          <div className="mb-3">
+                            <label htmlFor="business.address.phone">
+                          Business Number
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="business.address.phone"
+                              className="form-control"
+                              // style={{
+                              //   border: `${
+                              //     touched.business.address.state && errors.business.address.state
+                              //       ? '1px solid red'
+                              //       : ''
+                              //   }`,
+                              // }}
+                            />
+                            <ErrorMessage name="business.address.phone" />
+                          </div>
+
+
+
+                          <div className="mb-3">
+                            <label htmlFor="business.address.zipcode">
+                         Pincode
+                            </label>
+                            <Field
+                              as={Input}
+                              type="text"
+                              name="business.address.zipcode"
+                              className="form-control"
+                              // style={{
+                              //   border: `${
+                              //     touched.business.address.state && errors.business.address.state
+                              //       ? '1px solid red'
+                              //       : ''
+                              //   }`,
+                              // }}
+                            />
+                            <ErrorMessage name="business.address.zipcode" />
+                          </div>
+
+
+</Card>
+)}                        <div>
                           <Button
                             type="primary"
                             htmlType="submit"
@@ -556,6 +837,7 @@ const AuthDetails = () => {
                 onChange={(e) => setPhoneVerificationOtp(e.target.value)}
               />
             </div>
+            
             <Button type="primary" htmlType="button" onClick={otpSubmit}>
               Submit
             </Button>
@@ -573,6 +855,7 @@ const AuthDetails = () => {
           >
             Verify Email Address
           </Button>
+         
         </Card>
       )}
     </>

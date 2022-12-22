@@ -453,7 +453,7 @@ const [selectedStatus,setSelectedStatus] = useState("")
     //   dataIndex: 'orderNo',
     // },
     {
-      title: 'OrderNo',
+      title: 'Order No',
       dataIndex: 'orderNo',
       render: (text, record) => (
         <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
@@ -508,7 +508,7 @@ const [selectedStatus,setSelectedStatus] = useState("")
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
     },
     {
-      title: 'Order status',
+      title: 'Order Status',
       dataIndex: 'status',
       render: (status, record) => (
         <>

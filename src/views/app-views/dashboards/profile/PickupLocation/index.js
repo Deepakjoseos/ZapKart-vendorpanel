@@ -25,8 +25,9 @@ const PickupLocation = () => {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [pincode ,setPincode]=useState([])
   const [city ,setCity]=useState([])
+  const [country, setCountry] = useState([])
   const [state ,setState]=useState([])
-
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
   const getProfile = async () => {
     const data = await authVendorService.getProfile()
 
@@ -41,32 +42,64 @@ const PickupLocation = () => {
 
   
 
-  const getCity = async ()=>{
-    const data = await localityService.getCity()
-    if(data){
+ 
+  const getCity = async (query) => {
+    const data = await localityService.getCity(query)
+    if (data) {
       setCity(data.data)
     }
   }
-  const getState = async ()=>{
+  const getState = async () => {
     const data = await localityService.getState()
-    if(data){
+    if (data) {
       setState(data.data)
     }
   }
-  const getPincode = async ()=>{
-    const data = await localityService.getPincode()
-    if(data){
+  const getCountry = async () => {
+    const data = await localityService.getCountry()
+    if (data) {
+      setCountry(data.data)
+    }
+  }
+  const getPincode = async (query) => {
+    const data = await localityService.getPincode(query)
+    if (data) {
       setPincode(data.data)
     }
+  }
+  // const getDistrict = async () => {
+  //   const data = await districtService.getDistrict()
+  //   if (data) {
+  //     setDistrict(data.data)
+  //   }
+  // }
+
+  useEffect(() => {
+    // getCity()
+    if (SITE_NAME !== 'zapkart') {
+      getState()
+    }
+
+    getCountry()
+    // getDistrict()
+    // getPincode()
+  }, [])
+
+  useEffect(() => {
+    if (SITE_NAME === 'zapkart') {
+      if (country?.length > 0) {
+        getState(`countryName=${country[0].name}`)
       }
-  
-  useEffect(()=>{
- 
-  getCity()
-  getState()
-  getPincode()
-  
-  },[])
+    }
+  }, [country])
+
+  useEffect(() => {
+    if (SITE_NAME !== 'zapkart') {
+      if (state?.length > 0) {
+        getCity(`stateName=${state[0]?.name}`)
+      }
+    }
+  }, [state])
 
   const IconText = ({ icon, text }) => (
     <Space>
@@ -138,8 +171,11 @@ const PickupLocation = () => {
           isFormOpen={isFormOpen}
           getProfile={getProfile}
           city={city}
-          state={state}
-          pincode={pincode}
+                state={state}
+                country={country}
+                pincode={pincode}
+                getPincode={getPincode}
+                getCity={getCity}
         />
       </div>
     </>

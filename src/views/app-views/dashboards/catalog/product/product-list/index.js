@@ -268,12 +268,12 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
     },
     {
-      title: 'QTY',
+      title: 'Quantity',
       dataIndex: 'qty',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
-      title: 'approval',
+      title: 'Approval',
       dataIndex: 'approval',
       // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
