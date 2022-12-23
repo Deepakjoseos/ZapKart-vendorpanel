@@ -59,6 +59,18 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
   // useEffect(() => {
   //   getPickupLocations()
   // }, [])
+
+  const fetchTaxCategories = async () => {
+    const allTaxCategories = await taxCategoryService.getTaxCategories()
+    if (allTaxCategories) {
+      setTaxCategories(allTaxCategories)
+    }
+  }
+
+  useEffect(() => {
+    fetchTaxCategories()
+  }, [])
+
   const getCurrentUser = async () => {
     const data = authVendorService.getProfile()
     if (data) {
@@ -109,6 +121,7 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
   const resetInvoiceItemStateValues = () => {
     setBatch(null)
     setExpiry(null)
+    setTaxCategoryId(null)
     setSelectedCurrentItemId(null)
   }
 
@@ -118,7 +131,7 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
       ...prev,
       items: [
         ...prev?.items,
-        { id: selectedCurrentItemId, batch, expiry, hsn },
+        { id: selectedCurrentItemId, batch, expiry, hsn, taxCategoryId },
       ],
     }))
     resetInvoiceItemStateValues()
@@ -309,6 +322,24 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
           className="w-100"
           onChange={(date, dateString) => setExpiry(dateString)}
         />
+
+        <Select
+          placeholder="Tax Category"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          style={{ width: '100%' }}
+          onChange={(e) => setTaxCategoryId(e)}
+          value={taxCategoryId}
+        >
+          {taxCategories.map((medicineType) => (
+            <Option key={medicineType.id} value={medicineType.id}>
+              {medicineType.name}
+            </Option>
+          ))}
+        </Select>
       </Modal>
       {creatingInvoiceValue?.items?.length > 0 && (
         <Button type="primary" loading={submitLoading} onClick={onFinish}>

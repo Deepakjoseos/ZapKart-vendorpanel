@@ -63,7 +63,7 @@ const ShipmentCreateForm = ({
             'YYYY-MM-DD'
           ),
           shipRocket: {
-            pickup_location: values.pickup_location,
+            pickupLocation: values.pickup_location,
             length: values.length,
             breadth: values.breadth,
             height: values.height,
