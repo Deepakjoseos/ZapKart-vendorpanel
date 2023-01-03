@@ -374,6 +374,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'Rohit-dashboards-document-upload',
+        path: `${APP_PREFIX_PATH}/dashboards/document-upload2`,
+        title: 'Rohits-Document Upload',
+        icon: NodeExpandOutlined,
+        breadcrumb: false,
+        submenu: []
+      },
     ],
   },
 ]

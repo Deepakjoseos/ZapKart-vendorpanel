@@ -68,6 +68,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/document-upload`}
           component={lazy(() => import(`./documentUpload`))}
         />
+        <Route
+          path={`${match.url}/document-upload2`}
+          component={lazy(() => import(`./documentUpload2`))}
+        />
 
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
