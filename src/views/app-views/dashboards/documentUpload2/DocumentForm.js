@@ -202,7 +202,7 @@ const DocumentForm = ({
                 </Form.Item>
               {selectedDoc && (
                     <Form.Item label="Is Verified" >
-                        <Input value={selectedDoc.isVerified ? "Yes" : "No"} disabled/>
+                        <Input value={selectedDoc.isVerified ? "Yes" : "no" } disabled/>
                     </Form.Item>
               )}
             </Card>
