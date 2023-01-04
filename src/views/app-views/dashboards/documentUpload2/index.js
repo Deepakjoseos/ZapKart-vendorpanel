@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Row, Image } from "antd";
+import { Button, Card, Col, Form, Row, Image, Alert } from "antd";
 import {
     EditOutlined,
     DeleteOutlined,
@@ -85,24 +85,15 @@ return(
                         </Flex>
                     }
                     >
-                        {doc.isVerified ?(
-                            <Flex 
-                            // alignItems="center" 
-                            justifyContent="center"
-                            >
-                                <CheckCircleTwoTone twoToneColor="#52c41a"/>
-                                <h4> Verifed</h4>
-                            </Flex>
-                        ):(
-                            <Flex 
-                            // alignItems="center"
-                            justifyContent="center" 
-                            >
-                                <CloseCircleOutlined />
-                                <h4>Not Verifed</h4>
-                            </Flex>
-                        )}
                         <Image.PreviewGroup>
+                            <Flex style={{padding:'30px'}}>
+                                {doc.isVerified ?(
+                                    <Alert style={{width:'20%'}}message="Verified" type="success" showIcon/>
+                                ):(
+                                    <Alert style={{width:'25%'}}message="Not-Verified" type="error" showIcon/>
+                                )}
+                                <br/>
+                            </Flex>
                             {doc?.files.map((file, index) => (
                             <Image
                                 key={index}

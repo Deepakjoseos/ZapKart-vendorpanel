@@ -157,7 +157,8 @@ const DocumentForm = ({
 
     return (
         <Drawer    
-            title='Document'
+            // title='Document'
+            title = {!selectedDoc ? "Create Document" : "Update Document"}
             width={720}
             onClose={() => onDrawerClose()}
             visible={openDocumentForm}
@@ -199,7 +200,13 @@ const DocumentForm = ({
                 <Form.Item name="type" label="Type" rules={rules.type}>
                     <Input placeholder="Type" />
                 </Form.Item>
+              {selectedDoc && (
+                    <Form.Item label="Is Verified" >
+                        <Input value={selectedDoc.isVerified ? "Yes" : "No"} disabled/>
+                    </Form.Item>
+              )}
             </Card>
+
 
             <Card title="Documents">
               <Upload multiple listType="picture-card" name="documents"  {...propsImages} 
