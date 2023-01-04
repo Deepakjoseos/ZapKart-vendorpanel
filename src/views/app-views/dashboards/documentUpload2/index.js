@@ -6,6 +6,7 @@ import {
     PlusCircleOutlined,
 } from '@ant-design/icons'
 import Flex from "components/shared-components/Flex";
+import {CheckCircleTwoTone, CloseCircleOutlined } from '@ant-design/icons';
 
 import vendorService from "services/document";
 import DocumentForm from "./DocumentForm";
@@ -21,15 +22,18 @@ useEffect(() => {
 const [documentList, setDocumentList] = useState([])
 const [openDocumentForm, setOpenDocumentForm] = useState(false)
 const [selectedDoc, setSelectedDoc] = useState(null)
+const [docLoading, setDocLoading] = useState(false)
 
 
 const [form] = Form.useForm()
 
 const getVendorsDocs = async() => {
+    setDocLoading(true)
     const data = await vendorService.getVendors()
     if(data){
         setDocumentList(data.data.documents)
     }
+    setDocLoading(false)
 }
  
 const onEditDocument = ((doc) => {
@@ -38,6 +42,7 @@ const onEditDocument = ((doc) => {
 })
 
 const onDeleteDocument = async(docId) =>{
+    setDocLoading(true)
   const deleted = await vendorService.deleteVendorDocument(docId)   
   if(deleted) getVendorsDocs()
 }
@@ -60,8 +65,12 @@ return(
                     <Card
                     title={doc.type}
                     style={{ marginBottom: 30 }}
+                    loading={docLoading}
+                    // actions={<CheckCircleTwoTone twoToneColor="#52c41a" />}
                     extra={
-                        <Flex alignItems="center">
+                        <Flex alignItems="center" >
+                            <Flex alignItems="left" >
+                            </Flex>
                             <Button
                                 type="primary"
                                 className="mr-1"
@@ -76,6 +85,23 @@ return(
                         </Flex>
                     }
                     >
+                        {doc.isVerified ?(
+                            <Flex 
+                            // alignItems="center" 
+                            justifyContent="center"
+                            >
+                                <CheckCircleTwoTone twoToneColor="#52c41a"/>
+                                <h4> Verifed</h4>
+                            </Flex>
+                        ):(
+                            <Flex 
+                            // alignItems="center"
+                            justifyContent="center" 
+                            >
+                                <CloseCircleOutlined />
+                                <h4>Not Verifed</h4>
+                            </Flex>
+                        )}
                         <Image.PreviewGroup>
                             {doc?.files.map((file, index) => (
                             <Image
@@ -97,6 +123,7 @@ return(
                     refreshData={getVendorsDocs}
                     selectedDoc={selectedDoc}
                     setSelectedDoc={setSelectedDoc}
+                    setDocLoading={setDocLoading}
                 />
         </Row>
     </div>

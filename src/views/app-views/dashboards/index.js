@@ -64,12 +64,12 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/shipment`}
           component={lazy(() => import(`./shipment`))}
         />
-        <Route
+        {/* <Route
           path={`${match.url}/document-upload`}
           component={lazy(() => import(`./documentUpload`))}
-        />
+        /> */}
         <Route
-          path={`${match.url}/document-upload2`}
+          path= {`${match.url}/document-upload`}
           component={lazy(() => import(`./documentUpload2`))}
         />
 

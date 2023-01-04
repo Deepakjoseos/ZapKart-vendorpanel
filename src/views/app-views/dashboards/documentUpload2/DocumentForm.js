@@ -19,14 +19,14 @@ const DocumentForm = ({
     form,
     refreshData,
     selectedDoc,
-    setSelectedDoc
+    setSelectedDoc,
+    setDocLoading
 }
 ) => {
 
     const [submitLoading, setSubmitLoading] = useState(false)
     const [documents, setDocuments] = useState([])
     const { Option } = Select
-    const { imageCategories } = useSelector((state) => state.auth)
     const [passingData, setPassingData] = useState({})
 
     const {
@@ -80,16 +80,14 @@ const DocumentForm = ({
 
           values.isVerified = false;
             if (documents) {
-              // const documentCategory = imageCategories.find(
-              //   (imgCat) => imgCat.imageFor === 'ProductTemplates'
-              // )
+
   
               const imgValues = await multipleImageUpload(documents)
-              console.log(imgValues, "imgvalues")
               values.files = imgValues 
               // console.log(values.files)
               // console.log(selectedDoc,"selsctedDoc", values, "values")
               if(selectedDoc){
+                setDocLoading(true)
                 const edited = await vendorService.updateVendorDocument(
                   selectedDoc.id,
                   values
@@ -104,10 +102,11 @@ const DocumentForm = ({
                   message.error('Please upload image')
                 }
               } else {
+                setDocLoading(true)
                 const created = await vendorService.createVendorDocument(values)
 
                 if (created) {
-                  message.success(`Created Variant Success`)
+                  message.success(`Successfully Created Documents`)
                   setOpenDocumentForm(false)
                   setSelectedDoc(null)
                   refreshData()
@@ -116,6 +115,7 @@ const DocumentForm = ({
                   message.error('Please upload image')
                 }
               }
+              setDocLoading(false)
               
         
             }
