@@ -538,7 +538,7 @@ const AuthDetails = () => {
                             />
                             <ErrorMessage name="phone" />
                           </div>
-                          {!phoneVerified && (
+                          {/* {!phoneVerified && (
                             <p
                               onClick={() => {
                                 if (values.phone?.length >= 10) {
@@ -557,14 +557,30 @@ const AuthDetails = () => {
                             >
                               Verify PhoneNumber
                             </p>
+                          )} */}
+                          {!phoneVerified && (
+                            <>
+                              <br/>
+                              <Button 
+                                type='primary'
+                                onClick={() => {
+                                  if (values.phone?.length >= 10) {
+                                    linkPhoneNumber(values.phone)
+                                  } else {
+                                    notification.error({
+                                      message: 'Please Enter Valid Phone Number',
+                                    })
+                                  }
+                                }}
+                              >Verify Phone Number</Button>  
+                            </>
                           )}
                           
                         </>
                         )}
 
-
-                        
                         <div className="mb-3">
+                          <br/>
                           <label htmlFor="lastName">Email</label>
                           <Field
                             as={Input}
