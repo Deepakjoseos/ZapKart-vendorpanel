@@ -366,13 +366,21 @@ const dashBoardNavTree = [
           },
         ],
       },
+      // {
+      //   key: 'dashboards-document-upload',
+      //   path: `${APP_PREFIX_PATH}/dashboards/document-upload`,
+      //   title: 'Document Upload',
+      //   icon: NodeExpandOutlined,
+      //   breadcrumb: false,
+      //   submenu: [],
+      // },
       {
         key: 'dashboards-document-upload',
         path: `${APP_PREFIX_PATH}/dashboards/document-upload`,
         title: 'Document Upload',
         icon: NodeExpandOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
     ],
   },
