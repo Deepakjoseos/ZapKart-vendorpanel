@@ -1,24 +1,28 @@
 import fetch from 'auth/FetchInterceptor'
 
-const manufacturerService = {}
+const countryService = {}
+const api = `/country`
 
-manufacturerService.getManufacturer = async function () {
+countryService.getCountry = async function (
+  paginationQuery = '',
+  filterQuery = ''
+) {
   try {
+    let url = `${api}?${paginationQuery}&${filterQuery}`
     const res = await fetch({
-      url: '/manufacturers',
+      url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
 
-manufacturerService.deleteManufacturer = async function (id) {
+countryService.deleteCountry= async function (id) {
   try {
     const res = await fetch({
-      url: `/manufacturers/${id}`,
+      url: `/country/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -28,10 +32,10 @@ manufacturerService.deleteManufacturer = async function (id) {
   }
 }
 
-manufacturerService.getManufacturerById = async function (id) {
+countryService.getCountryById = async function (id) {
   try {
     const res = await fetch({
-      url: `/manufacturers/${id}`,
+      url: `/country/${id}`,
       method: 'get',
     })
     return res.data
@@ -40,10 +44,10 @@ manufacturerService.getManufacturerById = async function (id) {
   }
 }
 
-manufacturerService.createManufacturer = async function (data) {
+countryService.createCountry= async function (data) {
   try {
     const res = await fetch({
-      url: `/manufacturers`,
+      url: `/country`,
       method: 'post',
       data: data,
     })
@@ -53,10 +57,10 @@ manufacturerService.createManufacturer = async function (data) {
   }
 }
 
-manufacturerService.editManufacturer = async function (id, data) {
+countryService.editCountry = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/manufacturers/${id}`,
+      url: `/country/${id}`,
       method: 'put',
       data: data,
     })
@@ -66,7 +70,7 @@ manufacturerService.editManufacturer = async function (id, data) {
   }
 }
 
-// manufacturerService.setPost = function (data) {
+// brandService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',
 //     method: 'post',
@@ -74,4 +78,4 @@ manufacturerService.editManufacturer = async function (id, data) {
 //   })
 // }
 
-export default manufacturerService
+export default countryService

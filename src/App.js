@@ -47,7 +47,10 @@ function App() {
               business: data.business,
               gst: data.gst,
               tanNumber: data.tanNumber,
-              // pan: data.pan,
+              pan: data.pan,
+              drugLicense: data.drugLicense,
+              smsSubscription: data.smsSubscription,
+              emailSubscription: data.emailSubscription,
             }
 
             dispatch(
@@ -73,6 +76,8 @@ function App() {
             address: {},
             business: {},
             tanNumber: null,
+            drugLicense:null,
+            pan:null,
             gst: null,
             // pan: null,
             // passwordVerified: passwordAvailable?.providerId ? true : false,

@@ -18,6 +18,7 @@ import {
   PlusCircleOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
+import _ from 'lodash'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import NumberFormat from 'react-number-format'
@@ -83,7 +84,7 @@ const BankAccountList = ({ selectedVendorId }) => {
     if (data) {
       setList(data)
       setSearchBackupList(data)
-      console.log(data, 'show-bankacccounts')
+      // console.log(data, 'show-bankacccounts')
     }
   }
 
@@ -178,14 +179,58 @@ const BankAccountList = ({ selectedVendorId }) => {
   const tableColumns = [
     {
       title: "Account Type",
-      dataIndex: 'account_type'
+      dataIndex: 'account_type',
+      render: (text) => (
+        <Flex alignItems="center">
+          {text ==='bank_account' ? "Bank Account" : text ==='card' ? "CARD": "VPA UPI"}
+        </Flex>
+      ),
     },
+    
+    {
+      title: "Details",
+      dataIndex: 'id',
+      render: (_,record) => (
+        <Flex alignItems="center">
+          <div>
+          <p>{record?.bank_account?.bank_name}</p>
+          <p>{record?.bank_account?.ifsc}</p>
+          {/* <br></br> */}
+          <p>{record?.bank_account?.name}</p>
+          {/* <br></br> */}
+          <p>{record?.bank_account?.account_number}</p>
+          </div>
+          {/* <br></br> */}
+          <div>
+          <p>{record?.vpa?.address}</p>
+          </div>
+        </Flex>
+      ),
+    },
+    // {
+    //   title: "Details",
+    //   dataIndex: 'vpa',
+    //   render: (text) => (
+    //     <Flex alignItems="center">
+    //       {text?.address}
+    //     </Flex>
+    //   ),
+    // },
+    // {
+    //   title: "Account Holder Name",
+    //   dataIndex: 'bank_account',
+    //   render: (text) => (
+    //     <Flex alignItems="center">
+    //       {text.name}
+    //     </Flex>
+    //   ),
+    // },
     {
       title: "Created Date",
       dataIndex: "created_at",
       render: (text) => (
         <Flex alignItems="center">
-          {moment(new Date(text * 1000)).format('DD-MM-YYYY hh:mm:a')}
+          {moment(new Date(text * 1000)).format('DD-MMM-YYYY hh:mm:a')}
         </Flex>
       ),
     },

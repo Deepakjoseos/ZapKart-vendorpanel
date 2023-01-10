@@ -293,11 +293,12 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
-            
-            // gst: data.gst,
-            // tanNumber: data.tanNumber,
-            // pan: data.pan,
-            // drugLicense: data?.drugLicense,
+            smsSubscription: data.smsSubscription,
+            emailSubscription: data.emailSubscription,
+            gst: data.gst,
+            tanNumber: data.tanNumber,
+            pan: data.pan,
+            drugLicense: data?.drugLicense,
           }
 
 
