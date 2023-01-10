@@ -474,7 +474,7 @@ const AuthDetails = () => {
                 </div> */}
                         {/* OTP => PHONE VERIFICATION */}
                         {/* {!user.phoneVerified && !phoneVerified ? ( */}
-                        <>
+                        {/* <>
                           <div>
                             <label htmlFor="phone">Phone</label>
                             <Field
@@ -515,7 +515,7 @@ const AuthDetails = () => {
                             </p>
                           )}
                           
-                        </>
+                        </> */}
 
                         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
 
@@ -539,7 +539,7 @@ const AuthDetails = () => {
                             />
                             <ErrorMessage name="phone" />
                           </div>
-                          {!phoneVerified && (
+                          {/* {!phoneVerified && (
                             <p
                               onClick={() => {
                                 if (values.phone?.length >= 10) {
@@ -558,14 +558,30 @@ const AuthDetails = () => {
                             >
                               Verify PhoneNumber
                             </p>
+                          )} */}
+                          {!phoneVerified && (
+                            <>
+                              <br/>
+                              <Button 
+                                type='primary'
+                                onClick={() => {
+                                  if (values.phone?.length >= 10) {
+                                    linkPhoneNumber(values.phone)
+                                  } else {
+                                    notification.error({
+                                      message: 'Please Enter Valid Phone Number',
+                                    })
+                                  }
+                                }}
+                              >Verify Phone Number</Button>  
+                            </>
                           )}
                           
                         </>
                         )}
 
-
-                        
                         <div className="mb-3">
+                          <br/>
                           <label htmlFor="lastName">Email</label>
                           <Field
                             as={Input}
@@ -650,7 +666,7 @@ const AuthDetails = () => {
 
 
           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-           <Card> <h4>Bussiness Addresss</h4>
+           <Card> <h4>Business Address</h4>
             
                           <div className="mb-3">
                             <label htmlFor="business.name">
@@ -677,7 +693,7 @@ const AuthDetails = () => {
 
 
   <div className="mb-3">
-   <Card title="Tarde License">
+   <Card title="Trade License">
      <Upload
        listType="picture-card"
        name="image-1"
