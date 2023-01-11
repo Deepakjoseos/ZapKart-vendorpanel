@@ -185,7 +185,7 @@ const PickupLocationForm = ({
 
         <Col span={8}>
           <Form.Item
-            name="pin_code"
+            name="pinCode"
             label={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
           >
             <Select

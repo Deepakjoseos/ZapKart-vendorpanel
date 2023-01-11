@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
+import _, { get } from 'lodash'
+import qs from 'qs'
 import {
   Card,
   Table,
+  Form,
   Select,
   Input,
   Button,
@@ -26,6 +29,12 @@ import DeliveryZoneService from 'services/deliveryZone'
 import { DownloadOutlined } from '@ant-design/icons'
 import brandService from 'services/brand'
 import categoryService from 'services/category'
+import manufacturerService from 'services/manufacturer'
+import productTemplate from 'services/productTemplate'
+import Utils from 'utils'
+import medicineService from 'services/medicine';
+import constantsService from 'services/constants'
+
 
 const { Option } = Select
 
@@ -49,7 +58,10 @@ const getStockStatus = (status) => {
 const ProductList = () => {
   let history = useHistory()
   const fileInputRef = useRef()
+  const [form] = Form.useForm()
 
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -60,13 +72,17 @@ const ProductList = () => {
   const [excelFile, setExcelFile] = useState(null)
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
-  const [vendors, setVendors] = useState([])
-  const [selectedBrandId, setSelectedBrandId] = useState([])
+  const [productsTemplate, setProductsTemplate] = useState([])
+  const [selectedManufacture, setSelectedManufacture] = useState([])
   const [selectedCategoryId, setSelectedCategoryId] = useState([])
-  const [selectedVendorId, setSelectedVendorId] = useState([])
+  const [selectedStatus, setSelectedStatus] = useState([])
+  const [selectedMedicine, setSelectedMedicine] = useState([])
   const [selectedApproval, setSelectedApproval] = useState(null)
   const [selectedacquirementMethod, setSelectedacquirementMethod] = useState(null)
-
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 30,
+  })
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
   //   return
@@ -79,15 +95,47 @@ const ProductList = () => {
     }
   }
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const data = await productService.getProducts()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+  const getProductTemplates = async () => {
+    const data = await productTemplate.getProductTemplates()
+    if (data){
+      const users = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.name} `,
+        }
+      })
+      setProductsTemplate(users)
+      // console.log(users,'producttemplate')
     }
+  }
+  const getMedicines = async () => {
+    const data = await medicineService.getMedicinetypes()
+    if (data){
+      const users = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.name} `,
+        }
+      })
+      setSelectedMedicine(users)
+    }
+    // console.log(data,'medicines')
+  }
+
+  const getManufacturer = async () => {
+    const data = await manufacturerService.getManufacturer()
+    if(data){
+      const users = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.name} `,
+        }
+      })
+    setSelectedManufacture(users)
+    // console.log(users,'manufacture')
+    }
+  }
+    
     const getBrands = async () => {
       const data = await brandService.getBrands()
       if (data) {
@@ -103,11 +151,59 @@ const ProductList = () => {
     // const getVendors = async () =>{
     //   const data= await vendor
     // }
-    getProducts()
+    
+    
+
+  const getProducts = async (paginationParams = {},filterParams) => {
+    setLoading(true)
+    const data = await productService.getProducts(
+            qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+      )
+    if (data.data) {
+      setList(data.data)
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      // setSearchBackupList(data)
+      console.log(data, 'show-data')
+    }
+    setLoading(false)
+  }
+  useEffect(()=>{
+    getProducts({
+      pagination,}
+    )
+    getManufacturer()
     getBrands()
+    getMedicines()
     getCategories()
+    getProductTemplates()
   }, [])
 
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getProducts(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
+
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
   useEffect(() => {
     if (isExcelModalOpen) {
       getDeliveryZones()
@@ -135,33 +231,35 @@ const ProductList = () => {
     }
   }
   const handleQuery = async () => {
-    const query = {}
-    if ((selectedBrandId || selectedBrandId) !== 'All')
-      query.brandId = selectedBrandId
-    query.categoryId = selectedCategoryId
-    query.vendorId = selectedVendorId
-    query.approval = selectedApproval
-    query.acquirementMethod = selectedacquirementMethod
-    console.log('query', query)
-    const data = await productService.getProducts(query)
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getProducts({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
+  }
+
+  const rowSelection = {
+    onChange: (key, rows) => {
+      setSelectedRows(rows)
+      setSelectedRowKeys(key)
+    },
   }
 
   const handleClearFilter = async () => {
-    setSelectedBrandId(null)
-    setSelectedCategoryId(null)
-    setSelectedApproval(null)
-    setSelectedacquirementMethod(null)
-    setSelectedVendorId(null)
+    form.resetFields()
 
-    const data = await productService.getProducts({})
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
+    setPagination(resetPagination())
+    getProducts({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
   }
 
   const dropdownMenu = (row) => (
@@ -252,13 +350,7 @@ const ProductList = () => {
         return <Flex flexDirection="column">{category?.name}</Flex>
       },
     },
-    // {
-    //   title: 'DeliveryZone',
-    //   dataIndex: 'deliveryZone',
-    //   render: (deliveryZone) => {
-    //     return <Flex>{deliveryZone.name}</Flex>
-    //   },
-    // },
+   
     {
       title: 'Variant',
       dataIndex: 'variant',
@@ -275,7 +367,6 @@ const ProductList = () => {
     {
       title: 'Approval',
       dataIndex: 'approval',
-      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
@@ -313,78 +404,95 @@ const ProductList = () => {
     })
   }
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
-
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
+  // const onSearch = (e) => {
+  //   const value = e.currentTarget.value
+  //   const searchArray = e.currentTarget.value ? list : searchBackupList
+  //   const data = utils.wildCardSearch(searchArray, value)
+  //   setList(data)
+  //   setSelectedRowKeys([])
+  // }
 
   const filters = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
     <Flex className="mb-1 flex-wrap" mobileFlex={false}>
 
 
-      <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Search</label>
-        <Input
+      <div className="mr-md-3 mb-5">
+        <Form.Item className="mb-3" name="search" label="Search">
+        <Input 
+          type='text'
           placeholder="Search"
           prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
+          // onChange={(e) => setSelectedSearchbar(e.currentTarget.value)}
+          // value={selectedSearchbar}
         />
+        </Form.Item>
       </div>
       <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Status</label>
+      <Form.Item name="status" label="Status">
 
         <Select
-          defaultValue="All"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          // defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
+          // onChange={(value) => setSelectedStatus(value)}
           placeholder="Status"
+          // value={selectedStatus}
         >
-          <Option value="All">All</Option>
+          <Option value="">All</Option>
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
+        </Form.Item>
       </div>
       <div className=" mr-md-3 mb-3">
-        <label className='mt-2'>Brands</label>
+        <Form.Item name="brandId" label="Brand">
         <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedBrandId(value)}
+          // onChange={(value) => setSelectedBrandId(value)}
           // onSelect={handleQuery}
           placeholder="Brand"
-          value={selectedBrandId}
+          // value={selectedBrandId}
         >
-          <Option value="">All</Option>
+          <Option value="All">All</Option>
           {brands.map((brand) => (
             <Option key={brand.id} value={brand.id}>
               {brand.name}
             </Option>
           ))}
         </Select>
+        </Form.Item>
       </div>
 
       <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Categories</label>
+      <Form.Item name="categoryId" label="Category">
         <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedCategoryId(value)}
           // onSelect={handleQuery}
-          value={selectedCategoryId}
+          // value={selectedCategoryId}
           placeholder="Category"
         >
           <Option value="">All</Option>
@@ -394,32 +502,233 @@ const ProductList = () => {
             </Option>
           ))}
         </Select>
+        </Form.Item>
       </div>
-      {/* <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Vendors</label>
+      {/* //New filters */}
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="productTemplateId" label="Product Template">
         <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedVendorId(value)}
+          onChange={(value) => setSelectedCategoryId(value)}
           // onSelect={handleQuery}
-          value={selectedVendorId}
-          placeholder="Vendor">
+          // value={selectedCategoryId}
+          placeholder="Product Template"
+        >
           <Option value="">All</Option>
-          {vendors?.map((vendor) => (
-            <Option value={vendor.id}>
-              {vendor?.firstName} {vendor?.lastName}
+          {productsTemplate.map((users) => (
+                <Option key={users.id} value={users.id}>
+                  {users.fullName}
+                </Option>
+              ))}
+        </Select>
+        </Form.Item>
+      </div>
+
+      {/* <div className="mr-md-3 mb-3">
+      <Form.Item name="productVariantId" label="Product Variant">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Category"
+        >
+          <Option value="">All</Option>
+          {categories.map((category) => (
+            <Option key={category.id} value={category.id}>
+              {category.name}
             </Option>
           ))}
         </Select>
+        </Form.Item>
       </div> */}
+
       <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Approval</label>
+      <Form.Item name="productType" label="Product Type">
         <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedApproval(value)}
+          onChange={(value) => setSelectedCategoryId(value)}
           // onSelect={handleQuery}
-          value={selectedApproval}
+          // value={selectedCategoryId}
+          placeholder="Product Type"
+        >
+          <Option value="">All</Option>
+          <Option value="Medicine">Medicine</Option>
+          <Option value="NonMedicine">Non-Medicine</Option>
+        </Select>
+        </Form.Item>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="prescriptionRequired" label="Prescription Required">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Prescription Required"
+        >
+          <Option value="">All</Option>
+          <Option value="true">Yes</Option>
+          <Option value="false">No</Option>
+        </Select>
+        </Form.Item>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="orderByName" label="Order By Name">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Order By Name"
+        >
+          <Option value="">All</Option>
+          <Option value="Asc">Ascending</Option>
+          <Option value="Desc">Descending</Option>
+        </Select>
+        </Form.Item>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="orderByPrice" label="Order By Price">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Order By Price"
+        >
+          <Option value="">All</Option>
+          <Option value="Low To High">Low To High</Option>
+          <Option value="High To Low">High To Low</Option>
+        </Select>
+        </Form.Item>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="returnable" label="Returnable">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Returnable"
+        >
+          <Option value="">All</Option>
+          <Option value={true}>Yes</Option>
+          <Option value={false}>No</Option>
+        </Select>
+        </Form.Item>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="manufactureId" label="Manufacturer">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Manufacturer"
+        >
+          <Option value="">All</Option>
+          {selectedManufacture.map((users) => (
+                <Option key={users.id} value={users.id}>
+                  {users.fullName}
+                </Option>
+              ))}
+        </Select>
+        </Form.Item>
+      </div>
+      
+      <div className="mr-md-3 mb-3">
+      <Form.Item name="medicineTypeId" label="Medicine type">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          // value={selectedCategoryId}
+          placeholder="Medicine type"
+        >
+          <Option value="">All</Option>
+          {selectedMedicine.map((users) => (
+                <Option key={users.id} value={users.id}>
+                  {users.fullName}
+                </Option>
+              ))}
+        </Select>
+        </Form.Item>
+      </div>
+
+      {/* //ENd filters */}
+      <div className="mr-md-3 mb-3">
+      <Form.Item label="Approval" name="approval">
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          // onChange={(value) => setSelectedApproval(value)}
+          // onSelect={handleQuery}
+          // value={selectedApproval}
           placeholder="Approval Method">
           <Option value="">All</Option>
           <Option value="Pending">Pending</Option>
@@ -427,11 +736,17 @@ const ProductList = () => {
           <Option value="On Hold">On Hold</Option>
           <Option value="Rejected">Rejected</Option>
         </Select>
+        </Form.Item>
       </div>
       {process.env.REACT_APP_SITE_NAME === 'awen' ?
         <div className="mr-md-3 mb-3">
-          <label className='mt-2'>Acquirement Method</label>
+          <Form.Item name="accquirement" label="Acquirement Method">
           <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             className="w-100"
             style={{ minWidth: 180 }}
             onChange={(value) => setSelectedacquirementMethod(value)}
@@ -444,19 +759,21 @@ const ProductList = () => {
             <Option value="Purchase">Purchase</Option>
             <Option value="Giveaway">Giveaway</Option>
           </Select>
+          </Form.Item>
         </div> : ""}
 
-      <div >
+      <div className='mb-1'>
         <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
           Filter
         </Button>
       </div>
-      <div>
+      <div className='mb-1'>
         <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
           Clear
         </Button>
       </div>
     </Flex>
+    </Form>
   )
 
   const handleExcelUpload = (e) => {
@@ -492,9 +809,22 @@ const ProductList = () => {
         </div>
 
         <div className="table-responsive">
-          <Table columns={tableColumns} scroll={{
-            x: true,
-          }} dataSource={list} rowKey="id" />
+          <Table 
+            columns={tableColumns} 
+            scroll={{
+              x: true,
+                    }} 
+            dataSource={list}
+            onChange={handleTableChange}
+            pagination={pagination}
+          loading={loading}
+            rowKey="id"
+            rowSelection={{
+              selectedRowKeys: selectedRowKeys,
+              type: 'checkbox',
+              preserveSelectedRowKeys: false,
+              ...rowSelection,
+          }} />
         </div>
       </Card>
 

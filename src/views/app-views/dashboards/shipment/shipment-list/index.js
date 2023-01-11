@@ -162,12 +162,12 @@ const ShipmentList = () => {
           {record.items.map((item, index) => (
             <>
               <div>
-                <span>OrderId:</span>
+                <span>Order No : </span>
                 <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                  {item?.orderId}
+                  {item?.orderNo}
                 </Link>
               </div>
-              <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
+              <div>Products : {item?.items?.map((cur) => `${cur.name}, `)}</div>
             </>
           ))}
         </div>
@@ -175,7 +175,7 @@ const ShipmentList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'shippedBy',
+      title: 'Shipped By',
       dataIndex: 'shippedBy',
     },
     {

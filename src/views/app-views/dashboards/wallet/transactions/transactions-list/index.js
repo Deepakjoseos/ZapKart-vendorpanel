@@ -85,23 +85,26 @@ const TransactionList = () => {
         if (data) {
             setList(data)
             setSearchBackupList(data)
-            console.log(data, 'show-data')
+            // console.log(data, 'show-data')
         }
     }
     const getWallet = async () => {
         const data = await walletService.getWallet()
         if (data) {
+            const bankaccount = data.bankAccounts
             setWallet(data)
+            setBankAccounts(bankaccount)
+
         }
-        console.log('walletvendor',wallet)
-        console.log('walletbankaccounts',wallet.bankAccounts)
+        // console.log('walletvendor',wallet)
+        // console.log('walletbankaccounts',wallet.bankAccounts)
         
     }
- const getBankAccounts = async ()=>{
-    if(wallet){
-        setBankAccounts(wallet.bankAccounts)
-    }
- }
+//  const getBankAccounts = async ()=>{
+//     if(wallet){
+//         setBankAccounts(wallet.bankAccounts)
+//     }
+//  }
 
     //   const fetchConstants = async () => {
     //     const data = await constantsService.getConstants()
@@ -117,7 +120,7 @@ const TransactionList = () => {
         // getUser()
         getTransactions()
         getWallet()
-        getBankAccounts()
+        // getBankAccounts()
 
     }, [])
 
@@ -194,13 +197,7 @@ const TransactionList = () => {
 
     // Antd Table Columns
     const tableColumns = [
-        {
-            title: 'Amount',
-            dataIndex: 'amount',
-            //   render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
-            //     {text}
-            //   </Link>
-        },
+        
         {
             title: "Type",
             dataIndex: 'type'
@@ -208,6 +205,13 @@ const TransactionList = () => {
         {
             title: "Description",
             dataIndex: 'description'
+        },
+        {
+            title: 'Amount',
+            dataIndex: 'amount',
+            //   render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
+            //     {text}
+            //   </Link>
         },
         {
             title: 'Confirmed',
@@ -222,27 +226,31 @@ const TransactionList = () => {
         {
             title: 'Date',
             dataIndex: 'createdAt',
-            render: (text) => <div>{moment(new Date(text * 1000)).format('YYYY-MM-DD hh:mm:a')}</div>,
+            render: (text) => <div>{moment(new Date(text * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>,
         },
         {
-            title: 'User',
-            dataIndex: "userId"
+            title: 'Quantity',
+            dataIndex: "itemQty",
+            render: (text) => <Flex justifyContent='center'>{text}</Flex>,
+
         },
         {
             title: 'Order',
             render: (_, row) => {
                 return (
+                    
                     <Flex flexDirection="column" justifyContent="center">
 
                         {/* {row.name}{row?.variant && `(${row.variant.name})`}   */}
-                        <span>OrderId:</span>
+                        {/* <span>Order No : </span> */}
                         <Link to={`/app/dashboards/orders/order-view/${row.orderId}`}>
-                            {row.orderId}
-                        </Link>
-                        <p>Item Name:</p>
-                        {row.itemName}
-                        <p>Item Quantity</p>
-                        {row.itemQty}
+                          {row.orderNo}
+                        </Link> 
+                       ({row.itemName})
+                        {/* <p>Item Name:</p> */}
+                        
+                        {/* <p>Item Quantity</p>
+                        {row.itemQty} */}
 
                     </Flex>
                 )
@@ -326,16 +334,25 @@ const TransactionList = () => {
             </Flex>
             <div className="table-responsive">
                 <div>
-                    <Flex justifyContent='end'>
+                <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
 
+                            <h1 className='ml-2 mb-5'>Wallet</h1>
 
-                        <div>
-                            {/* <span>   <WalletOutlined /></span> */}
-                            <h3>Wallet</h3>
-                            <p>Balance:{wallet.balance}</p>
-                            <p>Pending Balance:{wallet.pendingBalance}</p>
-                        </div>
-                        <Button className='ml-2' type="primary" onClick={() => { setisFormOpen(true) }} > Withdraw Balance From Wallet</Button>
+                            <div style={{marginLeft:"200px"}}>
+                            <Card className='ml-2' bordered={true} >
+                            <p>Balance : {wallet.balance}</p>
+                            </Card>
+                                                        </div>
+
+                            <Card className='ml-1' bordered={true} >
+                            <p>Pending Balance : {wallet.pendingBalance}</p>
+                            </Card>
+                            {/* </div> */}
+                            {/* <div > */}
+                            {/* <Card className='ml-3' bordered={true}>
+                            </Card> */}
+                            {/* </div> */}
+                        <Button className='ml-2 mb-4' type="primary" onClick={() => { setisFormOpen(true) }} > Withdraw Balance From Wallet</Button>
 
                     </Flex>
                 </div>

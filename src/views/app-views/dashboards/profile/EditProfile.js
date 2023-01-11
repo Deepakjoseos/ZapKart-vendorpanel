@@ -13,7 +13,7 @@ import {
   Upload,
   Card,
 } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import { UserOutlined ,CheckCircleOutlined , CloseOutlined} from '@ant-design/icons'
 import { ROW_GUTTER } from 'constants/ThemeConstant'
 import Flex from 'components/shared-components/Flex'
 import CustomIcon from 'components/util-components/CustomIcon'
@@ -33,7 +33,7 @@ const EditProfile = () => {
   const [country ,setCountry]=useState([])
   const [state ,setState]=useState([])
   const [Logo, setLogo] = useState(null)
-
+  
   console.log(user, 'mine')
   const dispatch = useDispatch()
   const { Option } = Select
@@ -69,12 +69,14 @@ const EditProfile = () => {
         gst: user.gst,
         address: user.address,
         tanNumber: user.tanNumber,
-        // pan: user.pan,
+        pan: user.pan,
+        drugLicense: user.drugLicense,
         country: user.country,
         state:user.state,
         business:user.business,
-
-        // address:
+        emailVerified: user?.emailVerified,
+        smsSubscription: user?.smsSubscription,
+        emailSubscription: user?.emailSubscription,
         'address.line1': user?.address?.line1,
         'address.city': user?.address?.city,
         'address.state': user?.address?.state,
@@ -99,7 +101,7 @@ const EditProfile = () => {
         'business.address.zipcode': user?.business?.address?.zipcode,
       })
       let himg = []
-
+      console.log(user,'users')
       if (user.displayImage) {
         himg = [
           {
@@ -156,8 +158,13 @@ const EditProfile = () => {
           lastName: values.lastName,
           gst: values.gst,
           tanNumber: values.tanNumber,
-          // pan: values.pan,
+          pan: values.pan,
+          emailVerified:values.emailVerified,
 
+          smsSubscription:values.smsSubscription,
+          emailSubscription: values.emailSubscription,
+
+          drugLicense: values.drugLicense,
           bank: {
             name: values["bank.name"],
             accountNumber: values["bank.accountNumber"],
@@ -201,7 +208,7 @@ const EditProfile = () => {
         }
 
         // Checking if image exists
-        console.log(values, 'plss')
+        // console.log(values, 'plss')
         if (displayImage?.length !== 0 && displayImage !== null) {
           const imgValue = await singleImageUploader(
             displayImage[0].originFileObj,
@@ -229,7 +236,11 @@ const EditProfile = () => {
               displayImage: data.displayImage,
               gst: data.gst,
               tanNumber: data.tanNumber,
-              // pan: data.pan,
+              pan: data.pan,
+              emailVerified:data.emailVerified,
+              emailSubscription: data.emailSubscription,
+              smsSubscription: data.smsSubscription,
+              drugLicense: data.drugLicense,
               address: data.address,
               business: data.business,
               bank:data.bank,
@@ -301,6 +312,14 @@ const EditProfile = () => {
     }
   }, [fileListImages])
 
+  // const onSwitch = (e) => {
+  //     if(e=== true){
+  //       setEmailVerified(true)
+  //     }
+  //     else{
+  //       setEmailVerified(false)
+  //     }
+  // }
 
   const propsLogo = {
     multiple: false,
@@ -393,6 +412,8 @@ const EditProfile = () => {
          
             <Col xs={24} sm={24} md={12}>
               <Form.Item
+                // hasFeedback
+                // validateStatus={user.emailVerified ? 'success' : 'error'}
                 label="Email"
                 name="email"
                 rules={[
@@ -402,11 +423,15 @@ const EditProfile = () => {
                   },
                 ]}
               >
-                <Input disabled />
+                {/* <Input disabled /> */}
+                {
+user.emailVerified ?  <Input disabled status="success" prefix={<CheckCircleOutlined />}  /> : <Input disabled status="error" prefix={<CloseOutlined />}  />
+}
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item
+                validateStatus='success'
                 label="Phone"
                 name="phone"
                 rules={[
@@ -419,9 +444,54 @@ const EditProfile = () => {
                 <Input disabled />
               </Form.Item>
             </Col>
+            
+            <Col xs={24} sm={24} md={12}>
+            <Form.Item
+                name="emailSubscription"
+                label="Email Subscription"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Required',
+                  },
+                ]}              >
+                <Select  placeholder="Email Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12}>
+            <Form.Item
+                name="smsSubscription"
+                label="Sms Subscription"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Required',
+                  },
+                ]}              >
+                <Select placeholder="Sms Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={12}>
+              <Form.Item label="GST" name="gst">
+                <Input />
+              </Form.Item>
+            </Col>
 
             <Col xs={24} sm={24} md={12}>
-              <Form.Item label="GST" name="gst">
+              <Form.Item name="pan" label="PAN" >
+                <Input />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={12}>
+              <Form.Item name="drugLicense" label="Drug License" >
                 <Input />
               </Form.Item>
             </Col>
@@ -437,22 +507,6 @@ const EditProfile = () => {
                 </Col>
 
                 <Col xs={24} sm={24} md={12}>
-                  <Form.Item name="address.city" label="City">
-                    <Input placeholder="City" />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={24} md={12}>
-                <Form.Item name="stateId" label="emirates" >
-          <Select placeholder="emirates">
-              {state.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-                </Col>
-                <Col xs={24} sm={24} md={12}>
                 <Form.Item name="countryId" label="Country" >
           <Select placeholder="Country">
               {country.map((item) => (
@@ -463,6 +517,25 @@ const EditProfile = () => {
                  </Select>
                   </Form.Item>
                 </Col>
+                
+                <Col xs={24} sm={24} md={12}>
+                <Form.Item name="stateId" label="State" >
+              <Select placeholder="State">
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+                </Col>
+
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item name="address.city" label="City">
+                    <Input placeholder="City" />
+                  </Form.Item>
+                </Col>
+
                 <Col xs={24} sm={24} md={12}>
                   <Form.Item name="address.phone" label="Phone">
                     <Input placeholder="Eg: +919988776655" />
@@ -515,7 +588,7 @@ const EditProfile = () => {
 
                 <Col xs={24} sm={24} md={12}>
                  <Form.Item name="countryId" label="Country" >
-          <Select placeholder="pincode">
+          <Select placeholder="Country">
               {country.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
@@ -526,8 +599,8 @@ const EditProfile = () => {
                 </Col>
 
                 <Col xs={24} sm={24} md={12}>
-                <Form.Item name="stateId" label="emirates" >
-          <Select placeholder="emirates">
+                <Form.Item name="stateId" label="State" >
+          <Select placeholder="State">
               {state.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}

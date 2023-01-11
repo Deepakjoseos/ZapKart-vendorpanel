@@ -308,14 +308,14 @@ const dashBoardNavTree = [
       //   ],
       // },
 
-      // {
-      //   key: 'dashboards-information',
-      //   path: `${APP_PREFIX_PATH}/dashboards/information/information-list`,
-      //   title: 'Information',
-      //   icon: DotChartOutlined,
-      //   breadcrumb: false,
-      //   submenu: [],
-      // },
+      {
+        key: 'dashboards-review',
+        path: `${APP_PREFIX_PATH}/dashboards/review/review-list`,
+        title: 'Review',
+        icon: InfoCircleOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
       {
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,

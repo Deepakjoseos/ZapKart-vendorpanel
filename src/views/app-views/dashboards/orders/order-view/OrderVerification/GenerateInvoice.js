@@ -296,12 +296,14 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
         ]}
         destroyOnClose
       >
+        <p>Batch</p>
         <Input
           placeholder="Batch"
           className="mb-3"
           onChange={(e) => setBatch(e.target.value)}
           value={batch}
         />
+        <p>Hsn</p>
         <Input
           placeholder="Hsn"
           className="mb-3"
@@ -314,7 +316,7 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
             <Option value={cur.id}>{cur?.name}</Option>
           ))}
         </Select> */}
-
+        <p>Expiry</p>
         <DatePicker
           placeholder="Expiry Date"
           format="YYYY-MM-DD"
@@ -322,7 +324,9 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
           className="w-100"
           onChange={(date, dateString) => setExpiry(dateString)}
         />
-
+        <br/>
+        <br/>
+        <p>TaxCategory</p>
         <Select
           placeholder="Tax Category"
           showSearch

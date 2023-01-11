@@ -169,7 +169,7 @@ import walletService from 'services/Wallet'
           className="ant-advanced-search-form"
           hideRequiredMark
         >
-          <Card title="Withdraw Balnce From Wallet">
+          <Card title="Withdraw Balance From Wallet">
             <Form.Item name="amount" label="Amount" >
               <Input placeholder="Withdrawing Amount" />
             </Form.Item>
