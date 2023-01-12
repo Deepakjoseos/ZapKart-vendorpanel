@@ -260,7 +260,7 @@ const ShipmentList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div className="d-flex">
+        {/* <div className="d-flex">
           <Button
             onClick={() => setCheckIfDeliverableOpen(true)}
             block
@@ -276,7 +276,7 @@ const ShipmentList = () => {
           >
             Add Shipment
           </Button>
-        </div>
+        </div> */}
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />

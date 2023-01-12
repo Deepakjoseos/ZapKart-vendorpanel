@@ -140,12 +140,23 @@ const Orders = () => {
 
   // On pagination Change
   const handleTableChange = (newPagination) => {
-    getOrders(
-      {
-        pagination: newPagination,
-      },
-      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
-    )
+    
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values 
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():'',
+        }, _.identity,)
+
+        getOrders({ pagination: newPagination }, sendingValues)
+      })
+      .catch((info) => {
+        // console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
   // console.log('order Status', orderStatuses)
@@ -174,13 +185,13 @@ const Orders = () => {
     {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
     },
     {
       title: 'Shipping Charge',
       dataIndex: 'shippingCharge',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
     },
     
     {
@@ -191,7 +202,7 @@ const Orders = () => {
         {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
         </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
     },
     {
       title: 'Order Status',
@@ -201,7 +212,7 @@ const Orders = () => {
           {status}
         </>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
     },
     {
       title: 'Payment Status',
@@ -268,13 +279,13 @@ const Orders = () => {
     >
       <Row gutter={8} align="bottom">
         <Flex className="mb-1 flex-wrap" mobileFlex={false}>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={7} sm={24} xs={24} lg={7}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={7} sm={24} xs={24} lg={7}>
           <Form.Item name="status" label="Order Status">
 
             <Select showSearch
@@ -321,7 +332,7 @@ const Orders = () => {
           </Form.Item>
         </Col> */}
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={7} sm={24} xs={24} lg={7}>
           <Form.Item name="paymentType" label="Payment Type">
 
             <Select showSearch
@@ -343,7 +354,7 @@ const Orders = () => {
 
           </Form.Item>
         </Col>        
-
+                
         <Col className="mr-md-3 mb-3">
           <Form.Item name="fromDate" label="From Date">
 

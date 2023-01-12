@@ -10,6 +10,7 @@ import {
   Menu,
   Tag,
 } from 'antd'
+import Flex from 'components/shared-components/Flex'
 import StatisticWidget from 'components/shared-components/StatisticWidget'
 import ChartWidget from 'components/shared-components/ChartWidget'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
@@ -102,13 +103,13 @@ const newJoinMemberOption = (
   </Menu>
 )
 
-const latestTransactionOption = (
+const latestTransactionOption =(getOrders)=> (
   <Menu>
     <Menu.Item key="0">
       <span>
         <div className="d-flex align-items-center">
           <ReloadOutlined />
-          <span onClick={refreshPage} className="ml-2">Refresh</span>
+          <span onClick={getOrders} className="ml-2">Refresh</span>
         </div>
       </span>
     </Menu.Item>
@@ -145,67 +146,65 @@ const cardDropdown = (menu) => (
 
 const tableColumns = [
   {
-    title: 'OrderNo',
+    title: 'Order No',
     dataIndex: 'orderNo',
-       render: (text, record) => (
-    <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
-    {text}
-  </Link>
-),
-    // render: (text, record) => (
-    //   <div className="d-flex align-items-center">
-    //     <Avatar
-    //       size={30}
-    //       className="font-size-sm"
-    //       icon={<UserOutlined />}
-    //       // style={{ backgroundColor: record.avatarColor }}
-    //     >
-    //       {/* {utils.getNameInitial(text)} */}
-    //     </Avatar>
-    //     <span className="ml-2">{text}</span>
-    //   </div>
-    // ),
+    render: (text, record) => (
+      <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+        {text}
+      </Link>
+    ),
   },
+
   {
-    title: 'User Name',
+    title: 'Customer Name',
     dataIndex: 'userName',
-    key: 'userId',
+
   },
-  // {
-  //   title: 'Date',
-  //   dataIndex: 'date',
-  //   key: 'date',
-  // },
+
   {
     title: 'Total Amount',
     dataIndex: 'totalAmount',
-    key: 'totalAmount',
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
+
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    title: 'Shipping Charge',
+    dataIndex: 'shippingCharge',
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
   },
-  // {
-  //   title: () => <div className="text-right">Status</div>,
-  //   key: 'status',
-  //   // render: (_, record) => (
-  //   //   <div className="text-right">
-  //   //     <Tag
-  //   //       className="mr-0"
-  //   //       color={
-  //   //         record.status === 'Approved'
-  //   //           ? 'cyan'
-  //   //           : record.status === 'Pending'
-  //   //           ? 'blue'
-  //   //           : 'volcano'
-  //   //       }
-  //   //     >
-  //   //       {record.status}
-  //   //     </Tag>
-  //   //   </div>
-  //   // ),
-  // },
+  
+  {
+    title: 'Order Date',
+    dataIndex: 'createdAt',
+    render: (createdAt) => (
+      <Flex alignItems="center">
+      {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
+      </Flex>
+    ),
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+  }, 
+  {
+    title: 'Order Status',
+    dataIndex: 'status',
+    render: (status, record) => (
+      <>
+        {status}
+      </>
+    ),
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'payment',
+    render: (payment, record) => {
+      return <Flex alignItems="centre" >
+       
+        {payment?.status === 'COMPLETED' ? 
+        <Tag style={{backgroundColor:"#87d068",color:"white"}}>COMPLETED</Tag> : 
+        <Tag  style={{backgroundColor:"#f50",color:"white"}}>PENDING</Tag>}
+        </Flex>
+    },
+  },
 ]
 
 export const DefaultDashboard = () => {
@@ -302,7 +301,7 @@ export const DefaultDashboard = () => {
     <Col xs={24} sm={24} md={24} lg={25}>
       <Card
         title="Latest Orders"
-        extra={cardDropdown(latestTransactionOption)}
+        extra={cardDropdown(latestTransactionOption(getOrders))}
       >
         <Table
           className="no-border-last"
