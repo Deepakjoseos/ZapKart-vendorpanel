@@ -1,0 +1,2 @@
+(this.webpackJsonpemilus=this.webpackJsonpemilus||[]).push([[38],{665:function(s,e,t){"use strict";t.r(e);t(0);var a=t(2);e.default=function(s){var e=s.name,t=s.desc;return Object(a.jsxs)("div",{className:"mb-3",children:[Object(a.jsxs)("span",{className:"font-weight-bold text-dark",children:[e,":"]}),Object(a.jsxs)("span",{className:"text-gray-light",children:[" ",t]})]})}}}]);
+//# sourceMappingURL=38.56e5cc73.chunk.js.map

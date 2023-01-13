@@ -12,6 +12,8 @@ import {
   Tag,
   Modal,
   notification,
+  Row,
+  Col,
 } from 'antd'
 import {
   EyeOutlined,
@@ -81,7 +83,7 @@ const ProductList = () => {
   const [selectedacquirementMethod, setSelectedacquirementMethod] = useState(null)
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 30,
+    pageSize: 15,
   })
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
@@ -314,7 +316,7 @@ const ProductList = () => {
     {
       title: 'Product',
       dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
 
     // {
@@ -357,17 +359,17 @@ const ProductList = () => {
       render: (variant) => {
         return <Flex>{variant?.name}</Flex>
       },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
     },
     {
       title: 'Quantity',
       dataIndex: 'qty',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
       title: 'Approval',
       dataIndex: 'approval',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
       title: 'Status',
@@ -375,7 +377,7 @@ const ProductList = () => {
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
     {
       title: '',
@@ -400,7 +402,7 @@ const ProductList = () => {
     tableColumns.splice(tableColumns?.length - 4, 0, {
       title: 'Product Buy Type',
       dataIndex: 'acquirementMethod',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
     })
   }
 
@@ -419,11 +421,10 @@ const ProductList = () => {
       name="filter_form"
       className="ant-advanced-search-form"
     >
-    <Flex className="mb-1 flex-wrap" mobileFlex={false}>
 
-
-      <div className="mr-md-3 mb-5">
-        <Form.Item className="mb-3" name="search" label="Search">
+    <Row gutter={8} align="bottom">
+    <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item name="search" label="Search">
         <Input 
           type='text'
           placeholder="Search"
@@ -432,8 +433,8 @@ const ProductList = () => {
           // value={selectedSearchbar}
         />
         </Form.Item>
-      </div>
-      <div className="mr-md-3 mb-3">
+      </Col>
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="status" label="Status">
 
         <Select
@@ -454,8 +455,8 @@ const ProductList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
         </Form.Item>
-      </div>
-      <div className=" mr-md-3 mb-3">
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
         <Form.Item name="brandId" label="Brand">
         <Select
           showSearch
@@ -478,9 +479,9 @@ const ProductList = () => {
           ))}
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="categoryId" label="Category">
         <Select
           showSearch
@@ -503,9 +504,9 @@ const ProductList = () => {
           ))}
         </Select>
         </Form.Item>
-      </div>
+      </Col>
       {/* //New filters */}
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="productTemplateId" label="Product Template">
         <Select
           showSearch
@@ -528,7 +529,7 @@ const ProductList = () => {
               ))}
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
       {/* <div className="mr-md-3 mb-3">
       <Form.Item name="productVariantId" label="Product Variant">
@@ -555,7 +556,7 @@ const ProductList = () => {
         </Form.Item>
       </div> */}
 
-      <div className="mr-md-3 mb-3">
+<Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="productType" label="Product Type">
         <Select
           showSearch
@@ -575,9 +576,9 @@ const ProductList = () => {
           <Option value="NonMedicine">Non-Medicine</Option>
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="prescriptionRequired" label="Prescription Required">
         <Select
           showSearch
@@ -597,9 +598,9 @@ const ProductList = () => {
           <Option value="false">No</Option>
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="orderByName" label="Order By Name">
         <Select
           showSearch
@@ -619,9 +620,9 @@ const ProductList = () => {
           <Option value="Desc">Descending</Option>
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="orderByPrice" label="Order By Price">
         <Select
           showSearch
@@ -641,9 +642,9 @@ const ProductList = () => {
           <Option value="High To Low">High To Low</Option>
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="returnable" label="Returnable">
         <Select
           showSearch
@@ -663,9 +664,9 @@ const ProductList = () => {
           <Option value={false}>No</Option>
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item name="manufactureId" label="Manufacturer">
         <Select
           showSearch
@@ -688,10 +689,10 @@ const ProductList = () => {
               ))}
         </Select>
         </Form.Item>
-      </div>
+      </Col>
       
-      <div className="mr-md-3 mb-3">
-      <Form.Item name="medicineTypeId" label="Medicine type">
+      <Col md={6} sm={24} xs={24} lg={6}>
+      <Form.Item name="medicineTypeId" label="Medicine Type">
         <Select
           showSearch
           optionFilterProp="children"
@@ -703,7 +704,7 @@ const ProductList = () => {
           onChange={(value) => setSelectedCategoryId(value)}
           // onSelect={handleQuery}
           // value={selectedCategoryId}
-          placeholder="Medicine type"
+          placeholder="Medicine Type"
         >
           <Option value="">All</Option>
           {selectedMedicine.map((users) => (
@@ -713,10 +714,10 @@ const ProductList = () => {
               ))}
         </Select>
         </Form.Item>
-      </div>
+      </Col>
 
       {/* //ENd filters */}
-      <div className="mr-md-3 mb-3">
+      <Col md={6} sm={24} xs={24} lg={6}>
       <Form.Item label="Approval" name="approval">
         <Select
           showSearch
@@ -729,7 +730,7 @@ const ProductList = () => {
           // onChange={(value) => setSelectedApproval(value)}
           // onSelect={handleQuery}
           // value={selectedApproval}
-          placeholder="Approval Method">
+          placeholder="Approval">
           <Option value="">All</Option>
           <Option value="Pending">Pending</Option>
           <Option value="Approved">Approved</Option>
@@ -737,9 +738,9 @@ const ProductList = () => {
           <Option value="Rejected">Rejected</Option>
         </Select>
         </Form.Item>
-      </div>
+      </Col>
       {process.env.REACT_APP_SITE_NAME === 'awen' ?
-        <div className="mr-md-3 mb-3">
+        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="accquirement" label="Acquirement Method">
           <Select
             showSearch
@@ -760,19 +761,19 @@ const ProductList = () => {
             <Option value="Giveaway">Giveaway</Option>
           </Select>
           </Form.Item>
-        </div> : ""}
+        </Col> : ""}
 
-      <div className='mb-1'>
+      <Col className="mb-4">
         <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
           Filter
         </Button>
-      </div>
-      <div className='mb-1'>
+      </Col>
+      <Col className="mb-4">
         <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
           Clear
         </Button>
-      </div>
-    </Flex>
+      </Col>
+      </Row>
     </Form>
   )
 

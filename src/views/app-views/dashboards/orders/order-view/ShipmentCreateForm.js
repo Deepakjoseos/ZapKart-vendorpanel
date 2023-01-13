@@ -221,7 +221,7 @@ const ShipmentCreateForm = ({
                   <Select placeholder="Pickup Location">
                     {pickupLocations.map((item) => (
                       <Option value={item?.pickup_location}>
-                        {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
+                        {`${item.address}, ${item.city}, ${item.state}, ${item?.pinCode}`}
                       </Option>
                     ))}
                   </Select>

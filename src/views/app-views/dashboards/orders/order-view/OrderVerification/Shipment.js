@@ -1,3 +1,4 @@
+
 import {
   Button,
   Card,
@@ -299,7 +300,7 @@ const Shipment = ({
                     <Select placeholder="Pickup Location">
                       {pickupLocations.map((item) => (
                         <Option value={item?.pickupLocation}>
-                          {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
+                          {`${item.address}, ${item.city}, ${item.state}, ${item?.pinCode}`}
                         </Option>
                       ))}
                     </Select>

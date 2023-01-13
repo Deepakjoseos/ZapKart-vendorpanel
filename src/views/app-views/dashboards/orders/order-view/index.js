@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
+import { Card, Table, Button, Select, notification, Image, Modal, Tag } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams, Link } from 'react-router-dom'
@@ -53,7 +53,7 @@ const OrderView = () => {
     if (order) {
       setOrder(orderData)
     }
-    console.log('order payment', order.payment)
+    console.log('order payment', order)
   }
 
   useEffect(() => {
@@ -187,9 +187,9 @@ const OrderView = () => {
             </Button>
           )} */}
 
-          <Button type="primary" className="mb-4" onClick={handlePrint}>
+          {/* <Button type="primary" className="mb-4" onClick={handlePrint}>
             Print this out!
-          </Button>
+          </Button> */}
         </Flex>
         <div>
           <Card>
@@ -259,11 +259,14 @@ const OrderView = () => {
                 )}
                 {/* <p>Total Amount: ₹{order?.totalAmount}</p> */}
                 <h4 className="mb-1 font-weight-semibold">Payment method : {order?.payment?.type}</h4>
+                <h4 className="mb-1 font-weight-semibold">Order Status : {order?.status}</h4>
 
                 <address>
                   <p>
                     <span className="font-weight-semibold text-dark font-size-md">
-                      Payment Status :  {order?.payment?.status}
+                      Payment Status :  {order?.payment?.status ==='COMPLETED' ?
+                      <Tag style={{backgroundColor:"#87d068",color:"white"}}>COMPLETED</Tag> : 
+                      <Tag  style={{backgroundColor:"#f50",color:"white"}}>PENDING</Tag>}
                     </span>
                     <br />
                     {/* <span>8626 Maiden Dr. </span>
@@ -292,7 +295,7 @@ const OrderView = () => {
               <>
                 <p>Prescriptions: </p>
                 {order?.prescriptions?.map((cur) => (
-                  <Image width={100} src={cur} />
+                  <Image width={100} height={100} src={cur} />
                 ))}
               </>
             )}
@@ -323,10 +326,19 @@ const OrderView = () => {
                     )
                   }
                 />
-
-                <Column title="Product Name" dataIndex="name" key="name" />
-                {/* <Column title="HSN" dataIndex="hsn" key="hsn" />
-                <Column title="BATCH" dataIndex="batch" key="batch" /> */}
+                <Column title="Invoice No" dataIndex="invoice" key="invoice"
+                render={ (_, record) => (
+                  <Flex alignItems="center">
+                  {record?.invoice?.invoiceNo}
+                  </Flex>)}
+                 /> 
+                <Column title="Product Name" dataIndex="name" key="name"
+                render={ (_, record) => (
+                        <Flex alignItems="center">
+                        {record.name}({record.vendorName})
+                        </Flex>)}
+       />
+                {/* <Column title="HSN" dataIndex="hsn" key="hsn" />*/}
 
                 {/* <Column title="EXP" dataIndex="expiry" key="expiry" /> */}
                 <Column title="QTY" dataIndex="quantity" key="quantity" />
@@ -353,11 +365,11 @@ const OrderView = () => {
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
-                <Column
+                {/* <Column
                   title="Vendor"
                   dataIndex="vendorName"
                   key="vendorName"
-                />
+                /> */}
 
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column

@@ -338,13 +338,13 @@ const TransactionList = () => {
 
                             <h1 className='ml-2 mb-5'>Wallet</h1>
 
-                            <div style={{marginLeft:"200px"}}>
-                            <Card className='ml-2' bordered={true} >
+                            <div style={{marginLeft:"400px"}}>
+                            <Card className='ml-5' bordered={true} >
                             <p>Balance : {wallet.balance}</p>
                             </Card>
                                                         </div>
 
-                            <Card className='ml-1' bordered={true} >
+                            <Card className='ml-5' bordered={true} >
                             <p>Pending Balance : {wallet.pendingBalance}</p>
                             </Card>
                             {/* </div> */}

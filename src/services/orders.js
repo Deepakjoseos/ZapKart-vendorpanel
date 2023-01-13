@@ -4,7 +4,7 @@ const orderService = {}
 const api = '/order/vendor/view_all'
 orderService.getOrders = async function (paginationQuery = '', query = '') {
   try {
-    let url = `${api}?statusOtherThan=Failed&${paginationQuery}&${query}`
+    let url = `${api}?statusOtherThan=Failed&statusOtherThan=Pending&${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',

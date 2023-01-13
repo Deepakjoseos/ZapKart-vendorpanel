@@ -84,7 +84,7 @@ const ReviewList = () => {
     }
 
     if(vendorId)
-    getReviews(pagination) 
+    getReviews({pagination}) 
     getVendorsId()
     getProductsTemplate()
     }, [vendorId])
@@ -95,10 +95,15 @@ const ReviewList = () => {
 //  console.log(vendorId,'idven')
 
 const getReviews = async (paginationParams = {}, filterParams,) => {
-  const data = await reviewService.getReviews( vendorId ,qs.stringify(getPaginationParams(paginationParams)),
+  const data = await reviewService.getReviews( vendorId ,
+    qs.stringify(getPaginationParams(paginationParams)),
   qs.stringify(filterParams))
   if (data) {
-    setList(data)
+    setList(data.data)
+    setPagination({
+      ...paginationParams.pagination,
+      total: data.total,
+    })
   } 
   console.log(data,'reviews')
 }
@@ -108,7 +113,7 @@ const getReviews = async (paginationParams = {}, filterParams,) => {
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
-    // ...params,
+    ...params,
   })
   const handleTableChange = (newPagination) => {
     getReviews(
@@ -164,7 +169,7 @@ const getReviews = async (paginationParams = {}, filterParams,) => {
           {text}
         </Link>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'orderNo'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'orderNo'),
     },
     
     {
@@ -174,7 +179,7 @@ const getReviews = async (paginationParams = {}, filterParams,) => {
         <Link to={`/app/dashboards/catalog/product/edit-product/${record.itemId}`}>
             {text}
           </Link>),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'itemName'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'itemName'),
     },
     {
       title: 'Customers',
@@ -192,7 +197,7 @@ const getReviews = async (paginationParams = {}, filterParams,) => {
           {/* </Link> */}
         </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'userName'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'userName'),
     },
     
     
@@ -203,13 +208,13 @@ const getReviews = async (paginationParams = {}, filterParams,) => {
         <Flex alignItems="center">
           {record.title}({record.rating})
         </Flex>),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
     },
 
     {
       title: "Message",
       dataIndex: 'message',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'message'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'message'),
     },
     // {
     //   title: "Rating",
@@ -225,7 +230,7 @@ const getReviews = async (paginationParams = {}, filterParams,) => {
         {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
         </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'updatedAt'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'updatedAt'),
     },
     
 

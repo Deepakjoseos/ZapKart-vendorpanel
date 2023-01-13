@@ -162,7 +162,11 @@ const PickupLocation = () => {
                 title={<p>{`${item?.name} (${item?.email})`}</p>}
                 description={item?.phone}
               />
-              {item?.address}
+              {item?.address},
+              {item?.city},
+              {item?.state},
+              {item?.country},
+              {item?.pinCode}
             </List.Item>
           )}
         />
