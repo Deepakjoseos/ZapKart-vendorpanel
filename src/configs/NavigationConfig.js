@@ -342,6 +342,15 @@ const dashBoardNavTree = [
       },
 
       {
+        key: 'dashboards-payout',
+        path: `${APP_PREFIX_PATH}/dashboards/payout`,
+        title: 'Payout',
+        icon: NodeExpandOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+
+      {
         key: 'dashboards-wallet',
         path: `${APP_PREFIX_PATH}/dashboards/wallet`,
         title: 'Wallet',
