@@ -245,7 +245,7 @@ const CreateInvoiceForm = ({
 
                 <Column title="Status" dataIndex="status" key="status" />
                 <Column
-                  title="Action"
+                  title="Invoice"
                   render={(_, row) => (
                     <>
                       {ifItemIdIsInCreatingInvoiceValue(row.id) ? (

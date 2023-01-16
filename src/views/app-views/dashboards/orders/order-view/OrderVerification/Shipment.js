@@ -98,12 +98,16 @@ const Shipment = ({
 
   const { Column } = Table
 
+  let addShipment = products.reduce((acc,items) => {
+      return items.status === 'Confirmed' && !items.shipped ? acc + 1 : 0
+  },0)
+
   return (
     <>
       <Tag color="orange">
         Note: You can Only Add Shipment If Product Status is Confirmed
       </Tag>
-      {products?.length > 0 && (
+      {addShipment > 0 && (
         <Button
           style={{ float: 'right' }}
           type="primary"
@@ -144,7 +148,17 @@ const Shipment = ({
         <Column title="HSN" dataIndex="hsn" key="hsn" />
         <Column title="BATCH" dataIndex="batch" key="batch" />
 
-        <Column title="EXP" dataIndex="expiry" key="expiry" />
+        <Column title="EXP" dataIndex="expiry" key="expiry"
+        render={(expiry) => {
+          return (
+            <>
+              {moment(new Date(expiry)).format(
+            'DD-MMM-YYYY'
+          )}
+            </>
+          )
+        }}
+        />
         <Column title="QTY" dataIndex="quantity" key="quantity" />
         <Column title="PRICE" dataIndex="price" key="price" />
         <Column title="DISC" dataIndex="discount" key="discount" />

@@ -8,6 +8,7 @@ import {
   Tabs,
   Tag,
 } from 'antd'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import shipmentService from 'services/shipment'
@@ -15,7 +16,7 @@ import shipmentService from 'services/shipment'
 const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
   const { Column } = Table
   const [vendorBasedItems, setVendorBasedItems] = useState([])
-  const [shiprocketBasedItems, setShiprocketBasedItems] = useState([])
+  const [shiprocketBasedItems, setShiprocketBasedItems] = useState({})
   const [trackOnBasedItems, setTrackOnBasedItems] = useState([])
   const [waitingListItems, setWaitingListItems] = useState([])
 
@@ -29,9 +30,10 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
     //   },
     // ....
     // ]
-    return Object.values(
+    console.log(shiprocketBasedItems, "result");
+    return (
       products?.reduce((a, c) => {
-        ;(
+        (
           a[c.shipmentId] ||
           (a[c.shipmentId] = {
             shipmentId: c.shipmentId,
@@ -55,7 +57,7 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
       )
 
       const shipmentBasedProducts = getShipmentBasedItems(
-        products?.filter((prod) => prod.shipmentType === 'Ship Rocket')
+        products?.filter((prod) => !['Vendor','Track On'].includes(prod.shipmentType))
       )
 
       const trackOnBasedProducts = getShipmentBasedItems(
@@ -203,7 +205,17 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
                   <Column title="HSN" dataIndex="hsn" key="hsn" />
                   <Column title="BATCH" dataIndex="batch" key="batch" />
 
-                  <Column title="EXP" dataIndex="expiry" key="expiry" />
+                  <Column title="EXP" dataIndex="expiry" key="expiry"
+                  render={(expiry) => {
+                    return (
+                      <>
+                        {moment(new Date(expiry)).format(
+                      'DD-MMM-YYYY'
+                    )}
+                      </>
+                    )
+                  }}
+                  />
                   <Column title="QTY" dataIndex="quantity" key="quantity" />
                   <Column title="PRICE" dataIndex="price" key="price" />
                   <Column title="DISC" dataIndex="discount" key="discount" />
@@ -216,9 +228,10 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
                         <>
                           {taxSplitup?.map((item) => (
                             <>
-                              <p>Amount:{item.taxAmount}</p>
+                              {/* <p>Amount:{item.taxAmount}</p>
                               <p>Percentage:{item.taxPercentage}</p>
-                              <p>Type:{item.taxType}</p>
+                              <p>Type:{item.taxType}</p> */}
+                              <p>{item.taxType}-{item.taxAmount}({item.taxPercentage}%)</p>
                             </>
                           ))}
                         </>
@@ -259,9 +272,9 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
           </Tabs.TabPane>
         )}
 
-        {shiprocketBasedItems?.length > 0 && (
+        {shiprocketBasedItems  && (
           <Tabs.TabPane tab="ShipRocket" key="2">
-            {shiprocketBasedItems?.map((item, i) => (
+            {Object.values(shiprocketBasedItems)?.map((item, i) => (
               <Card title={`Shipment: #${i + 1}`}>
                 {item?.shipmentAwb ? (
                   <div
@@ -356,7 +369,17 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
                   <Column title="HSN" dataIndex="hsn" key="hsn" />
                   <Column title="BATCH" dataIndex="batch" key="batch" />
 
-                  <Column title="EXP" dataIndex="expiry" key="expiry" />
+                  <Column title="EXP" dataIndex="expiry" key="expiry" 
+                  render={(expiry) => {
+                    return (
+                      <>
+                        {moment(new Date(expiry)).format(
+                      'DD-MMM-YYYY'
+                    )}
+                      </>
+                    )
+                  }}
+                  />
                   <Column title="QTY" dataIndex="quantity" key="quantity" />
                   <Column title="PRICE" dataIndex="price" key="price" />
                   <Column title="DISC" dataIndex="discount" key="discount" />
@@ -369,9 +392,10 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
                         <>
                           {taxSplitup?.map((item) => (
                             <>
-                              <p>Amount:{item.taxAmount}</p>
+                              {/* <p>Amount:{item.taxAmount}</p>
                               <p>Percentage:{item.taxPercentage}</p>
-                              <p>Type:{item.taxType}</p>
+                              <p>Type:{item.taxType}</p> */}
+                            <p>{item.taxType}-{item.taxAmount}({item.taxPercentage}%)</p>
                             </>
                           ))}
                         </>
@@ -437,7 +461,17 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
                   <Column title="HSN" dataIndex="hsn" key="hsn" />
                   <Column title="BATCH" dataIndex="batch" key="batch" />
 
-                  <Column title="EXP" dataIndex="expiry" key="expiry" />
+                  <Column title="EXP" dataIndex="expiry" key="expiry"
+                  render={(expiry) => {
+                    return (
+                      <>
+                        {moment(new Date(expiry)).format(
+                      'DD-MMM-YYYY'
+                    )}
+                      </>
+                    )
+                  }}
+                   />
                   <Column title="QTY" dataIndex="quantity" key="quantity" />
                   <Column title="PRICE" dataIndex="price" key="price" />
                   <Column title="DISC" dataIndex="discount" key="discount" />
@@ -528,7 +562,17 @@ const Result = ({ products, vendorInvoices, reFetchOrderData }) => {
                   <Column title="HSN" dataIndex="hsn" key="hsn" />
                   <Column title="BATCH" dataIndex="batch" key="batch" />
 
-                  <Column title="EXP" dataIndex="expiry" key="expiry" />
+                  <Column title="EXP" dataIndex="expiry" key="expiry"
+                  render={(expiry) => {
+                    return (
+                      <>
+                        {moment(new Date(expiry)).format(
+                      'DD-MMM-YYYY'
+                    )}
+                      </>
+                    )
+                  }}
+                   />
                   <Column title="QTY" dataIndex="quantity" key="quantity" />
                   <Column title="PRICE" dataIndex="price" key="price" />
                   <Column title="DISC" dataIndex="discount" key="discount" />
