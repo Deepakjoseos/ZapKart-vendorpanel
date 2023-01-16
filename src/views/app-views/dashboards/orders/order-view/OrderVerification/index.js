@@ -1,10 +1,10 @@
-import { Button, Card, Drawer, message, Steps } from 'antd'
-import React, { useState } from 'react'
-import './index.css'
-import GenerateInvoice from './GenerateInvoice'
-import Prescription from './Prescription'
-import Shipment from './Shipment'
-import Result from './Result'
+import { Button, Card, Drawer, message, Steps } from "antd";
+import React, { useState } from "react";
+import "./index.css";
+import GenerateInvoice from "./GenerateInvoice";
+import Prescription from "./Prescription";
+import Shipment from "./Shipment";
+import Result from "./Result";
 
 const OrderVerification = ({
   open,
@@ -18,26 +18,26 @@ const OrderVerification = ({
   orderStatus,
   userId,
 }) => {
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState(0);
 
   const next = () => {
-    setCurrent(current + 1)
-    reFetchOrderData()
-  }
+    setCurrent(current + 1);
+    reFetchOrderData();
+  };
   const prev = () => {
-    setCurrent(current - 1)
-  }
+    setCurrent(current - 1);
+  };
 
   const steps = [
     {
-      title: 'Prescription',
+      title: "Prescription",
       content: (
         <Prescription
           products={products?.filter(
             (prod) =>
               prod.prescriptionRequired &&
-              (prod.status === 'Verifying Prescription' ||
-                prod.status === 'Prescriptions Missing')
+              (prod.status === "Verifying Prescription" ||
+                prod.status === "Prescriptions Missing")
           )}
           orderId={orderId}
           userId={userId}
@@ -49,11 +49,11 @@ const OrderVerification = ({
       ),
     },
     {
-      title: 'Shipment',
+      title: "Shipment",
       content: (
         <Shipment
           products={products?.filter(
-            (prod) => prod.status === 'Confirmed' && !prod.shipmentId
+            (prod) => prod.status === "Confirmed" && !prod.shipmentId
           )}
           shipmentAvailableProducts={products?.filter(
             (prod) => prod.shipmentId
@@ -65,7 +65,7 @@ const OrderVerification = ({
       ),
     },
     {
-      title: 'GenerateInvoice',
+      title: "GenerateInvoice",
       content: (
         <GenerateInvoice
           orderId={orderId}
@@ -75,7 +75,7 @@ const OrderVerification = ({
       ),
     },
     {
-      title: 'Results',
+      title: "Results",
       content: (
         <Result
           orderId={orderId}
@@ -85,22 +85,22 @@ const OrderVerification = ({
         />
       ),
     },
-  ]
-
+  ];
+  // console.log(products, "shipment");
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
-  }))
+  }));
 
-  const { Step } = Steps
+  const { Step } = Steps;
 
   return (
     <>
       <Drawer
         title="Order Informations"
-        width={'100%'}
+        width={"100%"}
         onClose={() => {
-          setOpen(false)
+          setOpen(false);
         }}
         visible={open}
         bodyStyle={{
@@ -127,7 +127,7 @@ const OrderVerification = ({
           {current > 0 && (
             <Button
               style={{
-                margin: '0 8px',
+                margin: "0 8px",
               }}
               onClick={() => prev()}
             >
@@ -136,14 +136,21 @@ const OrderVerification = ({
           )}
 
           {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next()}>
+            <Button
+              type="primary"
+              disabled={
+                current === 1 &&
+                products?.filter((prod) => prod.shipmentId)?.length === 0
+              }
+              onClick={() => next()}
+            >
               Next
             </Button>
           )}
         </div>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default OrderVerification
+export default OrderVerification;

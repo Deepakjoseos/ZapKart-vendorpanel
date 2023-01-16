@@ -264,10 +264,10 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
                               )
                             }}
                           >
-                            Add To Invoice
+                            Add Invoice
                           </Button>
                         ) : (
-                          <b>Already Have Invoice</b>
+                          <b>{row?.invoiceId}</b>
                         )}
                       </>
                     )}
@@ -280,7 +280,7 @@ const GenerateInvoice = ({ orderId, reFetchOrderData, items }) => {
       </Row>
 
       <Modal
-        title={`Add Item`}
+        title={`Add Invoice`}
         style={{ top: 20 }}
         visible={isAddInvoiceModalOpen}
         onCancel={() => setIsAddInvoiceModalOpen(false)}
