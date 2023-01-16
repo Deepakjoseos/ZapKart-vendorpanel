@@ -16,6 +16,20 @@ orderService.getOrders = async function (paginationQuery = '', query = '') {
   }
 }
 
+orderService.getAllOrders = async function () {
+  try {
+    let url = `${api}`
+    const res = await fetch({
+      url,
+      method: 'get',
+    })
+    // const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 orderService.getOrderById = async function (id) {
   try {
     const res = await fetch({
