@@ -353,7 +353,7 @@ const AuthDetails = () => {
             phoneVerified: user.phoneNumber ? true : false,
             business: data.business,
             address: data.address,
-            
+            tdsEnabled: data?.tdsEnabled,
             gst: data.gst,
             tanNumber: data.tanNumber,
             pan: data.pan,

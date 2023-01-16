@@ -53,7 +53,7 @@ const OrderView = () => {
     if (order) {
       setOrder(orderData)
     }
-    console.log('order payment', order)
+    console.log('orders', order)
   }
 
   useEffect(() => {
@@ -510,7 +510,7 @@ const OrderView = () => {
                   <h6>
                     Order Date:
                     {moment(new Date(order?.createdAt * 1000)).format(
-                      'DD-MM-YYYY'
+                      'DD-MMM-YYYY'
                     )}
                     {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
                   </h6>
@@ -576,9 +576,9 @@ const OrderView = () => {
                         <>
                           {taxSplitup?.map((item) => (
                             <>
-                              <p>Amount:{item.taxAmount}</p>
-                              <p>Percentage:{item.taxPercentage}</p>
-                              <p>Type:{item.taxType}</p>
+                              {/* <p>Amount:{item.taxAmount}</p>
+                              <p>Percentage:{item.taxPercentage}</p> */}
+                              <p>{item.taxType}-{item.taxAmount}({item.taxPercentage}%)</p>
                             </>
                           ))}
                         </>

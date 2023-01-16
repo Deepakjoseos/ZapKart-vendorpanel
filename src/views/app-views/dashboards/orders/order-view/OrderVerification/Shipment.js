@@ -157,9 +157,10 @@ const Shipment = ({
               <>
                 {taxSplitup?.map((item) => (
                   <>
-                    <p>Amount:{item.taxAmount}</p>
+                    {/* <p>Amount:{item.taxAmount}</p>
                     <p>Percentage:{item.taxPercentage}</p>
-                    <p>Type:{item.taxType}</p>
+                    <p>Type:{item.taxType}</p> */}
+                    <p>{item.taxType}-{item.taxAmount}({item.taxPercentage}%)</p>
                   </>
                 ))}
               </>

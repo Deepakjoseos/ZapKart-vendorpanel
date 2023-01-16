@@ -423,7 +423,7 @@ const ProductList = () => {
     >
 
     <Row gutter={8} align="bottom">
-    <Col md={6} sm={24} xs={24} lg={6}>
+    <Col md={4} sm={24} xs={24} lg={4}>
         <Form.Item name="search" label="Search">
         <Input 
           type='text'
@@ -434,7 +434,7 @@ const ProductList = () => {
         />
         </Form.Item>
       </Col>
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="status" label="Status">
 
         <Select
@@ -456,7 +456,7 @@ const ProductList = () => {
         </Select>
         </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={4} sm={24} xs={24} lg={4}>
         <Form.Item name="brandId" label="Brand">
         <Select
           showSearch
@@ -481,7 +481,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
 
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="categoryId" label="Category">
         <Select
           showSearch
@@ -506,7 +506,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
       {/* //New filters */}
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="productTemplateId" label="Product Template">
         <Select
           showSearch
@@ -556,7 +556,7 @@ const ProductList = () => {
         </Form.Item>
       </div> */}
 
-<Col md={6} sm={24} xs={24} lg={6}>
+<Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="productType" label="Product Type">
         <Select
           showSearch
@@ -578,7 +578,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
 
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="prescriptionRequired" label="Prescription Required">
         <Select
           showSearch
@@ -600,7 +600,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
 
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="orderByName" label="Order By Name">
         <Select
           showSearch
@@ -622,7 +622,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
 
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="orderByPrice" label="Order By Price">
         <Select
           showSearch
@@ -644,7 +644,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
 
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="returnable" label="Returnable">
         <Select
           showSearch
@@ -666,7 +666,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
 
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="manufactureId" label="Manufacturer">
         <Select
           showSearch
@@ -691,7 +691,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
       
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item name="medicineTypeId" label="Medicine Type">
         <Select
           showSearch
@@ -717,7 +717,7 @@ const ProductList = () => {
       </Col>
 
       {/* //ENd filters */}
-      <Col md={6} sm={24} xs={24} lg={6}>
+      <Col md={4} sm={24} xs={24} lg={4}>
       <Form.Item label="Approval" name="approval">
         <Select
           showSearch
@@ -740,7 +740,7 @@ const ProductList = () => {
         </Form.Item>
       </Col>
       {process.env.REACT_APP_SITE_NAME === 'awen' ?
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={4} sm={24} xs={24} lg={4}>
           <Form.Item name="accquirement" label="Acquirement Method">
           <Select
             showSearch
@@ -773,6 +773,26 @@ const ProductList = () => {
           Clear
         </Button>
       </Col>
+      <Col style={{marginLeft:"500px"}} className="mb-4 ">
+      <Button
+            type="primary"
+            icon={<FileAddOutlined />}
+            onClick={() => setIsExcelModalOpen(true)}
+            className="mr-1"
+          >
+            Excel Upload
+          </Button>
+          </Col>
+          <Col className="mb-4">
+          <Button
+            onClick={addProduct}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            className="mr-1"
+          >
+            Add Product
+          </Button>
+          </Col>
       </Row>
     </Form>
   )
@@ -790,7 +810,7 @@ const ProductList = () => {
           {filters()}
 
         </Flex>
-        <div className="mr-2">
+        {/* <div className="mr-2">
           <Button
             type="primary"
             icon={<FileAddOutlined />}
@@ -807,7 +827,7 @@ const ProductList = () => {
           >
             Add Product
           </Button>
-        </div>
+        </div> */}
 
         <div className="table-responsive">
           <Table 

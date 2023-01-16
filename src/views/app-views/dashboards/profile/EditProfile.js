@@ -70,6 +70,7 @@ const EditProfile = () => {
         address: user.address,
         tanNumber: user.tanNumber,
         pan: user.pan,
+        tdsEnabled: user.tdsEnabled,
         drugLicense: user.drugLicense,
         country: user.country,
         state:user.state,
@@ -160,10 +161,9 @@ const EditProfile = () => {
           tanNumber: values.tanNumber,
           pan: values.pan,
           emailVerified:values.emailVerified,
-
+          tdsEnabled: values.tdsEnabled,
           smsSubscription:values.smsSubscription,
           emailSubscription: values.emailSubscription,
-
           drugLicense: values.drugLicense,
           bank: {
             name: values["bank.name"],
@@ -239,6 +239,7 @@ const EditProfile = () => {
               pan: data.pan,
               emailVerified:data.emailVerified,
               emailSubscription: data.emailSubscription,
+              tdsEnabled: data.tdsEnabled ,
               smsSubscription: data.smsSubscription,
               drugLicense: data.drugLicense,
               address: data.address,
@@ -477,7 +478,22 @@ user.emailVerified ?  <Input disabled status="success" prefix={<CheckCircleOutli
                 </Select>
               </Form.Item>
               </Col>
-
+              <Col xs={24} sm={24} md={12}>
+            <Form.Item
+                name="tdsEnabled"
+                label="TDS Enabled"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Required',
+                  },
+                ]}              >
+                <Select disabled placeholder="TDS Enabled">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Form.Item>
+              </Col>
               <Col xs={24} sm={24} md={12}>
               <Form.Item label="GST" name="gst">
                 <Input />

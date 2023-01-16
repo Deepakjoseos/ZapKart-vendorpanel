@@ -136,7 +136,7 @@ const OrderVerification = ({
           )}
 
           {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next()}>
+            <Button type="primary" disabled={current === 1 && products.length >0} onClick={() => next()}>
               Next
             </Button>
           )}

@@ -48,6 +48,7 @@ function App() {
               gst: data.gst,
               tanNumber: data.tanNumber,
               pan: data.pan,
+              tdsEnabled: data.tdsEnabled,
               drugLicense: data.drugLicense,
               smsSubscription: data.smsSubscription,
               emailSubscription: data.emailSubscription,
@@ -79,6 +80,7 @@ function App() {
             drugLicense:null,
             pan:null,
             gst: null,
+            tdsEnabled: null,
             // pan: null,
             // passwordVerified: passwordAvailable?.providerId ? true : false,
           }
