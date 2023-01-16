@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col, notification, message
+  Col, notification, message, DatePicker
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -30,26 +30,21 @@ import customerService from 'services/customer'
 import constantsService from 'services/constants'
 import orderService from 'services/orders'
 import moment from 'moment'
-import vendorService from 'services/vendor'
-import payoutService from 'services/vendorPayout'
+// import vendorService from 'services/vendor'
+import payoutService from 'services/payout'
+import StatisticWidget from 'components/shared-components/StatisticWidget'
 
 const { Option } = Select
 
 const PayoutList = () => {
+  const [orderList, setOrderList] = useState(null)
   const [vendorList, setVendorList] = useState(null)
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [userId, setUserId] = useState([])
   const [users, setUsers] = useState([])
-  const [selectedUserId, setSelectedUserId] = useState(null)
-  const [paymentStatuses, setPaymentStatuses] = useState([])
-  const [orderStatuses, setOrderStatuses] = useState([])
-  const [customerPrescriptions, setCustomerPrescriptions] = useState([])
-  const [statuses, setStatuses] = useState([])
+
   let history = useHistory()
   const [form] = Form.useForm()
 
-  const [list, setList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
+  const [vendorTotal, setVendorTotal] = useState(null)
 
   // Added for Pagination
   const [loading, setLoading] = useState(false)
@@ -89,6 +84,13 @@ const PayoutList = () => {
 
   }
 
+  // const getOrders = async () => {
+  //   const data = await orderService.getAllOrders()
+  //   if(data){
+  //     setOrderList(data.data)
+  //   }
+  // }
+
   const getPayout = async (paginationParams = {}, filterParams) => {
     const data = await payoutService.getPayouts(
       qs.stringify(getPaginationParams(paginationParams)),
@@ -97,7 +99,7 @@ const PayoutList = () => {
     if (data) {
       console.log(data.total,"total");
       setUsers(data.data)
-
+      setVendorTotal(data.vendorTotalAmount)
       setPagination({
         ...paginationParams.pagination,
         total: data.total,
@@ -106,12 +108,25 @@ const PayoutList = () => {
     }
   }
 
+  // const getCustomers = async () => {
+  //   const data = await customerService.getCustomers()
+  //   if (data) {
+  //     const customerList = data.map((cur) => {
+  //       return {
+  //         ...cur,
+  //         fullName: `${cur.firstName} ${cur.lastName}`,
+  //       }
+  //     })
+  //     setCustomerList(users)
+  //   }
+  // }
+
 
   useEffect(() => {
     getPayout({
       pagination,
     })
-    getVendors()
+    // getOrders()
   }, [])
 
 
@@ -122,19 +137,25 @@ const PayoutList = () => {
   })
 
   const handleTableChange = (newPagination) => {
-    getPayout(
-      {
-        pagination: newPagination,
-      },
-      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
-    )
+
+    form
+    .validateFields()
+    .then(async (values) => {
+      setFilterEnabled(true)
+      // console.log(values, "heyy");
+      // Removing falsy Values from values
+      const sendingValues = _.pickBy({...values,
+        fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+        toDate: values.toDate ? moment(values.toDate).format():''}, _.identity)
+      getPayout({ pagination: newPagination }, sendingValues)
+    })
+    .catch((info) => {
+      // console.log('info', info)
+      setFilterEnabled(false)
+    })
   }
 
   const tableColumns = [
-    {
-      title: 'Vendor',
-      dataIndex: 'vendorName',
-    },
     {
       title: 'Customer',
       dataIndex: 'customerName',
@@ -152,11 +173,11 @@ const PayoutList = () => {
       dataIndex: 'vendorAmount',
     },
     {
-      title: 'commission Amount',
+      title: 'Commission Amount',
       render: (_, record) => `${record.commissionAmount}  (${record.commissionPercentage}%)`
     },
     {
-      title: 'commission Amount',
+      title: 'TDS Amount',
       render: (_, record) => `${record.tdsAmount}  (${record.tdsPercentage}%)`
     },
     // {
@@ -193,7 +214,9 @@ const PayoutList = () => {
         setFilterEnabled(true)
         // console.log(values, "heyy");
         // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''}, _.identity)
         getPayout({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
@@ -218,13 +241,31 @@ const PayoutList = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
+
+      <Col md={6} sm={24} xs={24} lg={3}>
+          <Form.Item name="fromDate" label="From Date">
+            <DatePicker />
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={3}>
+          <Form.Item name="toDate" label="To Date">
+            <DatePicker />
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderNo" label="Order Number">
+            <Input />
+          </Form.Item>
+        </Col>
         {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col> */}
 
-        <Col md={6} sm={24} xs={24} lg={5}>
+        {/* <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="userId" label="Vendor Name">
 
             <Select showSearch
@@ -245,7 +286,7 @@ const PayoutList = () => {
             </Select>
 
           </Form.Item>
-        </Col>
+        </Col> */}
         {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="userId" label="Customers">
             <Select
@@ -271,6 +312,25 @@ const PayoutList = () => {
           </Form.Item>
         </Col> */}
 
+        {/* <Col md={6} sm={24} xs={24} lg={5}>
+          <Form.Item name="customerIds" label="Customers">
+            <Select
+              mode="multiple"
+              className="w-100"
+              style={{ minWidth: 100 }}
+              placeholder="Customers"
+            >
+              <Option value="">All</Option>
+              {customerList.map((user) => (
+                <Option key={user.id} value={user.id}>
+                  {user.fullName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col> */}
+
+
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -286,13 +346,24 @@ const PayoutList = () => {
     </Form>
   )
 
-  const getVendors = async () => {
-    const data = await vendorService.getVendors()
-    if (data) setVendorList(data)
-  }
+  // const getVendors = async () => {
+  //   const data = await vendorService.getVendors()
+  //   if (data) setVendorList(data)
+  // }
 
   return (
     <Card>
+     <>
+     <Row gutter={16}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+          <StatisticWidget
+            title="Total Vendor Amount"
+            value={vendorTotal}
+          />
+        </Col>
+      
+      </Row>
+     </>
       <div alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </div>
@@ -310,8 +381,8 @@ const PayoutList = () => {
           onChange={handleTableChange}
         />
       </div>
+
     </Card>
   )
 }
-
 export default PayoutList
